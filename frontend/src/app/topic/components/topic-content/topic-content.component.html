@@ -1,0 +1,35 @@
+<div class="w3-card-4" style="width:100%; font-size: small">
+  <header class="w3-container relative-header">
+      <h5 class="card-title" [ngClass]="{'active-card': topic.stNumLimit >= topic.studentCount}">
+        {{topic.title}}</h5>
+      <div class="dropdown dropdown-right">
+        <button class="btn btn-primary active dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          Option
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <ng-container *ngIf="topicSv.requestType === 'recent' && authoSv.isStudent() ">
+            <a class="dropdown-item" *ngIf="topicSv.appliedTopic == null &&  topic.stNumLimit >= topic.studentCount" (click)="apply()">Join</a>
+            <a class="dropdown-item" *ngIf="topicSv.appliedTopic != null && topicSv.appliedTopic.idTop == topic.idTop" (click)="reject()">Reject</a>
+          </ng-container>
+          <a class="dropdown-item" (click)="getTopicId()">Detail</a>
+          <ng-container *ngIf="topicSv.requestType === 'draft'" >
+
+            <a class="dropdown-item" (click)="publish()">Publish</a>
+            <a  class="dropdown-item" (click)="edit()">Edit</a>
+            <a class="dropdown-item" (click)="delete()">Delete</a>
+          </ng-container>
+        </div>
+      </div>
+  </header>
+  <div class="w3-container topic-content">
+    <p class="card-text">
+      <strong>Summary: </strong> {{topic.sumary}}</p>
+    <p class="card-text">
+      <strong>Student subscription limit: </strong>{{topic.stNumLimit}}</p>
+      <p class="card-text">
+        <strong>Student subscripted number: </strong>{{topic.studentCount}}
+      </p>
+  </div>
+</div>
+<br>

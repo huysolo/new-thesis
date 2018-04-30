@@ -1,0 +1,51 @@
+<div class="row chat-group">
+  <div class="col-md-3" ></div>
+  <div class="col-md-6 ">
+    <div class="box box-primary direct-chat direct-chat-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Group Chat</h3>
+
+        <div class="box-tools pull-right">
+          <span data-toggle="tooltip" title="" class="badge bg-light-blue" data-original-title="3 New Messages">3</span>
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle">
+            <i class="fa fa-comments"></i>
+          </button>
+          <button type="button" class="btn btn-box-tool" data-widget="remove">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="box-body">
+        <div class="direct-chat-messages">
+
+          <div *ngFor="let msg of this.listMessage" class="direct-chat-msg {{isMyMessage(msg.username)}}" >
+            <div class="direct-chat-info clearfix">
+              <span class="direct-chat-name pull-left">{{msg.username}}</span>
+              <span class="direct-chat-timestamp pull-right">{{msg.time | date}}</span>
+            </div>
+            <img *ngIf="msg.gender == '1'" class="direct-chat-img" src="https://bootdey.com/img/Content/user_1.jpg" alt="Message User Image">
+            <img *ngIf="msg.gender == '0'" class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg" alt="Message User Image">
+            <div class="direct-chat-text">
+              {{msg.content}}
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="box-footer">
+        <form method="post">
+          <div class="input-group">
+            <input type="text" name="message" placeholder="Type Message ..." class="form-control" #input>
+            <span class="input-group-btn">
+              <button type="submit" (click)="sendMessage(input.value)" class="btn btn-flat">Send</button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3" ></div>
+</div>

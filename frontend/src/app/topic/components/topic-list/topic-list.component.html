@@ -1,0 +1,82 @@
+<a class="float" *ngIf="topicSv.requestType !== 'history' && authoSv.isProfessor()">
+  <button type="button" class="btn btn-primary bmd-btn-fab" name="new" id="new" data-toggle="modal" (click)="newTopic()" data-target="#createTopic">
+    <i class="material-icons">add</i>
+  </button>
+</a>
+<div *ngIf="topicSv.appliedTopic != null">
+  <h3 class="text-center">Applied Topic</h3>
+  <app-topic-content [topic]="topicSv.appliedTopic"></app-topic-content>
+  <br>
+</div>
+
+<div>
+  <div class="row">
+    <div class="col-8">
+      <h3>Filter:</h3>
+    </div>
+    <div class="col-4">
+      <input placeholder="Search" class="form-control" type="text" name="search" [(ngModel)]="filter">
+    </div>
+  </div>
+  <div>
+    <form>
+      <div class="form-row" id="filter">
+        <div class="col-md-4 form-group" *ngIf="topicSv.requestType === 'history'" >
+          <select class="form-control" (change)="onChangeSemester($event.target.value)">
+            <option selected [value]="0" >All Semester</option>
+            <option *ngFor="let sem of listSem | async" [value]="sem.semesterNo">Semester No: {{sem.semesterNo}}</option>
+          </select>
+        </div>
+        <div class="col-md-4 form-group" *ngIf="authoSv.isStudent()">
+          <select class="form-control" (change)="onChangeProf($event.target.value)" >
+            <option selected [value]="0">All Proffesor</option>
+            <option *ngFor="let prof of profLst | async" [value]="prof.professor.idProfessor">
+              {{prof.name}}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-4 form-group">
+          <select class="form-control" (change)="onChangeSpec($event.target.value)">
+            <option selected [value]="0">All Specialize</option>
+            <option *ngFor="let spec of specLst | async" [value]="spec.idSpecialize">
+              {{spec.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- <form *ngIf="topicSv.requestType === 'recent'">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="avail">
+      <label class="form-check-label" for="avail">Unavailable Topic</label>
+    </div>
+  </form> -->
+</div>
+<h3 class="text-center">List of Topics</h3>
+<div *ngFor="let topic of topicSv.topicLst | async | filter:filter | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+  <app-topic-content [topic]="topic" (editTopic)="onEdit($event)" (delTopic)="onDelete($event)" [semno]="selectedSem" (applyTopic)="onApply($event)"></app-topic-content>
+</div>
+<div class="text-center">
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+<div class="modal fade" id="createTopic" tabindex="-1" role="dialog" aria-labelledby="topicTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mce-text-center" id="topicTitleId"> {{modalLabel}} Topic</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+          <app-create-topic [createTopic]="topicDetail" (created)="getWithRarams()"></app-create-topic>
+        </div>
+    </div>
+</div>
+
+<script>
+  $('#createTopic').on('show.bs.modal', event => {
+    const button = $(event.relatedTarget);
+    const modal = $(this);
+  });
+</script>

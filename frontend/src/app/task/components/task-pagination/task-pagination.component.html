@@ -1,0 +1,13 @@
+<div aria-label="...">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class="page-link" (click)="sendPage(page - 1)">Previous </a>
+      </li>
+      <li *ngFor="let page of pageCount; let i= index" class="page-item {{isActive(i)}}">
+        <a class="page-link" (click)="sendPage(i)">{{i}}</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" (click)="sendPage(page + 1)">Next</a>
+      </li>
+    </ul>
+  </div>

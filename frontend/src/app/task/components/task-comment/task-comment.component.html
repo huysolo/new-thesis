@@ -1,0 +1,29 @@
+<div class="w3-col m12">
+    <div class="w3-container w3-padding">
+      <form>
+        <div class="input-group">
+          <textarea class="form-control" rows="3" placeholder="Type Message ..." #input></textarea>
+          <span class="input-group-btn">
+            <button type="submit" (click)="sendComment(input.value)" class="w3-button w3-blue w3-round">Send</button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <div id="demo2" style="background-color: whitesmoke">
+      <div *ngFor="let cmt of taskCmt" class="w3-row">
+        <hr style="margin-top: 0px;">
+        <div class="w3-col l2 m3">
+          <img src="https://bootdey.com/img/Content/user_1.jpg" style="width:90px;">
+        </div>
+        <div class="w3-col l10 m9">
+          <h4>{{cmt.username}}
+            <span class="w3-opacity w3-medium">{{cmt.time | date}}</span>
+          </h4>
+          <p>{{cmt.content}}</p>
+          <br>
+        </div>
+      </div>
+      <div class="w3-margin-bottom"></div>
+    </div>
+  </div>

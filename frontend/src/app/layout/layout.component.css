@@ -1,0 +1,36 @@
+/* .list-group{
+  flex-grow: 0;
+  padding: 0px;
+}
+.img-avatar{
+  margin-right: 0px;
+    height: 30px;
+}
+.account{
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+#avatar-link{
+  padding: 0px;
+}
+
+dropdown-item{
+  padding-left: 0px;
+  padding-right: 0px;
+} */
+.navbar-sidenav{
+  margin-top: 51px !important;
+  background: #424242 !important;
+  height: 100vh !important;
+}
+.navbar-sidenav .nav-link{
+  /* padding: 16px; */
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+/* #sidenavToggler{
+  padding: 18px  !important;
+} */
+.nav-bar{
+}

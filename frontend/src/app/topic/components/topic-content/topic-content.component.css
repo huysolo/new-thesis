@@ -1,0 +1,24 @@
+.card-title{
+  margin-top: .75rem;
+}
+.topic-content{
+  padding-bottom: .75rem;
+}
+header.w3-container {
+  padding-right: 0px;
+}
+
+.relative-header{
+  position: relative;
+}
+
+.dropdown-right{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+.active-card {
+  color: #4CAF50;
+}

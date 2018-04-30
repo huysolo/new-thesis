@@ -1,0 +1,53 @@
+<link href="https://fonts.googleapis.com/css?family=Baloo|Ubuntu" rel="stylesheet">
+
+<body>
+	<div class="container">
+		<section id="content">
+			<form [formGroup]="profileForm" (ngSubmit)="edit(profileForm.value)">
+				<h1>My profile</h1>
+				<div>
+					<input type="text" placeholder="Username" formControlName="username" />
+					<div *ngIf="isEditUsername == false" class="alert">Username already exit!!!</div>
+				</div>
+				<div>
+					<input type="password" placeholder="Password" formControlName="password" />
+				</div>
+				<div>
+					<input type="text" placeholder="FirstName" formControlName="firstname" />
+				</div>
+				<div>
+					<input type="text" placeholder="LastName" formControlName="lastname" />
+				</div>
+				<div>
+					<input type="text" placeholder="Email" formControlName="email" />
+					<div *ngIf="isEditEmail == false" class="alert">Email already exit!!!</div>
+				</div>
+				<div>
+					<input type="text" placeholder="Gender" formControlName="gender" />
+				</div>
+				<div>
+					<input type="text" *ngIf="authService.isProfessor()" placeholder="Degree" formControlName="degree" />
+				</div>
+				<div>
+					<input type="text" *ngIf="authService.isProfessor()" placeholder="Skills" formControlName="skills" />
+				</div>
+				<div>
+					<input type="text" *ngIf="authService.isProfessor()" placeholder="ProfessorID" formControlName="profID" />
+				</div>
+				<div *ngIf="profileForm.dirty">
+          <input type="submit" value="Change" />
+          <button *ngIf="isLoading == true" class="buttonload">
+            <i class="fa fa-spinner fa-spin"></i>Loading
+          </button>
+          <button *ngIf="isSuccess == true" class="buttonsuccess">
+            <i class="fa fa-check"></i>Success
+          </button>
+          <button *ngIf="isFail == true" class="buttonfail">
+            <i class="fa fa-close"></i>Failed
+          </button>
+				</div>
+
+			</form>
+		</section>
+	</div>
+</body>

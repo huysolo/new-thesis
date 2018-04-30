@@ -1,0 +1,128 @@
+<div class="w3-container w3-card w3-white w3-round w3-margin">
+  <div *ngIf="task.showFullTask">
+    <div class="w3-right">
+      <span (click)="showTask(task)" class="w3-button w3-large w3-right" style="padding-top: 0px;">
+        <i class="fa fa-close"></i>
+      </span>
+      <br>
+      <span class="w3-opacity">1 min</span>
+      <hr>
+      <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor() && isrecent"
+      (click)="isRenderPopup(task.taskID)" class="w3-button w3-white w3-border">
+        <i class="fa fa-pencil"></i>Submit</button>
+      <button type="button " *ngIf="task.submit && !this.authService.isProfessor()"
+      (click)="isSubmitTask()"  class="w3-button w3-white w3-border">
+        <i class="fa fa-pencil"></i>Submited</button>
+    </div>
+
+    <h2 class="w3-text-grey w3-padding-16">
+      <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>{{task.title}}
+    </h2>
+    <div class="w3-container">
+      <h5 class="w3-opacity">
+        <b>Description: </b>
+      </h5>
+      <p>{{task.description}}</p>
+      <hr>
+    </div>
+    <div class="w3-container">
+      <h5 class="w3-opacity">
+        <b>Students :</b>
+      </h5>
+      <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+        <tr *ngFor="let std of task.student">
+          <td>
+            <span class="w3-xlarge">{{std.stdName}}</span>
+            <br>
+          </td>
+          <td>{{std.archive}}</td>
+          <td>{{std.uploadDate}}</td>
+        </tr>
+      </table>
+      <br>
+    </div>
+    <div class="w3-container">
+      <h5 class="w3-opacity">
+        <b>Deadline: </b>
+      </h5>
+      <h6 class="w3-text-teal">
+        <i class="fa fa-calendar fa-fw w3-margin-right"></i>{{task.deadline | date}}</h6>
+      <hr>
+    </div>
+
+
+
+    <div class="w3-dropdown-hover w3-margin-bottom ">
+      <button *ngIf="this.authService.isProfessor() && task.pass == 0" type="button" class="w3-button w3-white w3-border">
+        <i class="fa fa-pencil"></i> Review</button>
+      <button *ngIf="task.pass == 2" type="button" class="w3-button w3-white w3-border w3-border-green">
+        <i class="fa fa-check"></i> Passed</button>
+      <button *ngIf="task.pass == 1" type="button" class="w3-button w3-white w3-border w3-border-red">
+        <i class="fa fa-close"></i> Not Passed</button>
+      <div id="Demo" *ngIf="this.authService.isProfessor()" class="w3-dropdown-content w3-bar-block">
+        <a (click)="reviewTask(2)" class="w3-bar-item w3-button w3-show w3-border">Pass</a>
+        <a (click)="reviewTask(1)" class="w3-bar-item w3-button w3-show w3-border">Not Pass</a>
+      </div>
+    </div>
+
+    <p class="w3-right">
+      <button (click)="getTaskComment(task)" class="w3-button w3-black">
+        <b>Replies </b>
+        <span *ngIf="task.comment" class="w3-tag w3-white"> {{task.comment.length}}</span>
+      </button>
+    </p>
+    <p class="w3-clear"></p>
+
+    <app-task-comment *ngIf="task.showCmt == true" [taskid]="task.taskID"></app-task-comment>
+
+
+  </div>
+
+  <div class="w3-row" *ngIf="task.showFullTask == undefined">
+    <h4 class="w3-text-grey w3-padding-16 w3-col m3">
+      <i class="fa fa-certificate fa-fw w3-margin-right w3-large w3-text-teal"></i>{{task.title}}
+    </h4>
+    <div class="w3-text-teal w3-padding-16 w3-col m3">
+      <i class="fa fa-calendar fa-fw w3-margin-right"></i>{{task.deadline | date}}
+    </div>
+    <div class="w3-text-teal w3-col m3 w3-padding-16">
+      <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()"
+        class="w3-button w3-white w3-border">
+        <i class="fa fa-pencil"></i>Submit</button>
+      <button type="button " *ngIf="task.submit && !this.authService.isProfessor()"  (click)="isSubmitTask()"
+        class="w3-button w3-white w3-border">
+        <i class="fa fa-pencil"></i>Submited</button>
+    </div>
+    <div class="w3-text-teal w3-col m1 w3-padding-16">
+      <button *ngIf="task.pass == 1" type="button" class="w3-button w3-white w3-padding-small w3-border">
+        <i class="fa fa-close red" style="color:red;"></i>
+      </button>
+      <button *ngIf="task.pass == 2" type="button" class="w3-button w3-white w3-padding-small w3-border">
+        <i class="fa fa-check" style="color:green;"></i>
+      </button>
+    </div>
+    <div class="w3-text-teal w3-col m2 w3-padding-16">
+      <button type="button" (click)="showTask(task)" class="w3-button w3-white w3-padding-small w3-border">
+        Show detail
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<div class="w3-modal {{issubmit}}" *ngIf="this.authService.isTeamLead()">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="padding:32px;max-width:600px">
+      <div class="w3-container w3-white w3-center">
+        <h3 class="w3-wide">Do you want to submit this task?</h3>
+        <div class="w3-row">
+          <div class="w3-half">
+            <button type="submit" (click)="submitToProf()" class="w3-button w3-block w3-green">Submit</button>
+          </div>
+          <div class="w3-half">
+            <button type="button" (click)="isSubmitTask()" class="w3-button w3-block w3-red">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
