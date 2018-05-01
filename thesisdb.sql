@@ -5,8 +5,7 @@ create table chat_group
   id_user      int                                 not null,
   content      varchar(50)                         not null,
   primary key (time, id_user)
-)
-  engine = InnoDB;
+);
 
 create table comment_task
 (
@@ -17,8 +16,7 @@ create table comment_task
   content varchar(150)                        not null,
   primary key (time, id_task, id_user)
 )
-  comment 'Comment on each task'
-  engine = InnoDB;
+  comment 'Comment on each task';
 
 create index comment_task_task_id_task_fk
   on comment_task (id_task);
@@ -35,8 +33,7 @@ create table faculty
   unique (id_faculty),
   constraint faculty_name_uindex
   unique (name)
-)
-  engine = InnoDB;
+);
 
 create table file
 (
@@ -46,8 +43,7 @@ create table file
   upload_date timestamp default CURRENT_TIMESTAMP null,
   id_user     varchar(45)                         null,
   id_task     int                                 null
-)
-  engine = InnoDB;
+);
 
 create table hibernate_sequence
 (
@@ -60,8 +56,7 @@ create table join_per_meeting
   id_student int not null,
   id_meeting int not null,
   primary key (id_student, id_meeting)
-)
-  engine = InnoDB;
+);
 
 create index join_per_meeting_meeting_id_meeting_fk
   on join_per_meeting (id_meeting);
@@ -76,23 +71,19 @@ create table meeting
   id_topic_sem  int             null,
   reason        varchar(45)     null,
   title         varchar(45)     null
-)
-  engine = InnoDB;
+);
 
 create index meeting_topic_per_semester_id_topic_semester_fk
   on meeting (id_topic_sem);
 
 create table meeting_schelule
 (
-  id_meeting_schelule int             not null
-    primary key,
-  status              int default '0' null,
-  note                varchar(45)     null,
-  meeting_time        timestamp       null,
-  id_meeting          int             null,
-  location            varchar(45)     null
-)
-  engine = InnoDB;
+  status       int default '0' null,
+  meeting_time timestamp       not null,
+  id_meeting   int             not null,
+  location     varchar(45)     not null,
+  primary key (meeting_time, id_meeting, location)
+);
 
 create table notification
 (
@@ -104,30 +95,26 @@ create table notification
   notify_type varchar(45)                         null,
   constraint id_notify_UNIQUE
   unique (id_notify)
-)
-  engine = InnoDB;
+);
 
 create table professor
 (
-  id_professor int         not null
+  id_professor int auto_increment
     primary key,
   id_user      int         not null,
   degree       varchar(45) null,
   skills       varchar(45) null,
-  constraint professor_id_professor_uindex
-  unique (id_professor),
   constraint professor_id_user_uindex
   unique (id_user)
-)
-  engine = InnoDB;
+);
 
 create table review
 (
   id_prof  int not null,
   id_topic int not null,
+  score    int null,
   primary key (id_prof, id_topic)
-)
-  engine = InnoDB;
+);
 
 create table semester
 (
@@ -141,31 +128,25 @@ create table semester
   start_date       timestamp default '0000-00-00 00:00:00' not null,
   review_date      timestamp                               null,
   close_date       timestamp                               null
-)
-  engine = InnoDB;
+);
 
 create table specialize
 (
-  id_specialize int         not null
+  id_specialize int auto_increment
     primary key,
   id_falcuty    int         not null,
   name          varchar(45) not null
-)
-  engine = InnoDB;
+);
 
 create table standard
 (
   id_standard int not null
     primary key,
   st_name     int null,
-  id_prof     int null,
-  semester_no int null
+  semester_no int null,
+  id_user     int null
 )
-  comment 'Standard for Professors'
-  engine = InnoDB;
-
-create index standard_professor_id_professor_fk
-  on standard (id_prof);
+  comment 'Standard for Professors';
 
 create table student
 (
@@ -176,8 +157,7 @@ create table student
   unique (id_student),
   constraint student_id_user_uindex
   unique (id_user)
-)
-  engine = InnoDB;
+);
 
 create table student_task
 (
@@ -188,8 +168,7 @@ create table student_task
   on update CURRENT_TIMESTAMP,
   primary key (id_student, id_task)
 )
-  comment 'Student On Each Task'
-  engine = InnoDB;
+  comment 'Student On Each Task';
 
 create table student_topic_sem
 (
@@ -200,8 +179,7 @@ create table student_topic_sem
 		other member 0',
   primary key (id_topic_sem, id_student)
 )
-  comment 'List of student belong to each topic per semester'
-  engine = InnoDB;
+  comment 'List of student belong to each topic per semester';
 
 create index student_topic_sem_student_id_student_fk
   on student_topic_sem (id_student);
@@ -217,8 +195,7 @@ create table task
   id_topic_sem int                                 null,
   pass         int                                 null,
   submit       int                                 null
-)
-  engine = InnoDB;
+);
 
 create index task_topic_per_semester_id_topic_semester_fk
   on task (id_topic_sem);
@@ -237,10 +214,11 @@ create table topic
   upload_date   timestamp default CURRENT_TIMESTAMP null,
   publish_date  timestamp                           null,
   student_count int default '0'                     null,
+  prof_score    int                                 null,
+  review_date   datetime                            null,
   constraint topic_id_top_uindex
   unique (id_top)
-)
-  engine = InnoDB;
+);
 
 create index topic_professor_id_professor_fk
   on topic (id_prof);
@@ -253,8 +231,7 @@ create table topic_mission
   detail     varchar(60) not null,
   constraint mission_topic_mission_id_uindex
   unique (id_mission)
-)
-  engine = InnoDB;
+);
 
 create table topic_per_semester
 (
@@ -268,8 +245,7 @@ create table topic_per_semester
   constraint topic_per_semester_id_topic_uindex
   unique (id_topic)
 )
-  comment 'Topic on each semester'
-  engine = InnoDB;
+  comment 'Topic on each semester';
 
 create table topic_requirement
 (
@@ -279,8 +255,7 @@ create table topic_requirement
   detail   varchar(50) null,
   constraint topic_requirement_req_id_uindex
   unique (id_req)
-)
-  engine = InnoDB;
+);
 
 create table topic_sem_standard
 (
@@ -289,8 +264,7 @@ create table topic_sem_standard
   score        int default '0' not null,
   primary key (id_standard, id_topic_sem)
 )
-  comment 'Standard foreach topic per semester'
-  engine = InnoDB;
+  comment 'Standard foreach topic per semester';
 
 create index topic_sem_standard_topic_per_semester_id_topic_semester_fk
   on topic_sem_standard (id_topic_sem);
@@ -309,13 +283,13 @@ create table user
   comment '1: male
 	0: female',
   id_falcuty int         null,
+  role       int         null,
   constraint user_id_user_uindex
   unique (id_user),
   constraint user_user_name_uindex
   unique (user_name),
   constraint user_email_uindex
   unique (email)
-)
-  engine = InnoDB;
+);
 
 
