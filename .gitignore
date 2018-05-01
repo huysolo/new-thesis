@@ -86,6 +86,3 @@ nbdist/
 .nb-gradle/
 
 .vscode/
-
-frontend/package.json
-frontend/package-lock.json
