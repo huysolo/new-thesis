@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MainPageComponent } from '../main-page/main-page.component';
 import {LoginComponent} from '../user/pages/login/login.component';
-import {MeetingComponent} from '../meeting/meeting.component';
 import { AuthGuardUserService } from '../core/auth-guard-user.service';
 import {LayoutComponent} from '../layout/layout.component';
 
@@ -20,6 +19,10 @@ const appRoutes: Routes = [
   {
     path: 'task',
     loadChildren: 'app/task/task.module#TaskModule'
+  },
+  {
+    path: 'meeting',
+    loadChildren: 'app/meeting/meeting.module#MeetingModule'
   },
   {
     path: 'layout',

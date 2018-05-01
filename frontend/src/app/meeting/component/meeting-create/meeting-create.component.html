@@ -1,0 +1,85 @@
+<!-- Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createTopic">
+  Launch demo modal
+</button>
+<div class="modal" id="createTopic" tabindex="-1" role="dialog" aria-labelledby="topicTitleId">
+  <div class="modal-dialog" style="max-width: 600px" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title mce-text-center" id="topicTitleId"> Create Meeting</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form #createTopicForm="ngForm" action="" method="post">
+            <div *ngIf="this.authService.isProfessor()" class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-pencil-square-o"></i> Topic </h5>
+              </label>
+              <select [(ngModel)]="meetingCreate.topicid" name="topicid" class="custom-select">
+                <option selected [value]="0">Choose Topic</option>
+                <option *ngFor="let topic of listTopic" [value]="topic.idTop">{{topic.title}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-pencil-square-o"></i> Content </h5>
+              </label>
+              <textarea [(ngModel)]="meetingCreate.content" name="specialize-topic" id="specialize-topic" cols="10" rows="5" class="form-control"
+                placeholder="Insert content here"></textarea>
+            </div>
+            <div class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-sticky-note-o"></i> Note </h5>
+              </label>
+              <input [(ngModel)]="meetingCreate.note" type="text" name="title-topic" id="title-topic" class="form-control" placeholder="Insert your note here">
+            </div>
+            <div class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-map-marker"></i> Time - Location</h5>
+              </label>
+              <ng-container *ngFor="let req of meetingCreate.timelocation; let i = index">
+                <div class="input-group mb-3">
+                  <div class="form-row">
+                    <div class="col-md-6">
+                      <input value="2018-11-16T20:00" [(ngModel)]="req.time" name="time{{i}}" type="datetime-local" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                      <input placeholder="Location" [(ngModel)]="req.location" name="location{{i}}" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="input-group-append col-md-1">
+                    <i class="material-icons btn-icon" *ngIf="meetingCreate.timelocation.length > 1" (click)="removeMeeting(i)">remove</i>
+                  </div>
+                </div>
+              </ng-container>
+              <input (click)="addTimeLocation()" name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button"
+                value="Add">
+            </div>
+            <div *ngIf="authService.isStudent()" class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-sticky-note-o"></i> Student </h5>
+              </label>
+              <ul class="list-group">
+                <li class="list-group-item {{list.class}}" (click)="isActiveStd(list)" *ngFor="let list of listAllStd">{{list.name}}</li>
+              </ul>
+            </div>
+
+            <br>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button (click)="createMeeting()" type="submit" class="btn btn-success" data-dismiss="modal">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
