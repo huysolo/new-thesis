@@ -87,9 +87,7 @@ nbdist/
 
 .vscode/
 
-application.properties
 backend/src/main/resources/application.properties
 backend/src/main/resources/application.properties
 frontend/package.json
 frontend/package-lock.json
-backend/upload-dir/material-kit.css
