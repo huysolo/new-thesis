@@ -14,6 +14,7 @@ public class Semester {
     private Timestamp applyCloseDate;
     private Timestamp endDate;
     private Timestamp startDate;
+    private Timestamp closeDate;
 
     @Id
     @Column(name = "semester_no")
@@ -81,5 +82,15 @@ public class Semester {
     public int hashCode() {
 
         return Objects.hash(semesterNo, applyOpenDate, applyCloseDate, endDate, startDate);
+    }
+
+    @Basic
+    @Column(name = "close_date")
+    public Timestamp getCloseDate() {
+        return closeDate;
+    }
+
+    public void setCloseDate(Timestamp closeDate) {
+        this.closeDate = closeDate;
     }
 }

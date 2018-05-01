@@ -10,7 +10,8 @@ import java.util.Objects;
 public class Standard {
     private int idStandard;
     private Integer stName;
-    private Integer idProf;
+    private Integer idUser;
+    private Integer semesterNo;
 
     @Id
     @Column(name = "id_standard")
@@ -33,13 +34,23 @@ public class Standard {
     }
 
     @Basic
-    @Column(name = "id_prof")
-    public Integer getIdProf() {
-        return idProf;
+    @Column(name = "id_user")
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    public void setIdProf(Integer idProf) {
-        this.idProf = idProf;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
+    }
+
+    @Basic
+    @Column(name = "semester_no")
+    public Integer getSemesterNo() {
+        return semesterNo;
+    }
+
+    public void setSemesterNo(Integer semesterNo) {
+        this.semesterNo = semesterNo;
     }
 
     @Override
@@ -49,12 +60,13 @@ public class Standard {
         Standard standard = (Standard) o;
         return idStandard == standard.idStandard &&
                 Objects.equals(stName, standard.stName) &&
-                Objects.equals(idProf, standard.idProf);
+                Objects.equals(idUser, standard.idUser) &&
+                Objects.equals(semesterNo, standard.semesterNo);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idStandard, stName, idProf);
+        return Objects.hash(idStandard, stName, idUser, semesterNo);
     }
 }

@@ -1,16 +1,19 @@
 package hcmut.thesis.backend.services;
 
+import hcmut.thesis.backend.models.Standard;
 import hcmut.thesis.backend.models.Topic;
+import hcmut.thesis.backend.models.TopicSemStandard;
+import hcmut.thesis.backend.modelview.ReviewTopic;
 import hcmut.thesis.backend.modelview.TopicDetail;
 
 import java.util.List;
 public interface TopicService {
     List<Topic> getListTopicBySemester(Integer idFal, Integer semesterNo, Integer profId, Boolean available, Integer specialize);
-    List<Topic> getListRecentTopicBySemester(Integer profId, Boolean aval, Integer specialize);
+    List<Topic> getListRecentTopicBySemester(Integer profId, Boolean available, Integer specialize);
     TopicDetail getTopicDetailById(Integer topId);
     Topic setTopicDetail(TopicDetail topicDetail, Boolean publish);
     Topic applyToTopic(Integer topId, Integer studentId);
-    Topic getAppliedTopic(Integer semesterNo, Integer studendId);
+    Topic getAppliedTopic(Integer semesterNo, Integer studentId);
     Integer numberOfApply(Integer topicId);
     List<Topic> getDraftTopics(Integer profId);
     Boolean availableTopic(Topic topic);
@@ -19,5 +22,12 @@ public interface TopicService {
     List<Topic> getListTopicReview(Integer semNo, Integer profId);
     Topic edit(TopicDetail topicDetail);
     Integer delete(Integer topicId);
+    List<Standard> getListCurrentStandardByUserId(Integer idUser);
+    List<Standard> getListStandardBySemesterAndUserId(Integer idUser, Integer semesterNo);
+    Standard setStandard(Integer userId, Standard standardName);
+    Integer removeStandard(Integer standardId, Integer idUser);
+    public List<TopicSemStandard> reviewTopic(List<TopicSemStandard> reviewTopic, Integer userId);
+    Standard copyStandardToCurrentSem(Standard standard);
+    Boolean isStandardOwner(Integer userId, Standard standard);
 
 }

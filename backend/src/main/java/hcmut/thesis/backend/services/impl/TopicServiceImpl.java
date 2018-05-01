@@ -1,9 +1,8 @@
 package hcmut.thesis.backend.services.impl;
 
-import hcmut.thesis.backend.models.StudentTopicSem;
-import hcmut.thesis.backend.models.Topic;
-import hcmut.thesis.backend.models.TopicMission;
-import hcmut.thesis.backend.models.TopicRequirement;
+import hcmut.thesis.backend.models.*;
+import hcmut.thesis.backend.modelview.ReviewTopic;
+import hcmut.thesis.backend.modelview.StandardScore;
 import hcmut.thesis.backend.modelview.TopicDetail;
 import hcmut.thesis.backend.modelview.UserSession;
 import hcmut.thesis.backend.repositories.*;
@@ -15,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,10 +42,13 @@ public class TopicServiceImpl implements TopicService {
     StudentTopicSemRepo studentTopicSemRepo;
 
     @Autowired
-    JdbcTemplate template;
+    ITopicDAO topicDAO;
 
     @Autowired
-    ITopicDAO topicDAO;
+    StandardRepo standardRepo;
+
+    @Autowired
+    StandardTopicRepo standardTopicRepo;
 
     @Override
     public List<Topic> getListTopicBySemester(Integer idFal, Integer semesterNo, Integer profId, Boolean aval, Integer specialize) {
@@ -187,7 +190,6 @@ public class TopicServiceImpl implements TopicService {
         try{
             Topic topic = topicRepo.findById(topicId).get();
             topicRepo.save(topic);
-            System.out.println(topic.getSemesterNo());
             return topic;
         } catch (Exception e){
             return null;
@@ -233,6 +235,61 @@ public class TopicServiceImpl implements TopicService {
         } catch (NullPointerException e) {
             return null;
         }
+    }
+
+    @Override
+    public List<Standard> getListCurrentStandardByUserId(Integer idUser) {
+        Semester semester = commonService.getSemOpen();
+
+        return getListStandardBySemesterAndUserId(idUser, semester.getSemesterNo());
+    }
+
+    @Override
+    public List<Standard> getListStandardBySemesterAndUserId(Integer idUser, Integer semesterNo) {
+        return standardRepo.getAllBySemesterNoAndIAndIdUser(semesterNo, idUser);
+    }
+
+    @Override
+    public Standard setStandard(Integer userId, Standard standard) {
+        Integer semNo = commonService.getSemOpen().getSemesterNo();
+        standard.setIdUser(userId);
+        standard.setSemesterNo(semNo);
+        return standardRepo.save(standard);
+    }
+
+    @Override
+    public Integer removeStandard(Integer standardId, Integer idUser) {
+        Optional<Standard> standard = standardRepo.findById(standardId);
+        if (standard.isPresent() && isStandardOwner(idUser, standard.get())) {
+            standardRepo.delete(standard.get());
+            return standardId;
+        } else {
+            throw new NullPointerException("Remove Condition Is Not Match");
+        }
+    }
+
+    @Override
+    public List<TopicSemStandard> reviewTopic(List<TopicSemStandard> reviewTopic, Integer userId) {
+        Integer semester = commonService.getSemOpen().getSemesterNo();
+        List<TopicSemStandard> topicSemStandards = new LinkedList<>();
+        for (TopicSemStandard st : reviewTopic) {
+            Optional<Standard> standard = standardRepo.findById(st.getIdStandard());
+            Optional<Topic> topic = topicRepo.findById(st.getIdTopicSem());
+            if (standard.isPresent() && topic.isPresent() && standard.get().getIdUser().equals(userId) && topic.get().getSemesterNo().equals(semester)) {
+                topicSemStandards.add(st);
+            }
+        }
+        return standardTopicRepo.saveAll(topicSemStandards);
+    }
+
+    @Override
+    public Standard copyStandardToCurrentSem(Standard standard) {
+        return null;
+    }
+
+    @Override
+    public Boolean isStandardOwner(Integer userId, Standard standard) {
+        return userId.equals(standard.getIdUser());
     }
 
     private Topic deleteTopicMissionAndRequirement(Integer topicId) throws NullPointerException {

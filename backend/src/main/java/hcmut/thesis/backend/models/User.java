@@ -17,6 +17,7 @@ public class User {
     private String photo;
     private String gender;
     private Integer idFalcuty;
+    private Integer role;
 
     @Id
     @Column(name = "id_user")
@@ -128,5 +129,15 @@ public class User {
     public int hashCode() {
 
         return Objects.hash(idUser, userName, password, firstName, lastName, email, photo, gender, idFalcuty);
+    }
+
+    @Basic
+    @Column(name = "role")
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
     }
 }

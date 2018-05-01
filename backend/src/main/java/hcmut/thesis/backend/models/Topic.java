@@ -17,6 +17,8 @@ public class Topic {
     private Timestamp uploadDate;
     private Timestamp publishDate;
     private Integer studentCount;
+    private Integer profScore;
+    private Timestamp reviewDate;
 
     public Topic(int idTop, String title, int stNumLimit, String sumary, int idProf, Integer score, Integer semesterNo, Integer idSpecialize, Integer studentCount) {
         this.idTop = idTop;
@@ -165,5 +167,25 @@ public class Topic {
 
     public void setStudentCount(Integer studentCount) {
         this.studentCount = studentCount;
+    }
+
+    @Basic
+    @Column(name = "prof_score")
+    public Integer getProfScore() {
+        return profScore;
+    }
+
+    public void setProfScore(Integer profScore) {
+        this.profScore = profScore;
+    }
+
+    @Basic
+    @Column(name = "review_date")
+    public Timestamp getReviewDate() {
+        return reviewDate;
+    }
+
+    public void setReviewDate(Timestamp reviewDate) {
+        this.reviewDate = reviewDate;
     }
 }

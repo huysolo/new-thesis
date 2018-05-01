@@ -1,9 +1,6 @@
 package hcmut.thesis.backend.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +8,7 @@ import java.util.Objects;
 public class Review {
     private int idProf;
     private int idTopic;
+    private Integer score;
 
     @Id
     @Column(name = "id_prof")
@@ -45,5 +43,15 @@ public class Review {
     public int hashCode() {
 
         return Objects.hash(idProf, idTopic);
+    }
+
+    @Basic
+    @Column(name = "score")
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }
