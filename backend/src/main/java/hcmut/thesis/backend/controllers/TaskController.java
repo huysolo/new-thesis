@@ -7,9 +7,35 @@ package hcmut.thesis.backend.controllers;
 
 import hcmut.thesis.backend.models.Task;
 import hcmut.thesis.backend.models.Topic;
+import hcmut.thesis.backend.modelview.ChatGroupInfo;
+import hcmut.thesis.backend.modelview.PageInfo;
+import hcmut.thesis.backend.modelview.StudentDoTask;
+import hcmut.thesis.backend.modelview.TaskComment;
+import hcmut.thesis.backend.modelview.TaskInfo;
+import hcmut.thesis.backend.modelview.UserSession;
+import hcmut.thesis.backend.repositories.ProfessorRepo;
+import hcmut.thesis.backend.repositories.SemesterRepo;
+import hcmut.thesis.backend.repositories.StudentRepo;
+import hcmut.thesis.backend.repositories.StudentTaskRepo;
+import hcmut.thesis.backend.repositories.StudentTopicSemRepo;
+import hcmut.thesis.backend.repositories.TaskRepo;
+import hcmut.thesis.backend.repositories.TopicRepo;
+import hcmut.thesis.backend.services.ChatGroupService;
+import hcmut.thesis.backend.services.CommonService;
+import hcmut.thesis.backend.services.ITaskDAO;
+import hcmut.thesis.backend.services.IUserDAO;
+import hcmut.thesis.backend.services.TaskService;
+
+import hcmut.thesis.backend.services.TopicService;
+import hcmut.thesis.backend.services.impl.StorageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import java.util.List;
 import hcmut.thesis.backend.modelview.*;
 import hcmut.thesis.backend.repositories.*;
 import hcmut.thesis.backend.services.*;
+
 import hcmut.thesis.backend.services.impl.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -76,6 +102,9 @@ public class TaskController {
     
     @Autowired
     TopicService topicService;
+    
+    @Autowired
+    CommonService commonService;
 
     @RequestMapping(value = "/crttask", method = RequestMethod.POST)
     @ResponseBody
@@ -89,7 +118,11 @@ public class TaskController {
     public PageInfo getListTask(@RequestParam("topicID") Integer topicID,
             @RequestParam("page") Integer pageNumber) {
         if (topicID == -1) {
-            topicID = topicService.getAppliedTopic(semRepo.getCurrentApplySemester().get(0),userSession.getStudent().getIdStudent()).getIdTop();
+            Integer currSem = commonService.getCurrentSem();
+            if(currSem == null){
+                return null;
+            }
+            topicID = topicService.getAppliedTopic(currSem,userSession.getStudent().getIdStudent()).getIdTop();
         }
         if (userSession.isStudent()) {
             return taskService.getPage(pageNumber,topicID, true);
@@ -108,7 +141,11 @@ public class TaskController {
     @ResponseBody
     public List<Topic> getTopicFromSemID(@RequestParam(value="semid") Integer semid) {
         if(semid == -1){
-            semid = semRepo.getCurrentApplySemester().get(0);
+            Integer currSem = commonService.getCurrentSem();
+            if(currSem == null){
+                return null;
+            }
+            semid = currSem;
         }
         return topicRepo.findListTopicFromSemID(userSession.getProf().getIdProfessor(), semid);
     }

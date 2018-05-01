@@ -17,6 +17,7 @@ import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.StudentTopicSemRepo;
 import hcmut.thesis.backend.repositories.TopicRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
+import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.IUserDAO;
 import hcmut.thesis.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class UserDAO implements IUserDAO {
 
     @Autowired
     SemesterRepo semRepo;
+
+    @Autowired
+    CommonService commonService;
 
     @Override
     public User getUser(String username, String password) {
@@ -99,9 +103,12 @@ public class UserDAO implements IUserDAO {
                 currUserInfo.setSkills(prof.getSkills());
 
             } else {
-                if (this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), semRepo.getCurrentApplySemester().get(0)) != null) {
-                    currUserInfo.setTeamLead(this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), semRepo.getCurrentApplySemester().get(0)).getTeamLead());
-                    currUserInfo.setTopicID(this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), semRepo.getCurrentApplySemester().get(0)).getIdTopicSem());
+                Integer currSemid = commonService.getCurrentSem();
+                if (currSemid != null) {
+                    if (this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), currSemid) != null) {
+                        currUserInfo.setTeamLead(this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), currSemid).getTeamLead());
+                        currUserInfo.setTopicID(this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), currSemid).getIdTopicSem());
+                    }
                 }
             }
 
@@ -210,6 +217,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public StudentTopicSem getStdTopicSem(int stdid, int semid) {
+
         List<Integer> listTopicID = topicRepo.findTopIDBySemesterNo(semid);
         for (int i = 0; i < listTopicID.size(); i++) {
             if (stdTopicSemRepo.getStdTopicSemFromTopicID(listTopicID.get(i), stdid) != null) {
