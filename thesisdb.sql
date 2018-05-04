@@ -110,19 +110,21 @@ create table professor
 
 create table review
 (
-  id_prof  int not null,
-  id_topic int not null,
-  score    int null,
-  primary key (id_prof, id_topic)
+  id_prof   int             not null,
+  id_topic  int             not null,
+  score     int             null,
+  submitted int default '0' not null,
+  id_review int auto_increment
+    primary key
 );
 
 create table semester
 (
   semester_no      int                                     not null
     primary key,
-  apply_open_date  timestamp default CURRENT_TIMESTAMP     null
+  apply_open_date  timestamp                               null
   on update CURRENT_TIMESTAMP,
-  apply_close_date timestamp default CURRENT_TIMESTAMP     null
+  apply_close_date timestamp                               null
   on update CURRENT_TIMESTAMP,
   end_date         timestamp default '0000-00-00 00:00:00' not null,
   start_date       timestamp default '0000-00-00 00:00:00' not null,
@@ -140,11 +142,11 @@ create table specialize
 
 create table standard
 (
-  id_standard int not null
+  id_standard int auto_increment
     primary key,
-  st_name     int null,
-  semester_no int null,
-  id_user     int null
+  st_name     varchar(50)     not null,
+  id_user     int             null,
+  coefficient int default '1' not null
 )
   comment 'Standard for Professors';
 
@@ -235,15 +237,12 @@ create table topic_mission
 
 create table topic_per_semester
 (
-  id_topic_semester int auto_increment
-    primary key,
-  score             int default '0' not null,
-  semester_no       int             null,
-  id_topic          int             not null,
+  id_review int auto_increment,
+  score     int default '0' not null,
+  title     int             not null,
+  primary key (id_review, title),
   constraint topic_per_semester_id_topic_semester_uindex
-  unique (id_topic_semester),
-  constraint topic_per_semester_id_topic_uindex
-  unique (id_topic)
+  unique (id_review)
 )
   comment 'Topic on each semester';
 
@@ -259,15 +258,14 @@ create table topic_requirement
 
 create table topic_sem_standard
 (
-  id_topic_sem int             not null,
-  id_standard  int             not null,
-  score        int default '0' not null,
-  primary key (id_standard, id_topic_sem)
+  id_topic_sem_standard int auto_increment
+    primary key,
+  score                 int default '0' not null,
+  content               varchar(45)     not null,
+  coefficient           int default '1' not null,
+  id_review             int             not null
 )
   comment 'Standard foreach topic per semester';
-
-create index topic_sem_standard_topic_per_semester_id_topic_semester_fk
-  on topic_sem_standard (id_topic_sem);
 
 create table user
 (
