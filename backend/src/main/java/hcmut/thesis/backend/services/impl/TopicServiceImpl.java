@@ -10,7 +10,6 @@ import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.ITopicDAO;
 import hcmut.thesis.backend.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -49,6 +48,12 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     StandardTopicRepo standardTopicRepo;
+
+    @Autowired
+    ReviewRepo reviewRepo;
+
+    @Autowired
+    TopicSemStandardRepo  topicSemStandardRepo;
 
     @Override
     public List<Topic> getListTopicBySemester(Integer idFal, Integer semesterNo, Integer profId, Boolean aval, Integer specialize) {
@@ -137,14 +142,14 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Topic getAppliedTopic(Integer semesterNo, Integer studendId) {
+    public Topic getAppliedTopic(Integer semesterNo, Integer studentId) {
         if (semesterNo == null){
             semesterNo = commonService.getCurrentApplySem();
         }
         List<Topic> topicList = topicRepo.findTopBySemesterNo(semesterNo);
         for (Topic topic :
                 topicList) {
-            if (studentTopicSemRepo.getStudentTopicSemByAll(studendId, topic.getIdTop()).size() > 0){
+            if (studentTopicSemRepo.getStudentTopicSemByAll(studentId, topic.getIdTop()).size() > 0){
                 return topic;
             }
         }
@@ -204,9 +209,14 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Topic> getListTopicReview(Integer semNo, Integer profId) {
+    public List<Topic> getListTopicReview(Integer semNo, Integer profId, Integer isSubmitted) {
         if (semNo == null) {
-            return topicDAO.getListReviewTopicByProfId(profId);
+            if (isSubmitted == null) {
+                return topicDAO.getListReviewTopicByProfId(profId);
+            } else {
+                return topicDAO.getListReviewTopicByProfId(profId, isSubmitted);
+            }
+
         }
         return topicDAO.getListReviewTopicByProfIdAndSemesterNo(profId, semNo);
     }
@@ -238,22 +248,13 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Standard> getListCurrentStandardByUserId(Integer idUser) {
-        Semester semester = commonService.getSemOpen();
-
-        return getListStandardBySemesterAndUserId(idUser, semester.getSemesterNo());
-    }
-
-    @Override
-    public List<Standard> getListStandardBySemesterAndUserId(Integer idUser, Integer semesterNo) {
-        return standardRepo.getAllBySemesterNoAndIAndIdUser(semesterNo, idUser);
+    public List<Standard> getListStandardBySemesterAndUserId(Integer idUser) {
+        return standardRepo.getAllBySemesterNoAndIAndIdUser(idUser);
     }
 
     @Override
     public Standard setStandard(Integer userId, Standard standard) {
-        Integer semNo = commonService.getSemOpen().getSemesterNo();
         standard.setIdUser(userId);
-        standard.setSemesterNo(semNo);
         return standardRepo.save(standard);
     }
 
@@ -269,17 +270,36 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<TopicSemStandard> reviewTopic(List<TopicSemStandard> reviewTopic, Integer userId) {
-        Integer semester = commonService.getSemOpen().getSemesterNo();
+    public Review reviewTopic(ReviewTopic reviewTopic, Integer profId) {
+        Optional<Review> review = reviewRepo.findReviewByIdProfAndIdTopic(profId, reviewTopic.getTopicId());
+        System.out.println(reviewTopic.getStandardScores().size());
         List<TopicSemStandard> topicSemStandards = new LinkedList<>();
-        for (TopicSemStandard st : reviewTopic) {
-            Optional<Standard> standard = standardRepo.findById(st.getIdStandard());
-            Optional<Topic> topic = topicRepo.findById(st.getIdTopicSem());
-            if (standard.isPresent() && topic.isPresent() && standard.get().getIdUser().equals(userId) && topic.get().getSemesterNo().equals(semester)) {
-                topicSemStandards.add(st);
+        Integer numerator = 0;
+        Integer denominator = 0;
+        if (review.isPresent() && review.get().getSubmitted() == 0){
+            for (StandardScore standardScore : reviewTopic.getStandardScores()) {
+                System.out.println(standardScore.getStandardId());
+                Optional<Standard> standard = standardRepo.findById(standardScore.getStandardId());
+                if (standard.isPresent()) {
+                    TopicSemStandard topicSemStandard = new TopicSemStandard();
+                    topicSemStandard.setContent(standard.get().getStName());
+                    topicSemStandard.setCoefficient(standard.get().getCoefficient());
+                    topicSemStandard.setScore(standardScore.getScore());
+                    topicSemStandard.setIdReview(review.get().getIdReview());
+
+                    numerator = numerator +  standard.get().getCoefficient() * standardScore.getScore();
+                    denominator = denominator + standard.get().getCoefficient();
+                    topicSemStandards.add(topicSemStandard);
+                }
+
+
             }
+            topicSemStandardRepo.saveAll(topicSemStandards);
+            review.get().setSubmitted(review.get().getSubmitted() + 1);
+            review.get().setScore(numerator / denominator);
+            return reviewRepo.save(review.get());
         }
-        return standardTopicRepo.saveAll(topicSemStandards);
+        return null;
     }
 
     @Override
@@ -290,6 +310,16 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Boolean isStandardOwner(Integer userId, Standard standard) {
         return userId.equals(standard.getIdUser());
+    }
+
+    @Override
+    public Integer deleteStandard(Integer standardId, Integer idUser) {
+        Optional<Standard> standard = standardRepo.findById(standardId);
+        if (standard.isPresent() && standard.get().getIdUser().equals(idUser)){
+            standardRepo.delete(standard.get());
+            return standardId;
+        }
+        return null;
     }
 
     private Topic deleteTopicMissionAndRequirement(Integer topicId) throws NullPointerException {

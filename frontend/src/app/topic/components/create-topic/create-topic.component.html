@@ -12,7 +12,7 @@
               </h5>
             </label>
             <input type="text" name="title-topic" id="title-topic" class="form-control" placeholder="Insert your title here" [(ngModel)]="createTopic.topic.title"
-              required #title="ngModel">
+              required #title="ngModel" >
             <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
               Title is required
             </div>

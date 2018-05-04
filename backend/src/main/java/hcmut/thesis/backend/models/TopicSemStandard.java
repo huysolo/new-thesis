@@ -5,30 +5,22 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "topic_sem_standard", schema = "thesis", catalog = "")
-@IdClass(TopicSemStandardPK.class)
 public class TopicSemStandard {
-    private int idTopicSem;
-    private int idStandard;
+    private int idTopicSemStandard;
     private int score;
+    private String content;
+    private int coefficient;
+    private int idReview;
 
     @Id
-    @Column(name = "id_topic_sem")
-    public int getIdTopicSem() {
-        return idTopicSem;
+    @Column(name = "id_topic_sem_standard")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getIdTopicSemStandard() {
+        return idTopicSemStandard;
     }
 
-    public void setIdTopicSem(int idTopicSem) {
-        this.idTopicSem = idTopicSem;
-    }
-
-    @Id
-    @Column(name = "id_standard")
-    public int getIdStandard() {
-        return idStandard;
-    }
-
-    public void setIdStandard(int idStandard) {
-        this.idStandard = idStandard;
+    public void setIdTopicSemStandard(int idTopicSemStandard) {
+        this.idTopicSemStandard = idTopicSemStandard;
     }
 
     @Basic
@@ -41,19 +33,51 @@ public class TopicSemStandard {
         this.score = score;
     }
 
+    @Basic
+    @Column(name = "content")
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Basic
+    @Column(name = "coefficient")
+    public int getCoefficient() {
+        return coefficient;
+    }
+
+    public void setCoefficient(int coefficient) {
+        this.coefficient = coefficient;
+    }
+
+    @Basic
+    @Column(name = "id_review")
+    public int getIdReview() {
+        return idReview;
+    }
+
+    public void setIdReview(int idReview) {
+        this.idReview = idReview;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TopicSemStandard that = (TopicSemStandard) o;
-        return idTopicSem == that.idTopicSem &&
-                idStandard == that.idStandard &&
-                score == that.score;
+        return idTopicSemStandard == that.idTopicSemStandard &&
+                score == that.score &&
+                coefficient == that.coefficient &&
+                idReview == that.idReview &&
+                Objects.equals(content, that.content);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idTopicSem, idStandard, score);
+        return Objects.hash(idTopicSemStandard, score, content, coefficient, idReview);
     }
 }

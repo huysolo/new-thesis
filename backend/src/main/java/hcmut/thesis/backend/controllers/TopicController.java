@@ -1,7 +1,10 @@
 package hcmut.thesis.backend.controllers;
 
 import com.google.gson.Gson;
+import hcmut.thesis.backend.models.Review;
+import hcmut.thesis.backend.models.Standard;
 import hcmut.thesis.backend.models.Topic;
+import hcmut.thesis.backend.modelview.ReviewTopic;
 import hcmut.thesis.backend.modelview.TopicDetail;
 import hcmut.thesis.backend.modelview.UserSession;
 import hcmut.thesis.backend.services.TopicService;
@@ -152,16 +155,20 @@ public class TopicController {
     }
 
     @GetMapping(value = "listReview")
-    List<Topic> getListReviewTopic(@RequestParam(value = "semno", required = false) Integer semNo) {
+    List<Topic> getListReviewTopic(
+            @RequestParam(value = "semno", required = false) Integer semNo,
+            @RequestParam(value = "submitted" , required = false) Integer isSubmitted
+
+    ) {
         if (!userSession.isProf()) {
             return null;
         }
-        return topicService.getListTopicReview(semNo, userSession.getProf().getIdProfessor());
+        return topicService.getListTopicReview(semNo, userSession.getProf().getIdProfessor(), isSubmitted);
     }
 
     @DeleteMapping
     @ResponseBody
-    ResponseEntity<Object> delete(@RequestParam(value = "topid", required = true) Integer topId){
+    ResponseEntity<Object> delete(@RequestParam(value = "topid") Integer topId){
         if (!userSession.isProf()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO DELETE");
         }
@@ -170,6 +177,42 @@ public class TopicController {
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("INVALID REQUEST");
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("standard")
+    List<Standard> gettandardByUserId(){
+        if (userSession.isUser()){
+            return topicService.getListStandardBySemesterAndUserId(userSession.getUserID());
+        } else {
+            return null;
+        }
+    }
+
+    @PostMapping("standard")
+    Standard addByUserId(@RequestBody Standard standard){
+        if (userSession.isUser())
+        {
+            return topicService.setStandard(userSession.getUserID(), standard);
+        } else {
+            return null;
+        }
+    }
+
+    @DeleteMapping("standard")
+    Integer delStandard(@RequestParam(value = "id") Integer standardId) {
+        if (userSession.isUser()){
+            return topicService.deleteStandard(standardId, userSession.getUserID());
+        } else {
+            return null;
+        }
+    }
+
+    @PostMapping("review")
+    Review reviewTopic(@RequestBody ReviewTopic reviewTopic) {
+        if (userSession.isProf()){
+            return topicService.reviewTopic(reviewTopic, userSession.getProf().getIdProfessor());
+        }
+        return null;
     }
 
 }

@@ -12,7 +12,7 @@ public interface SemesterRepo extends JpaRepository<Semester, Integer> {
     @Query("SELECT s.semesterNo FROM Semester s WHERE s.applyOpenDate < current_timestamp AND  s.applyCloseDate > current_timestamp")
     List<Integer> getCurrentApplySemester();
 
-    @Query("SELECT s.semesterNo FROM Semester s WHERE s.startDate < current_timestamp AND  s.endDate > current_timestamp")
+    @Query("SELECT s.semesterNo FROM Semester s WHERE s.startDate < currenter_timestamp AND  s.endDate > current_timestamp")
     List<Integer> getCurrentSemester();
 
     @Query("SELECT s FROM  Semester s WHERE  s.applyCloseDate < current_timestamp")

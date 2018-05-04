@@ -1,0 +1,118 @@
+<div class="row">
+  <div class="col-md-5">
+    <legend>Current Semester</legend>
+    <form action="" method="post" #standard="ngForm" (ngSubmit)="addStandard()">
+      <div class="bmd-form-group">
+        <label for="standradName" class="bmd-label-static">Standard</label>
+        <input type="text" [(ngModel)]="standardCreate.stName" #name="ngModel" class="form-control" name="standradName" id="standradName"
+          aria-describedby="standardNameId" placeholder="">
+      </div>
+      <div class="bmd-form-group">
+          <label for="coefficientST" class="bmd-label-static">Coefficient</label>
+          <input type="text" [(ngModel)]="standardCreate.coefficient" #coefficient="ngModel" class="form-control" name="coefficientST" id="standradName"
+            aria-describedby="standardNameId" placeholder="">
+        </div>
+      <button type="button" name="addBtn" (click)="addStandard()" id="addBtn" class="btn btn-primary btn-block active">Add</button>
+    </form>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Coefficient</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let st of standardList | async | paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
+          <th scope="row">{{i}}</th>
+          <td>{{st.stName}}</td>
+          <th>{{st.coefficient}}</th>
+          <td>
+            <button type="submit" class="btn btn-danger active" (click)="removeStandard(st.idStandard)">Remove</button>
+            <button type="submit" class="btn btn-primary active">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    <legend>Review List</legend>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Id</th>
+          <th scope="col">Title</th>
+          <th scope="col">Review</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tp of topicReviewList | async; let i = index">
+          <th scope="row">{{i}}</th>
+          <td>{{tp.idTop}}</td>
+          <td>{{tp.title}}</td>
+          <td>
+            <button type="button" class="btn btn-success active" (click)="review(tp.idTop)">Review</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <legend>Review List</legend>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Id</th>
+          <th scope="col">Title</th>
+          <th scope="col">Review</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tp of topicReviewedList | async; let i = index">
+          <th scope="row">{{i}}</th>
+          <td>{{tp.idTop}}</td>
+          <td>{{tp.title}}</td>
+          <td>
+            <button type="button" class="btn btn-success active" (click)="review(tp.idTop)">Detail</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-7" *ngIf="reviewTp != null">
+    <form action="" method="post" class="form" #submitReviewForm="ngForm">
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Coefficient</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let st of standardListReview; let i = index">
+            <th scope="row">{{i}}</th>
+            <td>{{st.stName}}</td>
+            <td>{{st.coefficient}}</td>
+            <td>
+              <input type="text" name="score{{i}}" [(ngModel)]="reviewTp.standardScores[i].score">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" name="" id="" class="btn btn-primary btn-lg btn-block" (click)="submitReview()">Submit</button>
+    </form>
+    <!-- <form action="" method="post">
+      <div class="form-group">
+        <div class="form-inline">
+
+        </div>
+        <label for="">StandardName</label>
+        <input type="text|password|email|number|submit|date|datetime|datetime-local|month|color|range|search|tel|time|url|week"
+          class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+        <small id="helpId" class="form-text text-muted">Help text</small>
+      </div>
+    </form> -->
+  </div>
+</div>
