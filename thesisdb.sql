@@ -42,7 +42,18 @@ create table file
   name        varchar(45)                         null,
   upload_date timestamp default CURRENT_TIMESTAMP null,
   id_user     varchar(45)                         null,
-  id_task     int                                 null
+  id_task     int                                 null,
+  version     int                                 not null
+);
+
+create table general_standard
+(
+  id_general_standard int auto_increment
+    primary key,
+  stName              varchar(50)  not null,
+  coefficient         int unsigned not null,
+  semester_no         int          not null,
+  st_name             varchar(255) null
 );
 
 create table hibernate_sequence
@@ -144,9 +155,10 @@ create table standard
 (
   id_standard int auto_increment
     primary key,
-  st_name     varchar(50)     not null,
-  id_user     int             null,
-  coefficient int default '1' not null
+  st_name     varchar(50)  not null,
+  id_user     int          null,
+  coefficient int unsigned not null,
+  semester_no int          null
 )
   comment 'Standard for Professors';
 
@@ -188,15 +200,16 @@ create index student_topic_sem_student_id_student_fk
 
 create table task
 (
-  id_task      int auto_increment
+  id_task         int auto_increment
     primary key,
-  title        varchar(150)                        not null,
-  description  varchar(200)                        null,
-  deadline     timestamp default CURRENT_TIMESTAMP not null
+  title           varchar(150)                        not null,
+  description     varchar(200)                        null,
+  deadline        timestamp default CURRENT_TIMESTAMP not null
   on update CURRENT_TIMESTAMP,
-  id_topic_sem int                                 null,
-  pass         int                                 null,
-  submit       int                                 null
+  id_topic_sem    int                                 null,
+  pass            int                                 null,
+  submit          int                                 null,
+  current_version int default '0'                     null
 );
 
 create index task_topic_per_semester_id_topic_semester_fk
@@ -260,10 +273,10 @@ create table topic_sem_standard
 (
   id_topic_sem_standard int auto_increment
     primary key,
-  score                 int default '0' not null,
-  content               varchar(45)     not null,
-  coefficient           int default '1' not null,
-  id_review             int             not null
+  content               varchar(45)              not null,
+  coefficient           int default '1'          not null,
+  id_review             int                      not null,
+  score                 int unsigned default '0' not null
 )
   comment 'Standard foreach topic per semester';
 

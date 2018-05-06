@@ -14,6 +14,7 @@ public class File {
     private Timestamp uploadDate;
     private int idUser;
     private Integer idTask;
+    private int version;
 
 
     public File(String name, int idUser, Integer idTask) {
@@ -25,6 +26,9 @@ public class File {
     public File() {
     }
 
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
 
     @Id
     @Column(name = "id_file")
@@ -92,5 +96,15 @@ public class File {
     public int hashCode() {
 
         return Objects.hash(idFile, name, uploadDate, idUser, idTask);
+    }
+
+    @Basic
+    @Column(name = "version")
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

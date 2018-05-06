@@ -18,9 +18,18 @@ public class Task {
     private Integer idTopicSem;
     private int submit;
     private int pass;
+    private Integer currentVersion;
+
+    public void setSubmit(Integer submit) {
+        this.submit = submit;
+    }
+
+    public void setPass(Integer pass) {
+        this.pass = pass;
+    }
 
     @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     @Column(name = "id_task")
     public int getIdTask() {
         return idTask;
@@ -65,21 +74,21 @@ public class Task {
     public Integer getIdTopicSem() {
         return idTopicSem;
     }
-
+    
     public void setIdTopicSem(Integer idTopicSem) {
         this.idTopicSem = idTopicSem;
     }
-    
+
     @Basic
     @Column(name = "submit")
     public int getSubmit() {
         return this.submit;
     }
-
+    
     public void setSubmit(int submit) {
         this.submit = submit;
     }
-    
+
     @Basic
     @Column(name = "pass")
     public int getPass() {
@@ -108,5 +117,15 @@ public class Task {
     public int hashCode() {
 
         return Objects.hash(idTask, title, description, deadline, submit, pass, idTopicSem);
+    }
+
+    @Basic
+    @Column(name = "current_version")
+    public Integer getCurrentVersion() {
+        return currentVersion;
+    }
+
+    public void setCurrentVersion(Integer currentVersion) {
+        this.currentVersion = currentVersion;
     }
 }
