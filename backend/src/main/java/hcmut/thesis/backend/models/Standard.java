@@ -12,6 +12,7 @@ public class Standard {
     private String stName;
     private Integer idUser;
     private int coefficient;
+    private Integer semesterNo;
 
     @Id
     @Column(name = "id_standard")
@@ -67,5 +68,15 @@ public class Standard {
 
     public void setCoefficient(int coefficient) {
         this.coefficient = coefficient;
+    }
+
+    @Basic
+    @Column(name = "semester_no")
+    public Integer getSemesterNo() {
+        return semesterNo;
+    }
+
+    public void setSemesterNo(Integer semesterNo) {
+        this.semesterNo = semesterNo;
     }
 }

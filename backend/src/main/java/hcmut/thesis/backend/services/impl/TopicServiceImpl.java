@@ -11,7 +11,6 @@ import hcmut.thesis.backend.services.ITopicDAO;
 import hcmut.thesis.backend.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,9 +44,6 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     StandardRepo standardRepo;
-
-    @Autowired
-    StandardTopicRepo standardTopicRepo;
 
     @Autowired
     ReviewRepo reviewRepo;
@@ -272,13 +268,18 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Review reviewTopic(ReviewTopic reviewTopic, Integer profId) {
         Optional<Review> review = reviewRepo.findReviewByIdProfAndIdTopic(profId, reviewTopic.getTopicId());
-        System.out.println(reviewTopic.getStandardScores().size());
         List<TopicSemStandard> topicSemStandards = new LinkedList<>();
         Integer numerator = 0;
         Integer denominator = 0;
         if (review.isPresent() && review.get().getSubmitted() == 0){
+            Optional<Topic> topic = topicRepo.findById(review.get().getIdTopic());
+            if (!topic.isPresent() ||
+                    (topic.get().getReviewDate() != null &&
+                            topic.get().getReviewDate().after(new Timestamp(System.currentTimeMillis())))
+                    ){
+                throw new NullPointerException("Cannot review topic before review date");
+            }
             for (StandardScore standardScore : reviewTopic.getStandardScores()) {
-                System.out.println(standardScore.getStandardId());
                 Optional<Standard> standard = standardRepo.findById(standardScore.getStandardId());
                 if (standard.isPresent()) {
                     TopicSemStandard topicSemStandard = new TopicSemStandard();
@@ -296,10 +297,10 @@ public class TopicServiceImpl implements TopicService {
             }
             topicSemStandardRepo.saveAll(topicSemStandards);
             review.get().setSubmitted(review.get().getSubmitted() + 1);
-            review.get().setScore(numerator / denominator);
+            review.get().setScore(numerator / (denominator == 0 ? denominator : 1));
             return reviewRepo.save(review.get());
         }
-        return null;
+        throw new NullPointerException();
     }
 
     @Override
@@ -322,13 +323,33 @@ public class TopicServiceImpl implements TopicService {
         return null;
     }
 
+    @Override
+    public List<TopicSemStandard> getListReviewedTopicStandard(Integer topicId, Integer profId) {
+        Optional<Review> review = reviewRepo.findReviewByIdProfAndIdTopic(profId, topicId);
+
+        return review.map(review1 -> topicSemStandardRepo.findAllByIdReview(review1.getIdReview())).orElse(null);
+    }
+
+    @Override
+    public List<Standard> getGeneralStandardOfCurrentSemester() {
+        Semester semester = commonService.getSemOpen();
+        return standardRepo.getAllBySemesterNo(semester.getSemesterNo());
+    }
+
+    @Override
+    public List<Standard> getStandardListByGeneralAndUserId(Integer userId) {
+        Semester semester = commonService.getSemOpen();
+        return standardRepo.getAllBySemesterNoAnAndIdUser(semester.getSemesterNo(), userId);
+    }
+
     private Topic deleteTopicMissionAndRequirement(Integer topicId) throws NullPointerException {
         TopicDetail topicDetail = getTopicDetailById(topicId);
+
         if (userSession.getProf().getIdProfessor() != topicDetail.getTopic().getIdProf()){
-            return null;
+            throw new NullPointerException("Cannot Delete This Topic");
         }
         if (topicDetail.getTopic().getSemesterNo() != null) {
-            return null;
+            throw new NullPointerException("Cannot Delete This Topic");
         }
         topicDetail.getTopicMission().forEach(topicMission -> {
             topicMissionRepo.delete(topicMission);

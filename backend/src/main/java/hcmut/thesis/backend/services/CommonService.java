@@ -13,6 +13,6 @@ public interface CommonService {
     Integer getCurrentApplySem();
     Integer getCurrentSem();
     Semester getSemOpen();
-    List<Specialize> getAllByIdFalcuty(Integer idFal);
+    List<Specialize> getAllByIdFaculty(Integer idFal);
     String getSpecByID(Integer idSpec);
 }

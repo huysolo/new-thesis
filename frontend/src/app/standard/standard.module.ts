@@ -4,13 +4,17 @@ import { ManageStandardComponent } from './pages/manage-standard/manage-standard
 import { StandardRoutingModule } from './standard-routing.module';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     NgxPaginationModule,
-    StandardRoutingModule
+    StandardRoutingModule,
+    MatTabsModule,
+    MatGridListModule
   ],
   declarations: [ManageStandardComponent]
 })

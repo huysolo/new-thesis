@@ -9,6 +9,7 @@ import { AuthService } from '../../../core/auth.service';
 import { ReviewTopic } from '../../../models/ReviewTopic';
 import { StandardScore } from '../../../models/StandardScore';
 import { TopicReview } from '../../../models/TopicReview';
+import { TopicSemStandard } from '../../../models/TopicSemStandard';
 
 @Component({
   selector: 'app-manage-standard',
@@ -24,41 +25,60 @@ export class ManageStandardComponent implements OnInit {
   topicReviewedList: Observable<Topic[]>;
   standardCreate: Standard;
   reviewTp: ReviewTopic;
-  idStandard = -1;
+  standdardSelected: Standard;
+  topicSelected: Topic;
+  topicRvStandardDetail: TopicSemStandard[];
   ngOnInit() {
+    this.topicRvStandardDetail = new Array<TopicSemStandard>();
+    this.standdardSelected = new Standard();
     this.standardCreate = new Standard();
     this.standardList = this.standardSv.getCurrentSemStandard();
     this.topicReviewList = this.topicSv.getListReview(new HttpParams().set('submitted', '0'));
-    this.topicReviewedList = this.topicSv.getListReview(new HttpParams().set('submitted', '1'));
+
+  }
+
+  reset() {
+    this.standdardSelected = new Standard();
   }
 
   addStandard() {
     this.standardCreate.idUser = parseInt(this.authoSv.getUserId());
     this.standardSv.postStandard(this.standardCreate).subscribe(data => {
-      console.log(data);
       this.standardList = this.standardList.map(st => {
         return st;
       });
     });
   }
 
-  review(topicId: Number) {
+  editStandard(standard: Standard) {
+    this.standdardSelected = Object.assign({}, standard);
+  }
+  submitEdit() {
+    this.standardSv.postStandard(this.standdardSelected).subscribe(data => {
+      this.standardList = this.standardList.map(st => {
+        return st;
+      });
+      this.reset();
+    });
+  }
 
-    this.standardList.subscribe(st => {
+  review(topicId: Number) {
+    this.standardSv.getListStandardAndGeneral().subscribe(stLst => {
       this.reviewTp = new ReviewTopic;
       this.reviewTp.topicId = topicId;
-      this.standardListReview = st;
+      this.standardListReview = stLst;
       this.reviewTp.standardScores = new Array<StandardScore>();
-      st.forEach(s => {
+      this.standardListReview.forEach(s => {
         this.reviewTp.standardScores.push(new StandardScore(s.idStandard));
       });
     });
   }
   submitReview() {
-      console.log(this.reviewTp.standardScores[0].score);
-      this.standardSv.postReview(this.reviewTp).subscribe(data => {
-        console.log(data);
+    this.standardSv.postReview(this.reviewTp).subscribe(data => {
+      this.topicReviewList = this.topicReviewList.map(tplst => {
+        return tplst.filter(topic => topic.idTop != data.idTopic);
       });
+    });
   }
 
   removeStandard(standardId: Number) {
@@ -68,5 +88,24 @@ export class ManageStandardComponent implements OnInit {
       });
     });
   }
+
+  detail(topicId: Number) {
+    this.standardSv.getReview(topicId).subscribe(data => {
+      this.topicRvStandardDetail = data;
+    });
+  }
+
+  setSlTopic(tp: Topic) {
+    this.topicSelected = tp;
+  }
+
+  onLinkClick(e) {
+    if (e.tab.textLabel === 'In Review') {
+      this.topicReviewList = this.topicSv.getListReview(new HttpParams().set('submitted', '0'));
+    } else {
+      this.topicReviewedList = this.topicSv.getListReview(new HttpParams().set('submitted', '1'));
+    }
+  }
+
 
 }

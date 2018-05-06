@@ -3,4 +3,5 @@ export class Standard {
     stName: String;
     idUser: Number;
     coefficient: Number;
+    semesterNo: Number;
 }

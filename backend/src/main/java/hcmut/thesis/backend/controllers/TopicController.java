@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import hcmut.thesis.backend.models.Review;
 import hcmut.thesis.backend.models.Standard;
 import hcmut.thesis.backend.models.Topic;
+import hcmut.thesis.backend.models.TopicSemStandard;
 import hcmut.thesis.backend.modelview.ReviewTopic;
 import hcmut.thesis.backend.modelview.TopicDetail;
 import hcmut.thesis.backend.modelview.UserSession;
@@ -214,5 +215,28 @@ public class TopicController {
         }
         return null;
     }
+
+    @GetMapping("review")
+    List<TopicSemStandard> getReviewedTopicStandard(@RequestParam(value = "id") Integer topicId) {
+        if (userSession.isProf()) {
+            return topicService.getListReviewedTopicStandard(topicId, userSession.getProf().getIdProfessor());
+        }
+        return null;
+
+    }
+
+    @GetMapping("generalStandard")
+    List<Standard> getGeneralStandards() {
+        return topicService.getGeneralStandardOfCurrentSemester();
+    }
+
+    @GetMapping("standardAndGeneral")
+    List<Standard> standardAndGeneral() {
+        if (userSession.isUser()){
+            return topicService.getListStandardBySemesterAndUserId(userSession.getUserID());
+        }
+        return  null;
+    }
+
 
 }

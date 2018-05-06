@@ -1,6 +1,6 @@
 <div class="row">
-  <div class="col-md-5">
-    <legend>Current Semester</legend>
+  <div class="col-md-5 col-sm-12">
+    <legend>Add Standard</legend>
     <form action="" method="post" #standard="ngForm" (ngSubmit)="addStandard()">
       <div class="bmd-form-group">
         <label for="standradName" class="bmd-label-static">Standard</label>
@@ -8,12 +8,15 @@
           aria-describedby="standardNameId" placeholder="">
       </div>
       <div class="bmd-form-group">
-          <label for="coefficientST" class="bmd-label-static">Coefficient</label>
-          <input type="text" [(ngModel)]="standardCreate.coefficient" #coefficient="ngModel" class="form-control" name="coefficientST" id="standradName"
-            aria-describedby="standardNameId" placeholder="">
-        </div>
+        <label for="coefficientST" class="bmd-label-static">Coefficient</label>
+        <input type="number" [(ngModel)]="standardCreate.coefficient" #coefficient="ngModel" class="form-control" name="coefficientST"
+          id="standradName" aria-describedby="standardNameId" placeholder="">
+      </div>
       <button type="button" name="addBtn" (click)="addStandard()" id="addBtn" class="btn btn-primary btn-block active">Add</button>
     </form>
+  </div>
+  <div class="col-md-7 col-sm-12">
+    <legend>Standard List</legend>
     <table class="table table-striped">
       <thead class="thead-dark">
         <tr>
@@ -26,93 +29,145 @@
       <tbody>
         <tr *ngFor="let st of standardList | async | paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
           <th scope="row">{{i}}</th>
-          <td>{{st.stName}}</td>
-          <th>{{st.coefficient}}</th>
-          <td>
-            <button type="submit" class="btn btn-danger active" (click)="removeStandard(st.idStandard)">Remove</button>
-            <button type="submit" class="btn btn-primary active">Edit</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <pagination-controls (pageChange)="p = $event"></pagination-controls>
-    <legend>Review List</legend>
-    <table class="table table-striped">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Id</th>
-          <th scope="col">Title</th>
-          <th scope="col">Review</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tp of topicReviewList | async; let i = index">
-          <th scope="row">{{i}}</th>
-          <td>{{tp.idTop}}</td>
-          <td>{{tp.title}}</td>
-          <td>
-            <button type="button" class="btn btn-success active" (click)="review(tp.idTop)">Review</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <legend>Review List</legend>
-    <table class="table table-striped">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Id</th>
-          <th scope="col">Title</th>
-          <th scope="col">Review</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tp of topicReviewedList | async; let i = index">
-          <th scope="row">{{i}}</th>
-          <td>{{tp.idTop}}</td>
-          <td>{{tp.title}}</td>
-          <td>
-            <button type="button" class="btn btn-success active" (click)="review(tp.idTop)">Detail</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="col-md-7" *ngIf="reviewTp != null">
-    <form action="" method="post" class="form" #submitReviewForm="ngForm">
-      <table class="table table-striped">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Coefficient</th>
-            <th scope="col">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let st of standardListReview; let i = index">
-            <th scope="row">{{i}}</th>
-            <td>{{st.stName}}</td>
-            <td>{{st.coefficient}}</td>
+          <ng-container *ngIf="standdardSelected.idStandard != null && st.idStandard === standdardSelected.idStandard ; else elseTemplate">
             <td>
-              <input type="text" name="score{{i}}" [(ngModel)]="reviewTp.standardScores[i].score">
+              <input type="text" class="form-control" [(ngModel)]="standdardSelected.stName" name="stEditName" #stEditName="ngModel" required>
             </td>
-          </tr>
-        </tbody>
-      </table>
-      <button type="button" name="" id="" class="btn btn-primary btn-lg btn-block" (click)="submitReview()">Submit</button>
-    </form>
-    <!-- <form action="" method="post">
-      <div class="form-group">
-        <div class="form-inline">
+            <td>
+              <input type="number" class="form-control" [(ngModel)]="standdardSelected.coefficient" name="stEditCo" #stEditCo="ngModel"
+                required>
+            </td>
 
-        </div>
-        <label for="">StandardName</label>
-        <input type="text|password|email|number|submit|date|datetime|datetime-local|month|color|range|search|tel|time|url|week"
-          class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-        <small id="helpId" class="form-text text-muted">Help text</small>
-      </div>
-    </form> -->
+            <td>
+              <button type="submit" class="btn btn-primary active" (click)="submitEdit()" [disabled]="!stEditName.valid || !stEditCo.valid">Submit</button>
+              <button type="submit" class="btn btn-dark active" (click)="reset()">Cancel</button>
+            </td>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <td>{{st.stName}}</td>
+            <th>{{st.coefficient}}</th>
+            <td>
+              <button type="submit" class="btn btn-danger active" (click)="removeStandard(st.idStandard)">Remove</button>
+              <button type="submit" class="btn btn-primary active" (click)="editStandard(st)">Change</button>
+            </td>
+          </ng-template>
+
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-center">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
   </div>
+
+  <hr>
 </div>
+<mat-tab-group (selectedTabChange)="onLinkClick($event)">
+  <mat-tab label="In Review">
+    <div class="row">
+      <div class="col-md-5 col-sm-12">  
+        <legend>Topic List</legend>
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Id</th>
+              <th scope="col">Title</th>
+              <th scope="col">Review</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tp of topicReviewList | async; let i = index">
+              <th scope="row">{{i}}</th>
+              <td>{{tp.idTop}}</td>
+              <td>{{tp.title}}</td>
+              <td>
+                <button type="button" class="btn btn-success active" (click)="review(tp.idTop) && setSlTopic(tp)">Review</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    
+      </div>
+      <div class="col-md-7 col-sm-12" >
+        <legend>Scores</legend>
+        <form action="" method="post" class="form" #submitReviewForm="ngForm">
+          <table class="table table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Coefficient</th>
+                <th scope="col">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let st of standardListReview; let i = index">
+                <th scope="row">{{i}}</th>
+                <td>{{st.stName}}</td>
+                <td>{{st.coefficient}}</td>
+                <td>
+                  <input type="number" name="score{{i}}" [(ngModel)]="reviewTp.standardScores[i].score" #score="ngModel" required>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button *ngIf="reviewTp != null" type="button" name="" id="" class="btn btn-primary btn-lg btn-block active" (click)="submitReview()" [disabled]="!submitReviewForm.form.valid">Submit</button>
+        </form>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Reviewed">
+    <div class="row">
+      <div class="col-md-5 col-sm-12">
+        <legend>Topic List</legend>
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Id</th>
+              <th scope="col">Title</th>
+              <th scope="col">Review</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tp of topicReviewedList | async; let i = index">
+              <th scope="row">{{i}}</th>
+              <td>{{tp.idTop}}</td>
+              <td>{{tp.title}}</td>
+              <td>
+                <button type="button" class="btn btn-success active" (click)="detail(tp.idTop)">Detail</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-7 col-sm-12">
+        <legend>Scores</legend>
+        <table class="table table-striped">
+          <thead class="thead-dark">
+              <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Coefficient</th>
+                  <th scope="col">Score</th>
+                </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tp of topicRvStandardDetail; let i = index">
+              <th scope="row">{{i}}</th>
+              <td>{{tp.content}}</td>
+              <td>{{tp.coefficient}}</td>
+              <td>
+                {{tp.score}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </mat-tab>
+</mat-tab-group>
+
+

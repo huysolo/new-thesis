@@ -30,5 +30,8 @@ public interface TopicService {
     Standard copyStandardToCurrentSem(Standard standard);
     Boolean isStandardOwner(Integer userId, Standard standard);
     Integer deleteStandard(Integer standardId, Integer idUser);
+    List<TopicSemStandard> getListReviewedTopicStandard(Integer topicId, Integer profId);
+    List<Standard> getGeneralStandardOfCurrentSemester();
+    List<Standard> getStandardListByGeneralAndUserId(Integer userId);
 
 }
