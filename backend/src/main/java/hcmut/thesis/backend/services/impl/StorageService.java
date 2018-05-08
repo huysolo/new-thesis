@@ -47,15 +47,15 @@ public class StorageService {
                 } else {
 
                     System.out.println("Directory already exists");
+                    }
+                    Files.deleteIfExists(path.resolve(file.getOriginalFilename()));
+                    Files.copy(file.getInputStream(), path.resolve(file.getOriginalFilename()));
                 }
-                Files.deleteIfExists(path.resolve(file.getOriginalFilename()));
-                Files.copy(file.getInputStream(), path.resolve(file.getOriginalFilename()));
-            }
 
-            return rs;
-        } catch (Exception e) {
-            throw new RuntimeException("FAIL!");
-        }
+                return rs;
+            } catch (Exception e) {
+                throw new RuntimeException("FAIL!");
+            }
     }
 
     public Resource loadFile(String filename, Integer taskId, Integer version) {

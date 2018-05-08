@@ -9,14 +9,11 @@ export class UploadFileService {
 
   constructor(private http: HttpClient, private zone: NgZone) {}
 
-  pushFileToStorage(file: File, id, version): Observable<HttpEvent<{}>> {
+  pushFileToStorage(file: File, id): Observable<HttpEvent<{}>> {
     const formdata: FormData = new FormData();
 
     formdata.append('file', file);
     formdata.append('id', id);
-    if (version != null) {
-      formdata.append('ver', version);
-    }
 
     const req = new HttpRequest('POST', 'http://localhost:8080/post', formdata, {
       reportProgress: true,
