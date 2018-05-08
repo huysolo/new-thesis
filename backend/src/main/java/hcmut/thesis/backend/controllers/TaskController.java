@@ -5,6 +5,7 @@
  */
 package hcmut.thesis.backend.controllers;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import hcmut.thesis.backend.models.Task;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.modelview.ChatGroupInfo;
@@ -201,18 +202,17 @@ public class TaskController {
         return topicRepo.getTopicFromTopicID(topicID);
     }
 
-    private List<String> files = new ArrayList<String>();
 
     @PostMapping("/post")
     public ResponseEntity<String> handleFileUpload(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("id") Integer taskId
+            @RequestParam("id") Integer taskId,
+            @RequestParam("ver") Integer version
     ) {
         String message;
         try {
             System.out.println(taskId);
-            storageService.storeTask(file, taskId);
-            files.add(file.getOriginalFilename());
+            storageService.storeTask(file, taskId, version);
 
             message = "You successfully uploaded " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.OK).body(message);
@@ -222,13 +222,22 @@ public class TaskController {
         }
     }
 
+    @PostMapping("addversion")
+    public ResponseEntity<Integer> addNewVersion(@RequestBody Integer idTask){
+        try {
+            return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
+        } catch (NullPointerException e) {
+            return  ResponseEntity.status(500).body(0);
+        }
+    }
+
     @GetMapping("/getallfiles")
     public ResponseEntity<List<String>> getListFiles(Model model,
-        @RequestParam("id") Integer taskId
+        @RequestParam("id") Integer taskId, @RequestParam(value = "ver", required = false) Integer version
     ) {
-        List<String> fileNames = taskService.getFileByTaskId(taskId)
+        List<String> fileNames = taskService.getFileByTaskId(taskId, version)
                 .stream().map(f -> MvcUriComponentsBuilder
-                        .fromMethodName(TaskController.class, "getFile", f.getName(), f.getIdTask()).build().toString())
+                        .fromMethodName(TaskController.class, "getFile", f.getName(), f.getIdTask(), f.getVersion()).build().toString())
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(fileNames);
@@ -236,10 +245,23 @@ public class TaskController {
 
     @GetMapping("/files/{fileName:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName, Integer taskId) {
-        Resource file = storageService.loadFile(fileName, taskId);
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName, Integer taskId, Integer version) {
+        Resource file = storageService.loadFile(fileName, taskId, version);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
     }
+
+    @DeleteMapping("file")
+    public ResponseEntity<String> deleteFile(@RequestParam("name") String name, @RequestParam("ver") Integer ver, @RequestParam("id") Integer idTask) {
+        try {
+            return ResponseEntity.ok(storageService.deleteFile(name, ver, idTask));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+
+
+
 }

@@ -14,4 +14,9 @@ export class DetailsUploadComponent implements OnInit {
   ngOnInit() {
   }
 
+  filename() {
+    const path = this.fileUpload.substring(this.fileUpload.lastIndexOf('/') + 1);
+    return (path.match(/[^.]+(\.[^?#]+)?/) || [])[0];
+  }
+
 }

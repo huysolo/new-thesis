@@ -5,6 +5,7 @@ export class TaskInfo {
   description: String;
   deadline: String;
   student: Array<StudentDoTask>;
+
   public TaskInfo(title: String, des: String, deadline: String, student: Array<StudentDoTask>) {
     this.title = title;
     this.description = des;

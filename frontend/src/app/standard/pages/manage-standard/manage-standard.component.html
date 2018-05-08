@@ -1,18 +1,18 @@
 <div class="row">
   <div class="col-md-5 col-sm-12">
     <legend>Add Standard</legend>
-    <form action="" method="post" #standard="ngForm" (ngSubmit)="addStandard()">
+    <form action="" method="post" #standardForm="ngForm" (ngSubmit)="addStandard()">
       <div class="bmd-form-group">
         <label for="standradName" class="bmd-label-static">Standard</label>
         <input type="text" [(ngModel)]="standardCreate.stName" #name="ngModel" class="form-control" name="standradName" id="standradName"
-          aria-describedby="standardNameId" placeholder="">
+          aria-describedby="standardNameId" placeholder="" required>
       </div>
       <div class="bmd-form-group">
         <label for="coefficientST" class="bmd-label-static">Coefficient</label>
         <input type="number" [(ngModel)]="standardCreate.coefficient" #coefficient="ngModel" class="form-control" name="coefficientST"
-          id="standradName" aria-describedby="standardNameId" placeholder="">
+          id="standradName" aria-describedby="standardNameId" placeholder="" required>
       </div>
-      <button type="button" name="addBtn" (click)="addStandard()" id="addBtn" class="btn btn-primary btn-block active">Add</button>
+      <button type="button" name="addBtn" (click)="addStandard()" id="addBtn" class="btn btn-primary btn-block active" [disabled]="!standardForm.valid">Add</button>
     </form>
   </div>
   <div class="col-md-7 col-sm-12">

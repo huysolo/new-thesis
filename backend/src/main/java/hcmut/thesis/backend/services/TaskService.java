@@ -13,6 +13,7 @@ import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.TaskComment;
 import hcmut.thesis.backend.modelview.TaskInfo;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -31,5 +32,10 @@ public interface TaskService {
     Topic getCurrTopicFromStdID(int stdid);
     List<File> getFileNameOfFile(int taskId);
     Boolean saveFileToTask(File file);
-    List<File> getFileByTaskId(Integer taskId);
+    List<File> getFileByTaskId(Integer taskId, Integer version);
+    Integer getCurrentVersionOfTaskId(Integer taskId);
+    Integer addNewVersion(Integer taskId);
+    Integer submitVersion(Integer taskId);
+    String deleteFile(String name, Integer idTask, Integer version);
+
 }

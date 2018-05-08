@@ -19,6 +19,7 @@ public class Task {
     private int submit;
     private int pass;
     private Integer currentVersion;
+    private Integer reviewVersion;
 
     public void setSubmit(Integer submit) {
         this.submit = submit;
@@ -64,7 +65,7 @@ public class Task {
     public Timestamp getDeadline() {
         return deadline;
     }
-
+    
     public void setDeadline(Timestamp deadline) {
         this.deadline = deadline;
     }
@@ -84,7 +85,7 @@ public class Task {
     public int getSubmit() {
         return this.submit;
     }
-    
+
     public void setSubmit(int submit) {
         this.submit = submit;
     }
@@ -128,4 +129,15 @@ public class Task {
     public void setCurrentVersion(Integer currentVersion) {
         this.currentVersion = currentVersion;
     }
+
+    @Basic
+    @Column(name = "review_version")
+    public Integer getReviewVersion() {
+        return reviewVersion;
+    }
+
+    public void setReviewVersion(Integer reviewVersion) {
+        this.reviewVersion = reviewVersion;
+    }
+
 }
