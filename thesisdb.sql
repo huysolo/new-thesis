@@ -37,7 +37,7 @@ create table faculty
 
 create table file
 (
-  id_file     int                                 not null
+  id_file     int auto_increment
     primary key,
   name        varchar(45)                         null,
   upload_date timestamp default CURRENT_TIMESTAMP null,
@@ -209,7 +209,8 @@ create table task
   id_topic_sem    int                                 null,
   pass            int                                 null,
   submit          int                                 null,
-  current_version int default '0'                     null
+  current_version int default '0'                     null,
+  approve         int default '0'                     null
 );
 
 create index task_topic_per_semester_id_topic_semester_fk

@@ -1,33 +1,29 @@
-<div class="dropdown">
-	<button class="btn btn-info active" *ngIf='showFile'
-		(click)='showFiles(false)'>Hide Files</button>
-	
-	<button class="btn btn-info active" *ngIf='!showFile'
-		(click)='showFiles(true)'>Show Files</button>
-		<button class="btn btn-primary dropdown-toggle active" type="button" id="Version" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false">
-					Version
-				</button>
-		<div class="dropdown-menu" aria-labelledby="Version" >
-			<a class="dropdown-item" (click)="changeVersion(v)" *ngFor="let v of uploadService.getListVersion(ver) | async">{{v}}</a>
-		</div>
-	</div>
 
-<div [hidden]="!showFile" class="card text-white bg-dark mb-3" style="max-width: 18rem;">
-	<!-- <div class="card-header"></div> -->
-	<div class="card-body">
-			<h5 class="card-title">List of Files</h5>
-		<div *ngFor="let file of fileUploads | async">
-			<p class="card-text">
-				<app-detail-upload [fileUpload]='file'></app-detail-upload>
-			</p>
+	<app-form-upload [id]="id" (emitListVersion)="reloadListVersion($event)"></app-form-upload>
+
+	<div class="dropdown">
+		<button class="btn btn-info active btn-sm" *ngIf='showFile'
+			(click)='showFiles(false)'>Hide Files</button>
+		
+		<button class="btn btn-info btn-sm active" *ngIf='!showFile'
+			(click)='showFiles(true)'>Show Files</button>
+			<button class="btn btn-primary btn-sm dropdown-toggle active " type="button" id="Version" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false">
+						Version
+					</button>
+			<div class="dropdown-menu" aria-labelledby="Version" >
+				<a class="dropdown-item" (click)="changeVersion(v)" *ngFor="let v of listVersion | async">{{v}}</a>
+			</div>
+		</div>
+	
+	
+	<div [hidden]="!showFile" class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+		<div class="card-body">
+				<h5 class="card-title">List of Files</h5>
+			<div *ngFor="let file of fileUploads | async">
+				<p class="card-text">
+					<app-detail-upload [fileUpload]='file' (rmEmitter)="deleteFile($event)"></app-detail-upload>
+				</p>
+			</div>
 		</div>
 	</div>
-</div>
-<div >
-		<!-- <div class="card-header">Header</div>
-		<div class="card-body">
-			
-			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-		</div>
-	</div> -->

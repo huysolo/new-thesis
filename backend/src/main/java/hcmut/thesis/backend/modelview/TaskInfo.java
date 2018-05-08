@@ -19,8 +19,19 @@ public class TaskInfo {
     private Timestamp deadline;
     private int submit;
     private int pass;
-    private List<StudentDoTask> student; 
-    
+    private List<StudentDoTask> student;
+    private Integer currentVersion;
+
+    public Integer getCurrentVersion() {
+        return currentVersion;
+    }
+
+    public void setCurrentVerion(Integer currentVersion) {
+        this.currentVersion = currentVersion;
+    }
+
+
+
     public int getTaskID(){
         return this.taskID;
     }

@@ -28,11 +28,9 @@ public class StorageService {
     private UserSession userSession;
 
 
-    public Boolean storeTask(MultipartFile file, Integer taskId, Integer version) {
+    public Boolean storeTask(MultipartFile file, Integer taskId) {
         try {
-            if (version == null) {
-                version = taskService.getCurrentVersionOfTaskId(taskId);
-            }
+            Integer version = taskService.getCurrentVersionOfTaskId(taskId);
             if (version == null) {
                 throw new RuntimeException("Cannot get task version");
             }

@@ -206,13 +206,11 @@ public class TaskController {
     @PostMapping("/post")
     public ResponseEntity<String> handleFileUpload(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("id") Integer taskId,
-            @RequestParam("ver") Integer version
+            @RequestParam("id") Integer taskId
     ) {
         String message;
         try {
-            System.out.println(taskId);
-            storageService.storeTask(file, taskId, version);
+            storageService.storeTask(file, taskId);
 
             message = "You successfully uploaded " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.OK).body(message);
@@ -255,7 +253,7 @@ public class TaskController {
     @DeleteMapping("file")
     public ResponseEntity<String> deleteFile(@RequestParam("name") String name, @RequestParam("ver") Integer ver, @RequestParam("id") Integer idTask) {
         try {
-            return ResponseEntity.ok(storageService.deleteFile(name, ver, idTask));
+            return ResponseEntity.ok(storageService.deleteFile(name, idTask, ver));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }

@@ -35,7 +35,6 @@ public interface TaskService {
     List<File> getFileByTaskId(Integer taskId, Integer version);
     Integer getCurrentVersionOfTaskId(Integer taskId);
     Integer addNewVersion(Integer taskId);
-    Integer submitVersion(Integer taskId);
     String deleteFile(String name, Integer idTask, Integer version);
 
 }
