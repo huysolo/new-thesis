@@ -58,6 +58,7 @@ export class TaskCreateComponent implements OnInit {
   }
 
   createtask(form) {
+    console.log(form.deadline);
     const temp = <TaskInfo>({ title: form.title, description: form.description, deadline: form.deadline, student: this.listStdDoTask });
     this.taskService.createtask(temp).subscribe(
       res => {

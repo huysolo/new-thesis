@@ -12,26 +12,26 @@ package hcmut.thesis.backend.modelview;
 public class StudentJoinMeeting {
     
     private String name;
-    private Integer stdid;
-    private Integer meetingid;
+    private int stdID;
+    private int meetingID;
     
     public void setName(String name){
         this.name = name;
     }
-    public void setStdID(Integer id){
-        this.stdid = id;
+    public void setStdID(int id){
+        this.stdID = id;
     }
-    public void setMeetingID(Integer id){
-        this.meetingid = id;
+    public void setMeetingID(int id){
+        this.meetingID = id;
     }
     
     public String getName(){
         return this.name;
     }
-    public Integer getStdID(){
-        return this.stdid;
+    public int getStdID(){
+        return this.stdID;
     }
-    public Integer getMeetingID(){
-        return this.meetingid;
+    public int getMeetingID(){
+        return this.meetingID;
     }
 }

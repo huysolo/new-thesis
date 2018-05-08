@@ -1,3 +1,108 @@
-<p>
-  meeting-detail works!
-</p>
+<div class="container" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{meeting.title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form #createTopicForm="ngForm" action="" method="post">
+            <!-- <div *ngIf="this.authService.isProfessor()" class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-pencil-square-o"></i> Topic </h5>
+              </label>
+              <select [(ngModel)]="meetingCreate.topicid" name="topicid" class="custom-select">
+                <option selected [value]="0">Choose Topic</option>
+                <option *ngFor="let topic of listTopic" [value]="topic.idTop">Title</option>
+              </select>
+            </div> -->
+            <div class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-sticky-note-o"></i> Content </h5>
+              </label>
+              <p>{{meeting.content}}</p>
+            </div>
+
+            <div *ngIf="authService.isStudent() && !meeting.status" class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-sticky-note-o"></i> Time-Location </h5>
+              </label>
+              <div *ngFor="let schedule of meeting.timeLocation" class="form-check">
+                <input (change)="stdBookLocationTime($event, schedule)" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+                <label class="form-check-label" for="exampleRadios1">
+                  {{schedule.location}} - {{schedule.meetingTime | date}}
+                </label>
+              </div>
+            </div>
+
+            <div *ngIf="meeting.status" class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-sticky-note-o"></i> Booked Time-Location </h5>
+              </label>
+              <div *ngFor="let schedule of meeting.timeLocation">
+                  <p *ngIf="schedule.status" >{{schedule.location}} - {{schedule.meetingTime | date}}</p>
+              </div>            
+            </div>
+           
+            <div *ngIf="this.authService.isProfessor()" class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-map-marker"></i> Time - Location</h5>
+              </label>
+              <ng-container *ngFor="let shedule of meeting.timeLocation; let i = index">
+                <div class="input-group mb-3">
+                  <div class="form-row">
+                    <div class="col-md-6">
+                      <input value="2018-11-16T20:00" [(ngModel)]="shedule.time" name="time{{i}}" type="datetime-local" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                      <input placeholder="Location" [(ngModel)]="shedule.location" name="location{{i}}" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="input-group-append col-md-1">
+                    <i class="material-icons btn-icon" *ngIf="meeting.timeLocation > 1" (click)="removeMeeting(i)">remove</i>
+                  </div>
+                </div>
+              </ng-container>
+              <input (click)="addTimeLocation()" name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button"
+                value="Add">
+            </div>  
+            
+            <div *ngIf="authService.isStudent() && !meeting.status" class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-sticky-note-o"></i> Student </h5>
+              </label>
+              <ul class="list-group">
+                <li class="list-group-item {{list.class}}" (click)="isActiveStd(list)" *ngFor="let list of listAllStd">{{list.name}}</li>
+              </ul>
+            </div>
+
+            <div *ngIf="meeting.status" class="form-group">
+              <label>
+                <h5>
+                  <i class="fa fa-sticky-note-o"></i>Join Student </h5>
+              </label>
+              <ul class="list-group">
+                <li class="list-group-item" *ngFor="let list of meeting.student">{{list.name}}</li>
+              </ul>
+            </div>
+
+            <br>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="editMeeting()" type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

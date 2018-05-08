@@ -5,6 +5,8 @@
  */
 package hcmut.thesis.backend.services;
 
+import hcmut.thesis.backend.modelview.MeetingInfo;
+import hcmut.thesis.backend.modelview.MeetingTimeLocation;
 import hcmut.thesis.backend.modelview.StudentJoinMeeting;
 import java.util.List;
 
@@ -14,4 +16,8 @@ import java.util.List;
  */
 public interface MeetingService {
     List<StudentJoinMeeting> getAllStdDoTopic(int topicid);
+    MeetingInfo createMeeting(MeetingInfo info);
+    List<MeetingInfo> getListMeetingFromTopicID(int topicid);
+    MeetingInfo profEditMeeting(MeetingInfo info);
+    MeetingInfo stdBookMeeting(MeetingInfo info);
 }

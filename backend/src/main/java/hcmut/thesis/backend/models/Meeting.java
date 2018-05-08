@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Objects;
+import javax.persistence.GeneratedValue;
 
 @Entity
 public class Meeting {
@@ -17,6 +18,7 @@ public class Meeting {
     private String title;
 
     @Id
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY )
     @Column(name = "id_meeting")
     public int getIdMeeting() {
         return idMeeting;

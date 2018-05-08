@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Objects;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 @Entity
 public class Task {

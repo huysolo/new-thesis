@@ -1,4 +1,5 @@
 export class TimeLocation {
-    time: String;
+    meetingTime: String;
     location: String;
+    status: number;
 }
