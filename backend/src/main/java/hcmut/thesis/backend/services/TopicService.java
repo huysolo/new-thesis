@@ -1,5 +1,6 @@
 package hcmut.thesis.backend.services;
 
+import hcmut.thesis.backend.models.Review;
 import hcmut.thesis.backend.models.Standard;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.models.TopicSemStandard;
@@ -19,15 +20,18 @@ public interface TopicService {
     Boolean availableTopic(Topic topic);
     Topic rejectTopic(Integer topId, Integer studentId);
     Topic publish(Integer topicId);
-    List<Topic> getListTopicReview(Integer semNo, Integer profId);
+    List<Topic> getListTopicReview(Integer semNo, Integer profId, Integer isSubmitted);
     Topic edit(TopicDetail topicDetail);
     Integer delete(Integer topicId);
-    List<Standard> getListCurrentStandardByUserId(Integer idUser);
-    List<Standard> getListStandardBySemesterAndUserId(Integer idUser, Integer semesterNo);
-    Standard setStandard(Integer userId, Standard standardName);
+    List<Standard> getListStandardBySemesterAndUserId(Integer idUser);
+    Standard setStandard(Integer userId, Standard standard);
     Integer removeStandard(Integer standardId, Integer idUser);
-    public List<TopicSemStandard> reviewTopic(List<TopicSemStandard> reviewTopic, Integer userId);
+    Review reviewTopic(ReviewTopic reviewTopic, Integer profId);
     Standard copyStandardToCurrentSem(Standard standard);
     Boolean isStandardOwner(Integer userId, Standard standard);
+    Integer deleteStandard(Integer standardId, Integer idUser);
+    List<TopicSemStandard> getListReviewedTopicStandard(Integer topicId, Integer profId);
+    List<Standard> getGeneralStandardOfCurrentSemester();
+    List<Standard> getStandardListByGeneralAndUserId(Integer userId);
 
 }

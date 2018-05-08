@@ -232,14 +232,57 @@ public class TaskServiceImpl implements TaskService {
     public Boolean saveFileToTask(File file) {
         Optional<Task> task = taskRepo.findById(file.getIdTask());
         if (task.isPresent()){
-            fileRepo.save(file);
+            Optional<File> f = fileRepo.findNameByIdTaskAndName(file.getIdTask(), file.getName(), file.getVersion());
+            if (!f.isPresent()) {
+                fileRepo.save(file);
+
+            } else {
+                file = f.get();
+            }
+            if (task.get().getReviewVersion() != null && file.getVersion() < task.get().getReviewVersion()) {
+                throw new NullPointerException("Cannot Upload On Reviewed Version");
+            }
             return true;
         }
         return false;
     }
 
     @Override
-    public List<File> getFileByTaskId(Integer taskId) {
-        return fileRepo.findAllByIdTask(taskId);
+    public List<File> getFileByTaskId(Integer taskId, Integer version) {
+        return fileRepo.findAllByIdTaskAndVersion(taskId, version);
     }
+
+    @Override
+    public Integer getCurrentVersionOfTaskId(Integer taskId) {
+        return taskRepo.findById(taskId).map(Task::getCurrentVersion).orElse(null);
+    }
+
+    @Override
+    public Integer addNewVersion(Integer taskId) {
+        return taskRepo.findById(taskId).map(task -> {
+            task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
+            taskRepo.save(task);
+            return task.getCurrentVersion();
+        }).orElseThrow(() -> new NullPointerException(""));
+    }
+
+    @Override
+    public Integer submitVersion(Integer taskId) {
+        return taskRepo.findById(taskId).map(task -> {
+            task.setReviewVersion(task.getCurrentVersion());
+            taskRepo.save(task);
+
+            return  task.getReviewVersion();
+        }).orElseThrow(NullPointerException::new);
+    }
+
+    @Override
+    public String deleteFile(String name, Integer idTask, Integer version) {
+        return fileRepo.findNameByIdTaskAndName(idTask, name,version).map(file -> {
+            fileRepo.delete(file);
+            return file.getName();
+        }).orElseThrow(() -> new  NullPointerException("File not found"));
+    }
+
+
 }

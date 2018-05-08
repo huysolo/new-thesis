@@ -1,9 +1,6 @@
 package hcmut.thesis.backend.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -14,12 +11,13 @@ public class File {
     private Timestamp uploadDate;
     private int idUser;
     private Integer idTask;
+    private int version;
 
-
-    public File(String name, int idUser, Integer idTask) {
+    public File(String name, int idUser, Integer idTask, Integer version) {
         this.name = name;
         this.idUser = idUser;
         this.idTask = idTask;
+        this.version = version;
     }
 
     public File() {
@@ -28,6 +26,7 @@ public class File {
 
     @Id
     @Column(name = "id_file")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdFile() {
         return idFile;
     }
@@ -93,4 +92,16 @@ public class File {
 
         return Objects.hash(idFile, name, uploadDate, idUser, idTask);
     }
+
+    @Basic
+    @Column(name = "version")
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+
 }

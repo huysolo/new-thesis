@@ -25,6 +25,10 @@ const appRoutes: Routes = [
     loadChildren: 'app/meeting/meeting.module#MeetingModule'
   },
   {
+    path: 'standard',
+    loadChildren: 'app/standard/standard.module#StandardModule'
+  },
+  {
     path: 'layout',
     component: LayoutComponent
   }

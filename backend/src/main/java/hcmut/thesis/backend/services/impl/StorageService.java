@@ -1,6 +1,7 @@
 package hcmut.thesis.backend.services.impl;
 
 import hcmut.thesis.backend.models.File;
+import hcmut.thesis.backend.models.Task;
 import hcmut.thesis.backend.modelview.UserSession;
 import hcmut.thesis.backend.services.TaskService;
 import org.slf4j.Logger;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Service
 public class StorageService {
@@ -24,16 +27,20 @@ public class StorageService {
     @Autowired
     private UserSession userSession;
 
-    Logger log = LoggerFactory.getLogger(this.getClass().getName());
-    private final Path taskLocation = Paths.get("upload", "task", "1");
 
-    public Boolean storeTask(MultipartFile file, Integer taskId) {
+    public Boolean storeTask(MultipartFile file, Integer taskId, Integer version) {
         try {
+            if (version == null) {
+                version = taskService.getCurrentVersionOfTaskId(taskId);
+            }
+            if (version == null) {
+                throw new RuntimeException("Cannot get task version");
+            }
 
-            File f = new File(file.getOriginalFilename(), userSession.getUserID(), taskId);
+            File f = new File(file.getOriginalFilename(), userSession.getUserID(), taskId, version);
             Boolean rs = taskService.saveFileToTask(f);
             if (rs) {
-                Path path = Paths.get("upload","task", taskId.toString());
+                Path path = Paths.get("upload","task", taskId.toString(), version.toString());
                 if (!Files.exists(path)) {
 
                     Files.createDirectories(path);
@@ -43,6 +50,7 @@ public class StorageService {
 
                     System.out.println("Directory already exists");
                 }
+                Files.deleteIfExists(path.resolve(file.getOriginalFilename()));
                 Files.copy(file.getInputStream(), path.resolve(file.getOriginalFilename()));
             }
 
@@ -52,9 +60,16 @@ public class StorageService {
         }
     }
 
-    public Resource loadFile(String filename, Integer taskId) {
+    public Resource loadFile(String filename, Integer taskId, Integer version) {
         try {
-            Path file =  Paths.get("upload","task", taskId.toString()).resolve(filename);
+            if (version == null) {
+                version = taskService.getCurrentVersionOfTaskId(taskId);
+            }
+            if (version == null) {
+                throw new RuntimeException("Cannot get task version");
+            }
+
+            Path file =  Paths.get("upload","task", taskId.toString(), version.toString()).resolve(filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
@@ -66,14 +81,16 @@ public class StorageService {
         }
     }
 
-    public void deleteAll() {
-        FileSystemUtils.deleteRecursively(taskLocation.toFile());
-    }
+    public String deleteFile(String name, Integer idTask, Integer version) throws IOException {
+        taskService.deleteFile(name, idTask, version);
+        Path path = Paths.get("upload","task", idTask.toString(), version.toString());
+        Files.deleteIfExists(path.resolve(name));
+        return name;
 
+    }
     public void init() {
 //        try {
 //            if (!Files.isDirectory(taskLocation)){
-//                System.out.println("Du me may");
 //                Files.createDirectories(taskLocation);
 //            }
 //        } catch (IOException e) {

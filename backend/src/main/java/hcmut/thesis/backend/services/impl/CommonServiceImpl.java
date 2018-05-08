@@ -42,11 +42,11 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public List<ProfInfo> getListProf() {
         List<ProfInfo> result = new ArrayList<>();
-        Integer idFalcuty = userSession.getCurrentUserFalcuty();
+        Integer idFaculty = userSession.getCurrentUserFalcuty();
         professorRepo.findAll().forEach(professor -> {
             Optional<User> user = userRepo.findById(professor.getIdUser());
             if (user.isPresent()){
-                if (user.get().getIdFalcuty().equals(idFalcuty)){
+                if (user.get().getIdFalcuty().equals(idFaculty)){
                     ProfInfo profInfo = new ProfInfo();
                     profInfo.setProfessor(userDAO.findProfByUserId(user.get().getIdUser()));
                     profInfo.setName(getFullName(user.get().getFirstName(), user.get().getLastName()));
@@ -91,7 +91,7 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public List<Specialize> getAllByIdFalcuty(Integer idFal) {
+    public List<Specialize> getAllByIdFaculty(Integer idFal) {
         return specializeRepo.findAllByIdFalcuty(idFal);
     }
 

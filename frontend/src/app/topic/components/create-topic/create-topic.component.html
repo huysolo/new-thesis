@@ -5,36 +5,34 @@
       <div class="container-fluid">
         <form #createTopicForm="ngForm" action="" method="post" (ngSubmit)="submitTopic(createTopic)">
 
-          <div class="form-group">
-            <label for="title-topic">
-              <h5>Title
+          <div class="form-group bmd-form-group">
+            <label for="title-topic" class="bmd-label-static">
+              Title
                 <span style="color: red">*</span>
-              </h5>
+              
             </label>
             <input type="text" name="title-topic" id="title-topic" class="form-control" placeholder="Insert your title here" [(ngModel)]="createTopic.topic.title"
-              required #title="ngModel">
+              required #title="ngModel" >
             <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
               Title is required
             </div>
           </div>
-          <div class="form-group">
-            <label for="stLim">
-              <h5> Student Limit
+          <div class="form-group bmd-form-group">
+            <label for="stLim" class="bmd-label-static">
+              Student Limit
                 <span style="color: red">*</span>
-              </h5>
             </label>
             <input type="number" [(ngModel)]="createTopic.topic.stNumLimit" class="form-control" name="stLim" id="stLim" aria-describedby="helpStLim"
-              placeholder="Insert limit" required #stLim="ngModel">
+              required #stLim="ngModel">
             <div [hidden]="stLim.valid || stLim.pristine" class="alert alert-danger">
               Limit of student is not valid
             </div>
             <small id="helpStLim" class="form-text text-muted">Limit of student allowed to apply to the topic</small>
           </div>
-          <div class="form-group">
-            <label for="summary-topic">
-              <h5>Specialize
+          <div class="form-group bmd-form-group">
+            <label for="summary-topic" class="bmd-label-static">
+              Specialize
                 <span style="color: red">*</span>
-              </h5>
             </label>
             <select class="form-control" [(ngModel)]="createTopic.topic.idSpecialize" name="spec" required #spec="ngModel">
               <option *ngFor="let spec of specLst | async" [ngValue]="spec.idSpecialize">
@@ -45,18 +43,18 @@
               Specialize is required
             </div>
           </div>
-          <div class="form-group">
-            <label for="specialize-topic">
-              <h5>Sumary</h5>
+          <div class="form-group bmd-form-group">
+            <label for="specialize-topic" class="bmd-label-static">
+              Sumary
             </label>
             <textarea name="specialize-topic" id="specialize-topic" cols="10" rows="5" class="form-control" placeholder="Insert your specialize here"
               [(ngModel)]="createTopic.topic.sumary"></textarea>
           </div>
-          <div class="form-group">
-            <label for="">
-              <h5>Requirements
+          <div class="form-group bmd-form-group">
+            <label for="" class="bmd-label-static">
+              Requirements
                 <span style="color: red">*</span>
-              </h5>
+              
             </label>
             <ng-container *ngFor="let req of createTopic.topicRequirement; let i = index">
               <div class="input-group mb-3">
@@ -72,11 +70,10 @@
             <input name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button" value="Add" (click)="addReq()">
           </div>
           <br>
-          <div class="form-group">
-            <label for="">
-              <h5>Missions
+          <div class="form-group bmd-form-group">
+            <label for="" class="bmd-label-static">
+              Missions
                 <span style="color: red">*</span>
-              </h5>
             </label>
             <ng-container *ngFor="let miss of createTopic.topicMission; let i = index">
               <div class="input-group mb-3">
