@@ -27,4 +27,9 @@ export class MeetingService {
     return this.httpClient.post<any>(loginUrl,schedule);
   }
 
+  cancelMeeting(meeting) {
+    const loginUrl = `http://localhost:8080/meeting/cancelmeeting`;
+    return this.httpClient.post<any>(loginUrl, meeting);
+  }
+
 }

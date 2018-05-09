@@ -121,4 +121,11 @@ public class MeetingController {
            return meetingService.stdBookMeeting(info);
        }
     }
+    
+    @RequestMapping(value = "/cancelmeeting", method = RequestMethod.POST)
+    @ResponseBody
+    public MeetingInfo cancelMeeting(@RequestBody MeetingInfo info) {
+        meetingService.cancelMeeting(info.getMeetingID(), info.getReason());
+        return info;
+    }
 }

@@ -20,4 +20,5 @@ public interface MeetingService {
     List<MeetingInfo> getListMeetingFromTopicID(int topicid);
     MeetingInfo profEditMeeting(MeetingInfo info);
     MeetingInfo stdBookMeeting(MeetingInfo info);
+    void cancelMeeting (int meetingid, String reason);
 }

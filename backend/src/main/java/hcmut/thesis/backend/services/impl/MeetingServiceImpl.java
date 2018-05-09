@@ -200,19 +200,23 @@ public class MeetingServiceImpl implements MeetingService {
                             info.getMeetingID(), aT.getMeetingTime(), aT.getLocation());
                     temp.setStatus(1);
                     meetingScheduleRepo.save(temp);
-                }
-                
-            }
-           
+                }                
+            }          
         }
         
         info.setStatus(1);
         
         Meeting temp = meetingRepo.getMeetingFromMeetingID(info.getMeetingID());
         temp.setStatus(1);
-        meetingRepo.save(temp);
-        
-        
+        meetingRepo.save(temp);              
          return info;
+    }
+    
+    @Override
+    public void cancelMeeting (int meetingid, String reason){
+        Meeting temp = meetingRepo.getMeetingFromMeetingID(meetingid);
+        temp.setReason(reason);
+        temp.setStatus(2);
+        meetingRepo.save(temp);
     }
 }
