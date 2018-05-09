@@ -9,16 +9,19 @@ import { UploadFileService } from '../../../upload-file.service';
   styleUrls: ['./list-upload.component.css']
 })
 export class ListUploadComponent implements OnInit {
-  @Input() id = 1;
-  @Input() ver = 2;
+  @Input() id;
+  @Input() ver;
   showFile = false;
   fileUploads: Observable<string[]>;
   currentVersion: number;
+  listVersion: Observable<number[]> = new Observable<number[]>();
 
-  constructor(public uploadService: UploadFileService) {}
+  constructor(public uploadService: UploadFileService) {
+  }
 
   ngOnInit() {
     this.currentVersion = this.ver;
+    this.listVersion = this.uploadService.getListVersion(this.ver);
   }
 
   showFiles(enable: boolean) {
@@ -30,10 +33,17 @@ export class ListUploadComponent implements OnInit {
   }
 
   deleteFile(name) {
-      this.uploadService.deleteFile(this.id, this.ver, name).subscribe(s => {
+      this.uploadService.deleteFile(this.id, this.currentVersion, name).subscribe(s => {
         this.fileUploads = this.uploadService.getFiles(this.id, this.currentVersion);
       });
 
+  }
+
+  reloadListVersion(event) {
+    this.listVersion = this.listVersion.map(lst => {
+      lst.push(event);
+      return lst;
+    });
   }
 
   changeVersion(v) {

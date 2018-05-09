@@ -41,6 +41,7 @@
       </table>
       <br>
     </div>
+    <app-list-upload [id]="task.taskID" [ver]="task.currentVersion"></app-list-upload>
     <div class="w3-container">
       <h5 class="w3-opacity">
         <b>Deadline: </b>
@@ -66,7 +67,7 @@
     </div>
 
     <p class="w3-right">
-      <button (click)="getTaskComment(task)" class="w3-button w3-black">
+      <button (click)="getTaskComment(task)" class="btn btn-dark active">
         <b>Replies </b>
         <span *ngIf="task.comment" class="w3-tag w3-white"> {{task.comment.length}}</span>
       </button>

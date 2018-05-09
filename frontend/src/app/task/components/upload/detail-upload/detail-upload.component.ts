@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'app-detail-upload',
@@ -8,7 +8,7 @@ import {Component, OnInit, Input} from '@angular/core';
 export class DetailsUploadComponent implements OnInit {
 
   @Input() fileUpload: string;
-
+  @Output() rmEmitter: EventEmitter<String> = new EventEmitter<String>();
   constructor() {}
 
   ngOnInit() {
@@ -17,6 +17,9 @@ export class DetailsUploadComponent implements OnInit {
   filename() {
     const path = this.fileUpload.substring(this.fileUpload.lastIndexOf('/') + 1);
     return (path.match(/[^.]+(\.[^?#]+)?/) || [])[0];
+  }
+  emitRemove() {
+    this.rmEmitter.emit(this.filename());
   }
 
 }

@@ -19,7 +19,6 @@ public class Task {
     private int submit;
     private int pass;
     private Integer currentVersion;
-    private Integer reviewVersion;
 
     public void setSubmit(Integer submit) {
         this.submit = submit;
@@ -130,14 +129,5 @@ public class Task {
         this.currentVersion = currentVersion;
     }
 
-    @Basic
-    @Column(name = "review_version")
-    public Integer getReviewVersion() {
-        return reviewVersion;
-    }
-
-    public void setReviewVersion(Integer reviewVersion) {
-        this.reviewVersion = reviewVersion;
-    }
 
 }

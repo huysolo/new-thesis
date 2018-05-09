@@ -102,6 +102,7 @@ public class TaskServiceImpl implements TaskService {
             temp.setSubmit(t.get(i).getSubmit());
             temp.setPass(t.get(i).getPass());
             temp.setStudent(getStudentDoTaskFromTaskID(t.get(i).getIdTask()));
+            temp.setCurrentVerion(t.get(i).getCurrentVersion());
             listTask.add(temp);
         }
         return listTask;
@@ -159,7 +160,7 @@ public class TaskServiceImpl implements TaskService {
     public PageInfo getPage(int pageNumber, int topicID, Boolean isStd) {
         PageInfo page = new PageInfo();
         List<TaskInfo> listTask = new ArrayList<>();
-        List<Task> t = (isStd == true) ? taskRepo.getTaskFromIDTopic(topicID) : taskRepo.getTaskSubmitFromProf(topicID);
+        List<Task> t = (isStd) ? taskRepo.getTaskFromIDTopic(topicID) : taskRepo.getTaskSubmitFromProf(topicID);
         for (int i = 8 * pageNumber; i < min(8 * (pageNumber + 1), t.size()); i++) {
 
             TaskInfo temp = new TaskInfo();
@@ -170,6 +171,7 @@ public class TaskServiceImpl implements TaskService {
             temp.setSubmit(t.get(i).getSubmit());
             temp.setPass(t.get(i).getPass());
             temp.setStudent(getStudentDoTaskFromTaskID(t.get(i).getIdTask()));
+            temp.setCurrentVerion(t.get(i).getCurrentVersion());
             listTask.add(temp);
         }
         int count;
@@ -239,9 +241,6 @@ public class TaskServiceImpl implements TaskService {
             } else {
                 file = f.get();
             }
-            if (task.get().getReviewVersion() != null && file.getVersion() < task.get().getReviewVersion()) {
-                throw new NullPointerException("Cannot Upload On Reviewed Version");
-            }
             return true;
         }
         return false;
@@ -263,21 +262,13 @@ public class TaskServiceImpl implements TaskService {
             task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
             taskRepo.save(task);
             return task.getCurrentVersion();
-        }).orElseThrow(() -> new NullPointerException(""));
+        }).orElseThrow(() -> new NullPointerException("Task Not Found"));
     }
 
-    @Override
-    public Integer submitVersion(Integer taskId) {
-        return taskRepo.findById(taskId).map(task -> {
-            task.setReviewVersion(task.getCurrentVersion());
-            taskRepo.save(task);
-
-            return  task.getReviewVersion();
-        }).orElseThrow(NullPointerException::new);
-    }
 
     @Override
     public String deleteFile(String name, Integer idTask, Integer version) {
+        System.out.println(version);
         return fileRepo.findNameByIdTaskAndName(idTask, name,version).map(file -> {
             fileRepo.delete(file);
             return file.getName();
