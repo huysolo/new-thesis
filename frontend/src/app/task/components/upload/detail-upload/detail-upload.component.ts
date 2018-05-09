@@ -19,7 +19,7 @@ export class DetailsUploadComponent implements OnInit {
     return (path.match(/[^.]+(\.[^?#]+)?/) || [])[0];
   }
   emitRemove() {
-    this.rmEmitter.emit(this.filename());
+    this.rmEmitter.emit(this.fileUpload);
   }
 
 }
