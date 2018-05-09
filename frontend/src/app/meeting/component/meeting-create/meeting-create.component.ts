@@ -24,7 +24,7 @@ export class MeetingCreateComponent implements OnInit {
 
   ngOnInit() {
     if(this.authService.isStudent()){
-      this.getAllStudentDoTopic();
+
     } else {
       this.getTopicFromSemID(-1);
     }
@@ -33,50 +33,27 @@ export class MeetingCreateComponent implements OnInit {
 
   newMeeting(){
     const temp = new TimeLocation();
-    this.meetingCreate.timelocation.push(temp);
+    this.meetingCreate.timeLocation.push(temp);
   }
 
   removeMeeting(i: number) {
-    this.meetingCreate.timelocation.splice(i, 1);
+    this.meetingCreate.timeLocation.splice(i, 1);
   }
 
   addTimeLocation(){
     const temp = new TimeLocation();
-    this.meetingCreate.timelocation.push(temp);
+    this.meetingCreate.timeLocation.push(temp);
   }
 
   createMeeting(){
     console.log(this.meetingCreate);
-  }
-
-  getAllStudentDoTopic() {
-    this.meetingService.getAllStudentDoTopic().subscribe(
+    this.meetingService.createMeeting(this.meetingCreate).subscribe(
       res => {
-        if(res != null){
-          this.listAllStd = res;
-          console.log(res);
-        }
-        else {
-          console.log('ko co gia tri');
-        }
-        
-      });
+        console.log(res);
+      }
+    );
   }
 
-  isActiveStd(list): void {
-    if (list.class === undefined) {
-      list.class = 'active';
-      const temp = <StudentMeeting>({ name: list.name, stdid: list.stdID });
-      this.meetingCreate.student.push(temp);
-    } else {
-      list.class = undefined;
-      for (let i = 0; i < this.meetingCreate.student.length; i++) {
-        if (this.meetingCreate.student[i].name === list.name) {
-          this.meetingCreate.student.splice(i, 1);
-        }
-      }
-    }
-  }
 
   getTopicFromSemID(semid) {
     this.taskService.getTopicFromSemID(semid).subscribe(
@@ -89,6 +66,13 @@ export class MeetingCreateComponent implements OnInit {
       }
     );
   }
+
+//   let d1 = new Date('2018-05-20 03:31:00.0')
+// undefined
+// d1.getTime
+// ƒ getTime() { [native code] }
+// d1.getTime()
+// 1526761860000
 
 }
 

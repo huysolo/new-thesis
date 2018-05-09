@@ -28,14 +28,8 @@ import hcmut.thesis.backend.services.IUserDAO;
 import hcmut.thesis.backend.services.TaskService;
 
 import hcmut.thesis.backend.services.TopicService;
-import hcmut.thesis.backend.services.impl.StorageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import java.util.List;
-import hcmut.thesis.backend.modelview.*;
-import hcmut.thesis.backend.repositories.*;
-import hcmut.thesis.backend.services.*;
+
 
 import hcmut.thesis.backend.services.impl.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +105,7 @@ public class TaskController {
     @ResponseBody
     public TaskInfo createTask(@RequestBody TaskInfo createInfo) {
         int topicid = taskService.getCurrTopicFromStdID(userSession.getStudent().getIdStudent()).getIdTop();
+        System.out.println(createInfo.getDeadline());
         return itaskDAO.createTask(createInfo, topicid);
     }
 
@@ -222,11 +217,12 @@ public class TaskController {
 
     @PostMapping("addversion")
     public ResponseEntity<Integer> addNewVersion(@RequestBody Integer idTask){
-        try {
-            return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
-        } catch (NullPointerException e) {
-            return  ResponseEntity.status(500).body(0);
-        }
+//        try {
+//            return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
+//        } catch (NullPointerException e) {
+//            return  ResponseEntity.status(500).body(0);
+//        }
+     return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
     }
 
     @GetMapping("/getallfiles")

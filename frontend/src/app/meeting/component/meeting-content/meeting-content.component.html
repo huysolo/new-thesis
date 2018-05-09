@@ -1,3 +1,15 @@
-<p>
-  meeting-content works!
-</p>
+<div class="container" >
+    <div *ngIf="this.authService.isProfessor()" class="form-group">
+        <label>
+          <h5>
+            <i class="fa fa-pencil-square-o"></i> Topic </h5>
+        </label>
+        <select (change)="getListMeetingFromTopicID($event.target.value)" name="topicid" class="custom-select">
+          <option selected [value]="0">Choose Topic</option>
+          <option *ngFor="let topic of listTopic" [value]="topic.idTop">{{topic.title}}</option>
+        </select>
+      </div>
+  <div *ngFor="let meeting of listMeeting">
+    <app-meeting-detail [meeting]="meeting"></app-meeting-detail>
+  </div>
+</div>

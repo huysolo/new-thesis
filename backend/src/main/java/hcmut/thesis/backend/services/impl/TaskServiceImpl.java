@@ -217,12 +217,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Topic getCurrTopicFromStdID(int stdid) {
-        Integer currSem = commonService.getCurrentSem();
-        if (currSem != null) {
+        try{
+            Integer currSem = commonService.getCurrentSem();
             return topicService.getAppliedTopic(currSem, stdid);
-        } else {
+        } catch(Exception e){
             return null;
-        }
+        }       
     }
 
     @Override

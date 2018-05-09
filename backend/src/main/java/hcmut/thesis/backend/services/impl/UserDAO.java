@@ -103,12 +103,15 @@ public class UserDAO implements IUserDAO {
                 currUserInfo.setSkills(prof.getSkills());
 
             } else {
-                Integer currSemid = commonService.getCurrentSem();
-                if (currSemid != null) {
+                
+                try {
+                    Integer currSemid = commonService.getCurrentSem();
                     if (this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), currSemid) != null) {
                         currUserInfo.setTeamLead(this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), currSemid).getTeamLead());
                         currUserInfo.setTopicID(this.getStdTopicSem(this.findStudentByUserId(user.getIdUser()).getIdStudent(), currSemid).getIdTopicSem());
                     }
+                } catch (Exception e){
+                    
                 }
             }
 
@@ -217,7 +220,6 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public StudentTopicSem getStdTopicSem(int stdid, int semid) {
-
         List<Integer> listTopicID = topicRepo.findTopIDBySemesterNo(semid);
         for (int i = 0; i < listTopicID.size(); i++) {
             if (stdTopicSemRepo.getStdTopicSemFromTopicID(listTopicID.get(i), stdid) != null) {

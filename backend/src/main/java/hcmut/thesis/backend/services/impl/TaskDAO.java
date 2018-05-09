@@ -10,6 +10,7 @@ import hcmut.thesis.backend.models.StudentTopicSem;
 import hcmut.thesis.backend.models.Task;
 import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.TaskInfo;
+import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.StudentTaskRepo;
 import hcmut.thesis.backend.repositories.StudentTopicSemRepo;
 import hcmut.thesis.backend.repositories.TaskRepo;
@@ -38,12 +39,16 @@ public class TaskDAO implements ITaskDAO {
     @Autowired
     IUserDAO iuserDAO;
     
+    @Autowired
+    StudentRepo stdRepo;
+    
     @Override
     public void createStudentTask(int taskID, List<StudentDoTask> std){
         for(int i = 0; i< std.size(); i++){
             StudentTask stdTask = new StudentTask();
             stdTask.setIdTask(taskID);
-            stdTask.setIdStudent(iuserDAO.getUser(std.get(i).getStdName()).getIdUser());
+            int userID = iuserDAO.getUser(std.get(i).getStdName()).getIdUser();
+            stdTask.setIdStudent(stdRepo.getStdIDFromUserID(userID));
             stdTaskRepo.save(stdTask);
         }
     }
@@ -65,10 +70,6 @@ public class TaskDAO implements ITaskDAO {
     public List<StudentDoTask> getStudentDoTask (int topicID){
         List<StudentDoTask> listStd = new ArrayList<StudentDoTask>();
         List<StudentTopicSem> stdTopicSem = stdTopicSemRepo.findAll();
-        
-        System.out.println(stdTopicSem.size());
-        System.out.println(stdTopicSem.get(0).getIdStudent());
-        System.out.println(stdTopicSem.get(1).getIdStudent());
         
 //        for(int i = 0; i< stdTopicSem.size(); i++){
 //            if(stdTopicSem.get(i).getIdTopicSem() == topicID){
