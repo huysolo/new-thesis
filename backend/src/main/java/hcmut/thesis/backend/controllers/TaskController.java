@@ -217,11 +217,12 @@ public class TaskController {
 
     @PostMapping("addversion")
     public ResponseEntity<Integer> addNewVersion(@RequestBody Integer idTask){
-        try {
-            return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
-        } catch (NullPointerException e) {
-            return  ResponseEntity.status(500).body(0);
-        }
+//        try {
+//            return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
+//        } catch (NullPointerException e) {
+//            return  ResponseEntity.status(500).body(0);
+//        }
+     return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
     }
 
     @GetMapping("/getallfiles")
