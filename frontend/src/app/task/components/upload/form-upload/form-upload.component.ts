@@ -27,7 +27,7 @@ export class FormUploadComponent implements OnInit {
 
 
   newversion() {
-    this.uploadService.newVersion(1).subscribe(data => {
+    this.uploadService.newVersion(this.id).subscribe(data => {
       this.emitListVersion.emit(data);
     });
   }
