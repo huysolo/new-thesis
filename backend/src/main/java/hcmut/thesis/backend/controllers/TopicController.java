@@ -233,7 +233,7 @@ public class TopicController {
     @GetMapping("standardAndGeneral")
     List<Standard> standardAndGeneral() {
         if (userSession.isUser()){
-            return topicService.getListStandardBySemesterAndUserId(userSession.getUserID());
+            return topicService.getStandardListByGeneralAndUserId(userSession.getUserID());
         }
         return  null;
     }

@@ -12,7 +12,7 @@ export class ListUploadComponent implements OnInit {
   @Input() id;
   @Input() ver;
   showFile = false;
-  fileUploads: Observable<string[]>;
+  fileUploads: string[];
   currentVersion: number;
   listVersion: Observable<number[]> = new Observable<number[]>();
 
@@ -28,15 +28,22 @@ export class ListUploadComponent implements OnInit {
     this.showFile = enable;
 
     if (enable) {
-      this.fileUploads = this.uploadService.getFiles(this.id, this.currentVersion);
+      this.uploadService.getFiles(this.id, this.currentVersion).subscribe(data => {
+        this.fileUploads = data;
+      });
     }
   }
 
   deleteFile(name) {
-      this.uploadService.deleteFile(this.id, this.currentVersion, name).subscribe(s => {
-        this.fileUploads = this.uploadService.getFiles(this.id, this.currentVersion);
+      this.uploadService.deleteFile(this.id, this.currentVersion, this.filename(name)).subscribe(s => {
       });
+      this.fileUploads = this.fileUploads.filter(f => f !== name);
 
+  }
+
+  filename(path) {
+    path = path.substring(path.lastIndexOf('/') + 1);
+    return (path.match(/[^.]+(\.[^?#]+)?/) || [])[0];
   }
 
   reloadListVersion(event) {

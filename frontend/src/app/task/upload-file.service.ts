@@ -47,6 +47,6 @@ export class UploadFileService {
 
   deleteFile(idTask, version, name) {
     const params = new HttpParams().append('name', name).append('ver', version).append('id', idTask);
-    return this.http.delete<String>(this.fileUrl, {params: params});
+    return this.http.delete<any>(this.fileUrl, {params: params});
   }
 }
