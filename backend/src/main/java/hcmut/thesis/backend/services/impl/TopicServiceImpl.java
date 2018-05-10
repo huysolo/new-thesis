@@ -205,16 +205,20 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Topic> getListTopicReview(Integer semNo, Integer profId, Integer isSubmitted) {
+    public List<Topic> getListTopicReview(Integer semNo, Integer profId, Integer isSubmitted, Boolean isGuide) {
         if (semNo == null) {
-            if (isSubmitted == null) {
-                return topicDAO.getListReviewTopicByProfId(profId);
-            } else {
-                return topicDAO.getListReviewTopicByProfId(profId, isSubmitted);
-            }
-
+            semNo = commonService.getSemOpen().getSemesterNo();
         }
-        return topicDAO.getListReviewTopicByProfIdAndSemesterNo(profId, semNo);
+//        if (semNo == null) {
+//
+//            if (isSubmitted == null) {
+//                return topicDAO.getListReviewTopicByProfId(profId, semester.getSemesterNo(), isGuide);
+//            } else {
+//                return topicDAO.getListReviewTopicByProfId(profId, isSubmitted, isGuide);
+//            }
+//
+//        }
+        return topicDAO.getListReviewTopicByProfIdAndSemesterNo(profId, semNo, isGuide, isSubmitted);
     }
 
     @Override
@@ -297,7 +301,7 @@ public class TopicServiceImpl implements TopicService {
             }
             topicSemStandardRepo.saveAll(topicSemStandards);
             review.get().setSubmitted(review.get().getSubmitted() + 1);
-            review.get().setScore(numerator / (denominator == 0 ? denominator : 1));
+            review.get().setScore(numerator / (denominator == 0 ? 1 : denominator));
             return reviewRepo.save(review.get());
         }
         throw new NullPointerException();

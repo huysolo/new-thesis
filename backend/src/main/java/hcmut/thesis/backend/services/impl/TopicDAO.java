@@ -1,14 +1,13 @@
 package hcmut.thesis.backend.services.impl;
 
-import hcmut.thesis.backend.models.Standard;
 import hcmut.thesis.backend.models.Topic;
-import hcmut.thesis.backend.models.TopicSemStandard;
 import hcmut.thesis.backend.modelview.TopicReview;
 import hcmut.thesis.backend.services.ITopicDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,9 +26,10 @@ public class TopicDAO implements ITopicDAO {
     }
 
     @Override
-    public List<Topic> getListReviewTopicByProfId(Integer profId, Integer sumitted) {
-        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ? and submitted = ?)";
-        List<Map<String, Object>> rs = jdbcTemplate.queryForList(sql, profId, sumitted);
+    public List<Topic> getListReviewTopicByProfId(Integer profId, Integer submitted, Boolean isGuide) {
+        String guideSql = "id_prof "+ (isGuide ? "==" : "!=") + "?";
+        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ? and submitted = ?)" + " AND " + guideSql;
+        List<Map<String, Object>> rs = jdbcTemplate.queryForList(sql, profId, submitted, profId);
         List<Topic> lstTopic = new LinkedList<>();
         rs.forEach(row -> {
             Topic topicReview = TopicMapper(row);
@@ -39,8 +39,8 @@ public class TopicDAO implements ITopicDAO {
     }
 
     @Override
-    public List<Topic> getListReviewTopicByProfId(Integer profId) {
-        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ?)";
+    public List<Topic> getListReviewTopicByProfId(Integer profId, Boolean isGuide) {
+        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ?) AND id_prof " + (isGuide ? " == " : " != ") + "?";
         List<Map<String, Object>> rs = jdbcTemplate.queryForList(sql, profId);
         List<Topic> lstTopic = new LinkedList<>();
         rs.forEach(row -> {
@@ -51,9 +51,11 @@ public class TopicDAO implements ITopicDAO {
     }
 
     @Override
-    public List<Topic> getListReviewTopicByProfIdAndSemesterNo(Integer profId, Integer semNo) {
-        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ?) AND semester_no = ?";
-        List<Map<String, Object>> rs = jdbcTemplate.queryForList(sql, profId, semNo);
+    public List<Topic> getListReviewTopicByProfIdAndSemesterNo(Integer profId, Integer semNo, Boolean isGuide, Integer submitted) {
+        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ? AND r.submitted = ?) " +
+                "AND semester_no = ?  AND id_prof " + (isGuide ? " = " : " != ") + "?";
+        System.out.println(sql);
+        List<Map<String, Object>> rs = jdbcTemplate.queryForList(sql, profId, submitted, semNo, profId);
         return getListTopicMapper(rs);
     }
 
@@ -77,24 +79,11 @@ public class TopicDAO implements ITopicDAO {
                 row.get("score") != null ? (Integer) row.get("score") : 0,
                 (Integer) row.get("semesterNo"),
                 (Integer) row.get("id_specialize"),
-                (Integer) row.get("student_count")
+                (Integer) row.get("student_count"),
+                (Timestamp) row.get("publish_date")
         );
     }
 
-    private TopicReview TopicReviewMapper(Map<String, Object> row) {
-        return new TopicReview(
-                (Integer) row.get("id_top"),
-                (String) row.get("title"),
-                (Integer) row.get("st_num_limit"),
-                (String) row.get("sumary"),
-                (Integer) row.get("id_prof"),
-                row.get("score") != null ? (Integer) row.get("score") : 0,
-                (Integer) row.get("semesterNo"),
-                (Integer) row.get("id_specialize"),
-                (Integer) row.get("student_count"),
-                (Integer) row.get("submitted")
-        );
-    }
 
 
 

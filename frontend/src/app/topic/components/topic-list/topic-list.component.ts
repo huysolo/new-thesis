@@ -7,13 +7,13 @@ import { CommonService } from '../../../core/common.service';
 import { ProfInfo } from '../../../models/ProfInfo';
 import { AuthService } from '../../../core/auth.service';
 import { ActivatedRoute } from '@angular/router';
-import { Observer } from 'rxjs/Observer';
 import { TopicDetail } from '../../../models/TopicDetail';
 import { TopicMission } from '../../../models/TopicMission';
 import { TopicRequirement } from '../../../models/TopicRequirement';
 import { HttpParams } from '@angular/common/http';
 import { Specialize } from '../../../models/Specialize';
 import { MatSnackBar } from '@angular/material';
+
 declare var $: any;
 @Component({
   selector: 'app-topic-list',

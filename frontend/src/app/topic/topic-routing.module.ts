@@ -6,6 +6,8 @@ import { TopicListComponent } from './components/topic-list/topic-list.component
 import { TopicDetail } from '../models/TopicDetail';
 import { AuthTopicGuardService } from './auth-topic-guard.service';
 import { CreateTopicComponent } from './components/create-topic/create-topic.component';
+import { ReviewTopicComponent } from './pages/review-topic/review-topic.component';
+import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic-page.component';
 
 const topicRoutes: Routes = [
   {
@@ -21,6 +23,14 @@ const topicRoutes: Routes = [
   }, {
     path: 'create',
     component: CreateTopicComponent
+  }, {
+    path: 'review',
+    component: ReviewTopicPageComponent,
+    children: [{
+        path: ':typ',
+        component: ReviewTopicComponent
+      }
+    ]
   }
 ];
 @NgModule({

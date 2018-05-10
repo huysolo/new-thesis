@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { Topic } from '../models/Topic';
 import { TopicDetail } from '../models/TopicDetail';
 import { AuthService } from '../core/auth.service';
-import { Observer } from 'rxjs/Observer';
 
 @Injectable()
 export class TopicService {
@@ -110,6 +109,14 @@ export class TopicService {
   }
 
   public getListReview(params) {
+    return this.http.get<Topic[]>(this.topicListReviewUrl, {params: params});
+  }
+
+  public getListTopicReview(semno, submitted, guide) {
+    let params = new HttpParams().append('submitted', submitted).append('guide', guide);
+    if (semno != null) {
+      params = params.append('semno', semno);
+    }
     return this.http.get<Topic[]>(this.topicListReviewUrl, {params: params});
   }
 

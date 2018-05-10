@@ -20,7 +20,7 @@ public class Topic {
     private Integer profScore;
     private Timestamp reviewDate;
 
-    public Topic(int idTop, String title, int stNumLimit, String sumary, int idProf, Integer score, Integer semesterNo, Integer idSpecialize, Integer studentCount) {
+    public Topic(int idTop, String title, int stNumLimit, String sumary, int idProf, Integer score, Integer semesterNo, Integer idSpecialize, Integer studentCount, Timestamp publishDate) {
         this.idTop = idTop;
         this.title = title;
         this.stNumLimit = stNumLimit;
@@ -30,6 +30,7 @@ public class Topic {
         this.semesterNo = semesterNo;
         this.idSpecialize = idSpecialize;
         this.studentCount = studentCount;
+        this.publishDate = publishDate;
     }
 
     public Topic() {

@@ -158,13 +158,13 @@ public class TopicController {
     @GetMapping(value = "listReview")
     List<Topic> getListReviewTopic(
             @RequestParam(value = "semno", required = false) Integer semNo,
-            @RequestParam(value = "submitted" , required = false) Integer isSubmitted
-
+            @RequestParam(value = "submitted" , required = false) Integer isSubmitted,
+            @RequestParam(value = "guide") Boolean guide
     ) {
         if (!userSession.isProf()) {
             return null;
         }
-        return topicService.getListTopicReview(semNo, userSession.getProf().getIdProfessor(), isSubmitted);
+        return topicService.getListTopicReview(semNo, userSession.getProf().getIdProfessor(), isSubmitted, guide);
     }
 
     @DeleteMapping

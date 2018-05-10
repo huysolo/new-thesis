@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommonServiceImpl implements CommonService {
@@ -37,6 +38,11 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public List<Semester> getListSemester() {
         return this.semesterRepo.findSemesterInThePast();
+    }
+
+    @Override
+    public List<Integer> getAllSemester() {
+        return semesterRepo.findAll().stream().map(Semester::getSemesterNo).collect(Collectors.toList());
     }
 
     @Override

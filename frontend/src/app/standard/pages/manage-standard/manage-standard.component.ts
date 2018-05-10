@@ -103,7 +103,7 @@ export class ManageStandardComponent implements OnInit {
     if (e.tab.textLabel === 'In Review') {
       this.topicReviewList = this.topicSv.getListReview(new HttpParams().set('submitted', '0'));
     } else {
-      this.topicReviewedList = this.topicSv.getListReview(new HttpParams().set('submitted', '1'));
+      this.topicReviewedList = this.topicSv.getListReview(new HttpParams().set('submitted  ', '1'));
     }
   }
 

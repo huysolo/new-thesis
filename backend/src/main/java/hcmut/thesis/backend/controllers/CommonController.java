@@ -27,6 +27,10 @@ public class CommonController {
     List<Semester> getListSemster(){
         return commonService.getListSemester();
     }
+    @GetMapping("allSemNo")
+    List<Integer> getListSemNo(){
+        return commonService.getAllSemester();
+    }
 
     @RequestMapping(value = "listProf", method = RequestMethod.GET)
     List<ProfInfo> getListProf(){

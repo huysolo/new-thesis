@@ -20,7 +20,7 @@ public interface TopicService {
     Boolean availableTopic(Topic topic);
     Topic rejectTopic(Integer topId, Integer studentId);
     Topic publish(Integer topicId);
-    List<Topic> getListTopicReview(Integer semNo, Integer profId, Integer isSubmitted);
+    List<Topic> getListTopicReview(Integer semNo, Integer profId, Integer isSubmitted,  Boolean isGuide);
     Topic edit(TopicDetail topicDetail);
     Integer delete(Integer topicId);
     List<Standard> getListStandardBySemesterAndUserId(Integer idUser);
