@@ -8,10 +8,17 @@ import java.util.Objects;
 @Table(name = "student_task", schema = "thesis", catalog = "")
 @IdClass(StudentTaskPK.class)
 public class StudentTask {
+    public StudentTask(int idTask, int idStudent) {
+        this.idTask = idTask;
+        this.idStudent = idStudent;
+    }
+
     private int idTask;
     private int idStudent;
-    private String archive;
-    private Timestamp uploadDate;
+    private Integer currentVersion;
+
+    public StudentTask() {
+    }
 
     @Id
     @Column(name = "id_task")
@@ -33,25 +40,7 @@ public class StudentTask {
         this.idStudent = idStudent;
     }
 
-    @Basic
-    @Column(name = "archive")
-    public String getArchive() {
-        return archive;
-    }
 
-    public void setArchive(String archive) {
-        this.archive = archive;
-    }
-
-    @Basic
-    @Column(name = "upload_date")
-    public Timestamp getUploadDate() {
-        return uploadDate;
-    }
-
-    public void setUploadDate(Timestamp uploadDate) {
-        this.uploadDate = uploadDate;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -60,13 +49,22 @@ public class StudentTask {
         StudentTask that = (StudentTask) o;
         return idTask == that.idTask &&
                 idStudent == that.idStudent &&
-                Objects.equals(archive, that.archive) &&
-                Objects.equals(uploadDate, that.uploadDate);
+                currentVersion.equals(that.currentVersion);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idTask, idStudent, archive, uploadDate);
+        return Objects.hash(idTask, idStudent, currentVersion);
+    }
+
+    @Basic
+    @Column(name = "current_version")
+    public Integer getCurrentVersion() {
+        return currentVersion;
+    }
+
+    public void setCurrentVersion(Integer currentVersion) {
+        this.currentVersion = currentVersion;
     }
 }

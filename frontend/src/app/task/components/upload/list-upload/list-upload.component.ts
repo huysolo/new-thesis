@@ -9,8 +9,10 @@ import { UploadFileService } from '../../../upload-file.service';
   styleUrls: ['./list-upload.component.css']
 })
 export class ListUploadComponent implements OnInit {
-  @Input() id;
+  @Input() taskId;
   @Input() ver;
+  @Input() general: Boolean = false;
+  @Input() userId: number;
   showFile = false;
   fileUploads: string[];
   currentVersion: number;
@@ -21,6 +23,7 @@ export class ListUploadComponent implements OnInit {
 
   ngOnInit() {
     this.currentVersion = this.ver;
+    console.log(this.userId);
     this.listVersion = this.uploadService.getListVersion(this.ver);
   }
 
@@ -28,14 +31,14 @@ export class ListUploadComponent implements OnInit {
     this.showFile = enable;
 
     if (enable) {
-      this.uploadService.getFiles(this.id, this.currentVersion).subscribe(data => {
+      this.uploadService.getFiles(this.taskId, this.currentVersion, this.userId).subscribe(data => {
         this.fileUploads = data;
       });
     }
   }
 
   deleteFile(name) {
-      this.uploadService.deleteFile(this.id, this.currentVersion, this.filename(name)).subscribe(s => {
+      this.uploadService.deleteFile(this.taskId, this.currentVersion, this.filename(name)).subscribe(s => {
       });
       this.fileUploads = this.fileUploads.filter(f => f !== name);
 

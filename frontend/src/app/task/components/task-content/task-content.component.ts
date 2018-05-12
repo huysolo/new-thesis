@@ -6,6 +6,8 @@ import { StudentDoTask } from '../student-do-task';
 import { AuthService } from '../../../core/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import { MatDialog } from '@angular/material';
+import { TaskCreateComponent } from '../task-create/task-create.component';
 
 
 @Component({
@@ -30,10 +32,17 @@ export class TaskContentComponent implements OnInit {
 
   topicID: any;
   isCreateTask: Boolean;
+  listAllStd: Array<StudentDoTask>;
 
 
 
-  constructor(public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute) {
+
+  constructor(
+    public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute,
+    public dialog: MatDialog) {
+      this.taskService.getAllStudentDoTopic().subscribe(data => {
+        this.listAllStd = data;
+      });
   }
 
   ngOnInit() {
@@ -73,7 +82,6 @@ export class TaskContentComponent implements OnInit {
         this.pagecount = new Array(res.pageCount);
         this.listTask = res.taskList;
         this.topicID = topicID;
-        console.log(this.listTask);
       }
     );
   }
@@ -123,7 +131,7 @@ export class TaskContentComponent implements OnInit {
     this.isCreateTask = true;
   }
 
-  switchIsCreate(event: Boolean){
+  switchIsCreate(event: Boolean) {
     this.isCreateTask = event;
   }
 
@@ -131,5 +139,20 @@ export class TaskContentComponent implements OnInit {
     this.listTask.push(event);
     this.isCreateTask = false;
   }
+
+  openDialog(): void {
+    console.log(this.topicID);
+    const dialogRef = this.dialog.open(TaskCreateComponent, {
+      width: '400px',
+      data: {students: this.listAllStd}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      console.log('The dialog was closed');
+    });
+  }
+  
+
 
 }

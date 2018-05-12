@@ -1,25 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { TaskInfo } from './components/task-info';
 
 import * as SockJs from 'sockjs-client';
 import * as Stomp from 'stompjs';
+import { UserUpload } from '../models/UserUpload';
+import { AuthService } from '../core/auth.service';
 
 @Injectable()
 export class TaskService {
   taskStdList: Array<any>;
   private socket;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private authSv: AuthService) { }
+
+
 
   createtask(task: TaskInfo) {
     const loginUrl = `http://localhost:8080/crttask`;
-    return this.httpClient.post<TaskInfo>(loginUrl, {
-      title: task.title,
-      description: task.description,
-      deadline: task.deadline,
-      student: task.student
-    });
+    return this.httpClient.post<TaskInfo>(loginUrl, task);
   }
 
   getlistTask(topicID: number) {
@@ -85,11 +84,20 @@ export class TaskService {
 
   getTaskComment(taskID: number) {
     const loginUrl = `http://localhost:8080/gettaskcomment`;
-    return this.httpClient.get<any>(loginUrl  +'?taskid=' +taskID);
+    return this.httpClient.get<any>(loginUrl  + '?taskid=' + taskID);
   }
 
-  sendComment(comment: String, taskid: number){
+  sendComment(comment: String, taskid: number) {
     const Url = `http://localhost:8080/taskcomment`;
     return this.httpClient.get<any>(Url + '?comment=' + comment + '&taskid=' + taskid + '');
+  }
+
+  getListUserUpload(taskId) {
+    const param = new HttpParams().append('id', taskId.toString());
+    return this.httpClient.get<UserUpload>('http://localhost:8080/getStudents', {params: param});
+  }
+
+  isBelongToTask(listUserTask: any[]) {
+    return listUserTask.filter(task => task.userId == this.authSv.getUserId()).length === 1;
   }
 }

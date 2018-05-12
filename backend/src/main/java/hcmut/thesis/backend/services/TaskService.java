@@ -5,16 +5,10 @@
  */
 package hcmut.thesis.backend.services;
 
-import hcmut.thesis.backend.models.File;
-import hcmut.thesis.backend.models.Standard;
-import hcmut.thesis.backend.models.Task;
-import hcmut.thesis.backend.models.Topic;
-import hcmut.thesis.backend.modelview.PageInfo;
-import hcmut.thesis.backend.modelview.StudentDoTask;
-import hcmut.thesis.backend.modelview.TaskComment;
-import hcmut.thesis.backend.modelview.TaskInfo;
+import hcmut.thesis.backend.models.*;
+import hcmut.thesis.backend.modelview.*;
+
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -33,9 +27,14 @@ public interface TaskService {
     Topic getCurrTopicFromStdID(int stdid);
     List<File> getFileNameOfFile(int taskId);
     Boolean saveFileToTask(File file);
-    List<File> getFileByTaskId(Integer taskId, Integer version);
+    List<File> getFileByTaskId(Integer taskId, Integer version, Integer idUser);
     Integer getCurrentVersionOfTaskId(Integer taskId);
     Integer addNewVersion(Integer taskId);
-    String deleteFile(String name, Integer idTask, Integer version);
+    Integer addNewVersionForStudentTask(Integer taskId, Integer idStudent);
+    Integer addNewVersionForGeneral(Integer taskId, Integer idStudent);
+    String deleteFile(String name, Integer idTask, Integer version, Integer idStudent);
+    StudentTask getStudentTaskByIdTaskAndIdStudent(Integer idTask, Integer idStudent);
+    Task getTaskByTaskId(Integer taskId);
+    List<UserUpload> getListStudentTask(Integer idTask);
 
 }

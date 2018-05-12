@@ -1,8 +1,10 @@
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Inject, NgZone } from '@angular/core';
 import { TaskService } from '../../task.service';
 import { StudentDoTask } from '../student-do-task';
 import { TaskInfo } from '../task-info';
+import { TaskContentComponent } from '../task-content/task-content.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 
 @Component({
@@ -12,59 +14,43 @@ import { TaskInfo } from '../task-info';
 })
 export class TaskCreateComponent implements OnInit {
   crttaskForm: FormGroup;
-  listAllStd: Array<any>;
-  listStdDoTask: Array<StudentDoTask> = [];
-  
+  listAllStd: Array<StudentDoTask>;
+  listStdDoTask: Array<Number> = [];
+  taskInfo: TaskInfo;
+  task = 'fdgnbkxcvzhknjl;cvxza;mkj/,xzcvm/.,xbcvsz/.,xzcvdg.m,/xc,vz.m/vxzc';
 
-  @Output('checkCreate') isCreate = new EventEmitter<Boolean>();
-  @Output('addNewTask') newTask = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, private taskService: TaskService) { 
-    this.crttaskForm = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      deadline: ['2017-11-16T20:00', Validators.required]
-    });
+  // @Output('checkCreate') isCreate = new EventEmitter<Boolean>();
+  // @Output('addNewTask') newTask = new EventEmitter<any>();
+
+  constructor(private fb: FormBuilder, private zone: NgZone,
+    private taskService: TaskService, public dialogRef: MatDialogRef<TaskContentComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+      this.listAllStd = data.students;
+      this.taskInfo = new TaskInfo();
+  }
+  getValue(e, st: StudentDoTask) {
+    st.selected = e;
   }
 
   ngOnInit() {
-    this.getAllStudentDoTopic();
   }
 
-  getAllStudentDoTopic() {
-    this.taskService.getAllStudentDoTopic().subscribe(
-      res => {
-        this.listAllStd = res;
+
+
+  submit() {
+    this.zone.run(() => {
+      this.taskInfo.studentIdList = [];
+      this.listAllStd.filter(data => {
+        return data.selected === true;
+      }).forEach(key => {
+        this.taskInfo.studentIdList.push(key.studentId);
       });
-  }
+      this.taskService.createtask(this.taskInfo).subscribe(data => {
+        this.dialogRef.close();
 
-  isCreateTask(){
-   this.isCreate.emit(false);
-  }
-
-  checked(list): void {
-    if (list.class === undefined) {
-      list.class = 'checked';
-      const temp = <StudentDoTask>({ stdName: list.stdName, archive: null, uploadDate: null });
-      this.listStdDoTask.push(temp);
-    } else {
-      list.class = undefined;
-      for (let i = 0; i < this.listStdDoTask.length; i++) {
-        if (this.listStdDoTask[i].stdName === list.stdName) {
-          this.listStdDoTask.splice(i, 1);
-        }
-      }
-    }
-  }
-
-  createtask(form) {
-    console.log(form.deadline);
-    const temp = <TaskInfo>({ title: form.title, description: form.description, deadline: form.deadline, student: this.listStdDoTask });
-    this.taskService.createtask(temp).subscribe(
-      res => {
-        this.newTask.emit(res);
-      }
-    );
+      });
+    });
   }
 
 }

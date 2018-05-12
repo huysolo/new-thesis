@@ -6,10 +6,7 @@
 package hcmut.thesis.backend.services.impl;
 
 import hcmut.thesis.backend.models.*;
-import hcmut.thesis.backend.modelview.PageInfo;
-import hcmut.thesis.backend.modelview.StudentDoTask;
-import hcmut.thesis.backend.modelview.TaskComment;
-import hcmut.thesis.backend.modelview.TaskInfo;
+import hcmut.thesis.backend.modelview.*;
 import hcmut.thesis.backend.repositories.SemesterRepo;
 import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.StudentTaskRepo;
@@ -73,18 +70,25 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     FileRepo fileRepo;
 
+    @Autowired
+    UserSession userSession;
+
     @Override
     public List<StudentDoTask> getStudentDoTaskFromTaskID(int taskID) {
-        List<StudentDoTask> listStd = new ArrayList<>();
-        List<StudentTask> t = stdTaskRepo.getStudentDoTaskFromIDTask(taskID);
-        for (StudentTask aT : t) {
-            StudentDoTask temp = new StudentDoTask();
-            temp.setStdName(userRepo.getUserNameFromID(aT.getIdStudent()));
-            temp.setArchive(aT.getArchive());
-            temp.setUploadDate(aT.getUploadDate());
-            listStd.add(temp);
-        }
-        return listStd;
+//        List<StudentDoTask> listStd = new ArrayList<>();
+//        stdTaskRepo.getStudentDoTaskFromIDTask(taskID).forEach(studentTask -> {
+//            u
+//            listStd.add(new StudentDoTask(userRepo.fin))
+//
+//
+//        });
+//        for (StudentTask aT : t) {
+//            StudentDoTask temp = new StudentDoTask();
+//            temp.setStdName(userRepo.getUserNameFromID(aT.getIdStudent()));
+//
+//            listStd.add(temp);
+//        }
+        return null;
     }
         
 
@@ -101,7 +105,6 @@ public class TaskServiceImpl implements TaskService {
             temp.setDeadline(t.get(i).getDeadline());
             temp.setSubmit(t.get(i).getSubmit());
             temp.setPass(t.get(i).getPass());
-            temp.setStudent(getStudentDoTaskFromTaskID(t.get(i).getIdTask()));
             temp.setCurrentVerion(t.get(i).getCurrentVersion());
             listTask.add(temp);
         }
@@ -111,13 +114,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID) {
         List<StudentDoTask> listStd = new ArrayList<>();
-        List<StudentTopicSem> t = stdTopicSemRepo.getAllStudentByIdTopicSem(topicID);
+        stdTopicSemRepo.getAllStudentByIdTopicSem(topicID).forEach(studentTopicSem -> {
+            try {
+                StudentDoTask studentDoTask = new StudentDoTask(studentTopicSem.getIdStudent(), userSession.getUserNameByIdStudent(studentTopicSem.getIdStudent()));
+                listStd.add(studentDoTask);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        });
 
-        for (StudentTopicSem aT : t) {
-            StudentDoTask temp = new StudentDoTask();
-            temp.setStdName(userRepo.getUserNameFromID(aT.getIdStudent()));
-            listStd.add(temp);
-        }
         return listStd;
     }
 
@@ -134,7 +139,6 @@ public class TaskServiceImpl implements TaskService {
             temp.setDeadline(aT.getDeadline());
             temp.setSubmit(aT.getSubmit());
             temp.setPass(aT.getPass());
-            temp.setStudent(getStudentDoTaskFromTaskID(aT.getIdTask()));
             listTask.add(temp);
         }
         return listTask;
@@ -170,7 +174,6 @@ public class TaskServiceImpl implements TaskService {
             temp.setDeadline(t.get(i).getDeadline());
             temp.setSubmit(t.get(i).getSubmit());
             temp.setPass(t.get(i).getPass());
-            temp.setStudent(getStudentDoTaskFromTaskID(t.get(i).getIdTask()));
             temp.setCurrentVerion(t.get(i).getCurrentVersion());
             listTask.add(temp);
         }
@@ -232,9 +235,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Boolean saveFileToTask(File file) {
+        System.out.println(file.getIdTask());
         Optional<Task> task = taskRepo.findById(file.getIdTask());
+
         if (task.isPresent()){
-            Optional<File> f = fileRepo.findNameByIdTaskAndName(file.getIdTask(), file.getName(), file.getVersion());
+            System.out.println(task.get().getIdTask());
+            Optional<File> f = fileRepo.findNameByIdTaskAndNameAndIdUser(file.getIdTask(), file.getName(), file.getVersion(), file.getIdUser());
             if (!f.isPresent()) {
                 fileRepo.save(file);
 
@@ -247,32 +253,70 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<File> getFileByTaskId(Integer taskId, Integer version) {
-        return fileRepo.findAllByIdTaskAndVersion(taskId, version);
+    public List<File> getFileByTaskId(Integer taskId, Integer version, Integer idUser) {
+        return idUser == null ? fileRepo.findAllByIdTaskAndVersionGeneral(taskId, version): fileRepo.findAllByIdTaskAndVersion(taskId, version, idUser);
     }
 
     @Override
     public Integer getCurrentVersionOfTaskId(Integer taskId) {
-        return taskRepo.findById(taskId).map(Task::getCurrentVersion).orElse(null);
+        return getTaskByTaskId(taskId).getCurrentVersion();
     }
 
     @Override
     public Integer addNewVersion(Integer taskId) {
-        return taskRepo.findById(taskId).map(task -> {
-            task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
-            taskRepo.save(task);
-            return task.getCurrentVersion();
-        }).orElseThrow(() -> new NullPointerException("Task Not Found"));
+        Task task = getTaskByTaskId(taskId);
+        task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
+        taskRepo.save(task);
+        return task.getCurrentVersion();
+    }
+
+    @Override
+    public Integer addNewVersionForStudentTask(Integer taskId, Integer idStudent) {
+        StudentTask studentTask = getStudentTaskByIdTaskAndIdStudent(taskId, idStudent);
+        studentTask.setCurrentVersion(studentTask.getCurrentVersion() == null ? 0 : studentTask.getCurrentVersion() + 1);
+        stdTaskRepo.save(studentTask);
+        return studentTask.getCurrentVersion();
+    }
+
+    @Override
+    public Integer addNewVersionForGeneral(Integer taskId, Integer idStudent) {
+        Task task = getTaskByTaskId(taskId);
+        if (!topicService.isTeamLeader(task.getIdTopicSem(), idStudent)){
+            throw new NullPointerException("User Don't Have Permission To Add New Version");
+        }
+        task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
+
+        return taskRepo.save(task).getCurrentVersion();
     }
 
 
     @Override
-    public String deleteFile(String name, Integer idTask, Integer version) {
+    public String deleteFile(String name, Integer idTask, Integer version, Integer idUser) {
         System.out.println(version);
-        return fileRepo.findNameByIdTaskAndName(idTask, name,version).map(file -> {
+        return fileRepo.findNameByIdTaskAndNameAndIdUser(idTask, name, version, idUser).map(file -> {
             fileRepo.delete(file);
             return file.getName();
         }).orElseThrow(() -> new  NullPointerException("File not found"));
+    }
+
+    @Override
+    public StudentTask getStudentTaskByIdTaskAndIdStudent(Integer idTask, Integer idStudent) {
+        return stdTaskRepo.findByIdTaskAndIdStudent(idTask, idStudent).orElseThrow(() -> new NullPointerException("Task Of Student Not Found"));
+    }
+
+    @Override
+    public Task getTaskByTaskId(Integer taskId) {
+        return taskRepo.findById(taskId).orElseThrow(() -> new NullPointerException("Task Not Found"));
+    }
+
+    @Override
+    public List<UserUpload> getListStudentTask(Integer idTask) {
+        List<UserUpload> userUploadList = new ArrayList<>();
+        stdTaskRepo.getStudentDoTaskFromIDTask(idTask).forEach(studentTask -> {
+            User user = userSession.getUserByIdStudent(studentTask.getIdStudent());
+            userUploadList.add(new UserUpload(user.getUserName(), user.getIdUser(), studentTask.getCurrentVersion()));
+        });
+        return userUploadList;
     }
 
 

@@ -36,7 +36,7 @@ public class TopicController {
 
     ){
         if (userSession.isUser()) {
-            return topicService.getListTopicBySemester(userSession.getCurrentUserFalcuty(), semno, profId, available, specialize);
+            return topicService.getListTopicBySemester(userSession.getCurrentUserFaculty(), semno, profId, available, specialize);
         } else {
             return null;
         }
@@ -119,12 +119,12 @@ public class TopicController {
 
     @PostMapping(value = "apply")
     @ResponseBody
-    ResponseEntity<Object> applyToTopic(@RequestBody Integer topicId){
+    ResponseEntity<?> applyToTopic(@RequestBody Integer topicId){
         try {
             if(!userSession.isStudent()){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO APPLY");
             }
-            Topic topic =topicService.applyToTopic(topicId, userSession.getStudent().getIdUser());
+            Topic topic =topicService.applyToTopic(topicId, userSession.getStudent().getIdStudent());
             if (topic == null){
                 return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("INVALID REQUEST");
             }
@@ -140,7 +140,7 @@ public class TopicController {
         if(!userSession.isStudent()){
             return null;
         }
-        return topicService.getAppliedTopic(semno,  userSession.getStudent().getIdUser());
+        return topicService.getAppliedTopic(semno,  userSession.getStudent().getIdStudent());
     }
     @PostMapping(value = "reject")
     @ResponseBody
@@ -148,7 +148,7 @@ public class TopicController {
         if(!userSession.isStudent()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO REJECT");
         }
-        Topic topic =topicService.rejectTopic(topicId, userSession.getStudent().getIdUser());
+        Topic topic =topicService.rejectTopic(topicId, userSession.getStudent().getIdStudent());
         if (topic == null){
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("INVALID REQUEST");
         }

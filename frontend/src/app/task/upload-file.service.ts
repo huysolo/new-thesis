@@ -9,11 +9,12 @@ export class UploadFileService {
 
   constructor(private http: HttpClient, private zone: NgZone) {}
 
-  pushFileToStorage(file: File, id): Observable<HttpEvent<{}>> {
+  pushFileToStorage(file: File, id, ver, isGeneral): Observable<HttpEvent<{}>> {
     const formdata: FormData = new FormData();
 
     formdata.append('file', file);
     formdata.append('id', id);
+    formdata.append('general', isGeneral);
 
     const req = new HttpRequest('POST', 'http://localhost:8080/post', formdata, {
       reportProgress: true,
@@ -23,14 +24,32 @@ export class UploadFileService {
     return this.http.request(req);
   }
 
-  newVersion(taskId) {
-    return this.http.post<any>(this.newverUrl, taskId);
+  newVersion(file: File, id, isGeneral): Observable<HttpEvent<{}>> {
+    const formdata: FormData = new FormData();
+
+    formdata.append('file', file);
+    formdata.append('id', id);
+    formdata.append('general', isGeneral);
+
+    const req = new HttpRequest('POST', 'http://localhost:8080/addversion', formdata, {
+      reportProgress: true,
+      responseType: 'text'
+    });
+
+    return this.http.request(req);
   }
 
-  getFiles(id, version): Observable<string[]> {
-    let params = new HttpParams().append('id', id);
+  // newVersion(taskId) {
+  //   return this.http.post<any>(this.newverUrl, taskId);
+  // }
+
+  getFiles(taskId, version, idUser): Observable<string[]> {
+    let params = new HttpParams().append('id', taskId);
     if (version != null) {
       params = params.append('ver', version);
+    }
+    if (idUser != null) {
+      params = params.append('idUser', idUser);
     }
     return this.http.get<string[]>('http://localhost:8080/getallfiles', {params: params});
   }

@@ -19,11 +19,13 @@ import hcmut.thesis.backend.repositories.TopicRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
 import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.IUserDAO;
+import hcmut.thesis.backend.services.TopicService;
 import hcmut.thesis.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -55,6 +57,9 @@ public class UserDAO implements IUserDAO {
 
     @Autowired
     CommonService commonService;
+
+    @Autowired
+    TopicService topicService;
 
     @Override
     public User getUser(String username, String password) {
@@ -221,9 +226,10 @@ public class UserDAO implements IUserDAO {
     @Override
     public StudentTopicSem getStdTopicSem(int stdid, int semid) {
         List<Integer> listTopicID = topicRepo.findTopIDBySemesterNo(semid);
-        for (int i = 0; i < listTopicID.size(); i++) {
-            if (stdTopicSemRepo.getStdTopicSemFromTopicID(listTopicID.get(i), stdid) != null) {
-                return stdTopicSemRepo.getStdTopicSemFromTopicID(listTopicID.get(i), stdid);
+        for (Integer aListTopicID : listTopicID) {
+            Optional<StudentTopicSem> studentTopicSem = stdTopicSemRepo.getStdTopicSemFromTopicID(aListTopicID, stdid);
+            if (studentTopicSem.isPresent()) {
+                return studentTopicSem.get();
             }
         }
         return null;

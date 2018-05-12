@@ -48,7 +48,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public List<ProfInfo> getListProf() {
         List<ProfInfo> result = new ArrayList<>();
-        Integer idFaculty = userSession.getCurrentUserFalcuty();
+        Integer idFaculty = userSession.getCurrentUserFaculty();
         professorRepo.findAll().forEach(professor -> {
             Optional<User> user = userRepo.findById(professor.getIdUser());
             if (user.isPresent()){

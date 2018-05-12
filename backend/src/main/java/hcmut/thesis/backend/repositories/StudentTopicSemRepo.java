@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -38,7 +39,7 @@ public interface StudentTopicSemRepo extends JpaRepository<StudentTopicSem, Inte
     @Query("SELECT st.idTopicSem FROM StudentTopicSem st WHERE st.idStudent = :studentID")
     int getTopicIDFromStudentID(@Param("studentID") Integer studentID);
     
-    @Query("SELECT st FROM StudentTopicSem st WHERE st.idTopicSem = :topicid AND st.idStudent = :stdid")
-    StudentTopicSem getStdTopicSemFromTopicID(@Param("topicid") Integer topicid, @Param("stdid") Integer stdid);
+    @Query("SELECT st FROM StudentTopicSem st WHERE st.idTopicSem = :idTopicSem AND st.idStudent = :idStudent")
+    Optional<StudentTopicSem> getStdTopicSemFromTopicID(@Param("idTopicSem") Integer idTopic, @Param("idStudent") Integer idStudent);
 
 }

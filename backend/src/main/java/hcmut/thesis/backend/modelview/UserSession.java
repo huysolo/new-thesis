@@ -7,6 +7,8 @@ package hcmut.thesis.backend.modelview;
 
 import hcmut.thesis.backend.models.Professor;
 import hcmut.thesis.backend.models.Student;
+import hcmut.thesis.backend.models.User;
+import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
 import hcmut.thesis.backend.services.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class UserSession {
 
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    StudentRepo studentRepo;
 
     private int userID;
     
@@ -53,7 +58,17 @@ public class UserSession {
 
     public Student getStudent() {return userDAO.findStudentByUserId(userID);}
 
-    public Integer getCurrentUserFalcuty() { return userRepo.getIdFalcutyByIdUser(userID); }
+    public Integer getCurrentUserFaculty() { return userRepo.getIdFalcutyByIdUser(userID); }
 
+    public Integer findIdUserFromStudentId(int idStudent) {
+        return studentRepo.findIdUserFromStudentId(idStudent).orElseThrow(() -> new NullPointerException("User Not Found"));
+    }
 
+    public User getUserByIdStudent(Integer idStudent) {
+        Integer userId = findIdUserFromStudentId(idStudent);
+        return userRepo.findById(userId).orElseThrow(() -> new NullPointerException("User Not Found Of Student"));
+    }
+     public String getUserNameByIdStudent(Integer idStudent) {
+        return getUserByIdStudent(idStudent).getUserName();
+     }
 }

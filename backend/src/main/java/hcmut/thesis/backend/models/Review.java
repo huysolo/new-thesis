@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Review {
     private int idProf;
     private int idTopic;
-    private Integer score;
+    private Float score;
     private int submitted;
     private int idReview;
 
@@ -36,11 +36,11 @@ public class Review {
 
     @Basic
     @Column(name = "score")
-    public Integer getScore() {
+    public Float getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(Float score) {
         this.score = score;
     }
 

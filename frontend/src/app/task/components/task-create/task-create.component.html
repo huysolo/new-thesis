@@ -1,31 +1,26 @@
-<div class="w3-modal popup">
-    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="padding:32px;max-width:600px">
-      <div class="w3-container w3-white w3-center">
-        <h1 class="w3-wide">CREATE TASK</h1>
-        <form [formGroup]="crttaskForm" (ngSubmit)="createtask(crttaskForm.value)">
-          <p>
-            <input class="w3-input" type="text" placeholder="Title" formControlName="title">
-          </p>
-          <p>
-            <textarea class="w3-input " placeholder="Description: " formControlName="description"></textarea>
-          </p>
-          <div class="scrollmenu">
-            <ul id="myUL">
-              <li *ngFor="let list of listAllStd" class="{{list.class}}" (click)="checked(list)">{{list.stdName}}</li>
-            </ul>
-          </div>
-          <p>
-            <input class="w3-input " type="datetime-local" placeholder="Date and time" formControlName="deadline">
-          </p>
-          <div class="w3-row">
-            <div class="w3-half">
-              <button type="submit" class="w3-button w3-block w3-green">Create</button>
-            </div>
-            <div class="w3-half">
-              <button type="button" (click)="isCreateTask()" class="w3-button w3-block w3-red">Cancel</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+<h1 mat-dialog-title>Create New Task</h1>
+<div mat-dialog-content>
+  <form #createTaskForm="ngForm" method="post">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Task Title" [(ngModel)]="taskInfo.title" required name="taskTitle" #taskTitle="ngModel">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+        <textarea matInput placeholder="Task Description" [(ngModel)]="taskInfo.description" required name="taskDescription" #taskDescription="ngModel"></textarea>
+      </mat-form-field>
+    <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Choose deadline" [(ngModel)]="taskInfo.deadline" required name="taskDeadline" #taskDeadline="ngModel">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    <p>Students Of Task</p>
+    <ng-container *ngFor="let st of listAllStd">
+      <mat-checkbox  (change)="getValue($event.checked, st)">{{st.stdName}}</mat-checkbox>
+      <br>
+    </ng-container>
+    
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="btn btn-secondary" mat-button (click)="this.dialogRef.close();">Cancel</button>
+  <button class="btn btn-success"  mat-button (click)="submit()"[disabled]="!createTaskForm.valid" cdkFocusInitial>Create</button>
+</div>

@@ -15,13 +15,27 @@ import { TaskCreateComponent } from './components/task-create/task-create.compon
 import { TaskCommentComponent } from './components/task-comment/task-comment.component';
 import { TaskPaginationComponent } from './components/task-pagination/task-pagination.component';
 import { DetailsUploadComponent } from './components/upload/detail-upload/detail-upload.component';
-
+import {MatExpansionModule} from '@angular/material/expansion';
+import { StudentTaskPipe } from './student-task.pipe';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule,
+  MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatDatepickerModule, MatListModule} from '@angular/material';
 @NgModule({
   imports: [
     CommonModule,
     TaskRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatInputModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatListModule
   ],
   declarations: [
     TaskContentComponent,
@@ -34,8 +48,10 @@ import { DetailsUploadComponent } from './components/upload/detail-upload/detail
     TaskDetailComponent,
     TaskCreateComponent,
     TaskCommentComponent,
-    TaskPaginationComponent
+    TaskPaginationComponent,
+    StudentTaskPipe
   ],
-  providers: [TaskService, UploadFileService]
+  providers: [TaskService, UploadFileService],
+  entryComponents: [TaskContentComponent, TaskCreateComponent]
 })
 export class TaskModule { }

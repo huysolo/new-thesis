@@ -1,11 +1,10 @@
 export class StudentDoTask {
   stdName: String;
-  archive: String;
-  uploadDate: Date;
-
-  public StudentDoTask(name: String, archive: String, uploadDate: Date ) {
+  studentId: number;
+  selected: boolean;
+  public StudentDoTask(name: String, studentId ) {
     this.stdName = name;
-    this.archive = archive;
-    this.uploadDate = uploadDate;
+    this.studentId = studentId;
+    this.selected = false;
   }
 }
