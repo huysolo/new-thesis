@@ -37,6 +37,9 @@ import { StandardService } from '../standard.service';
     TaskService,
     StandardService,
     AuthTopicGuardService
+  ],
+  exports: [
+    MaterialModule
   ]
 })
 export class CoreModule { }

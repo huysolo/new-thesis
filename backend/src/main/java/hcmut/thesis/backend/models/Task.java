@@ -1,13 +1,10 @@
 package hcmut.thesis.backend.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.hibernate.annotations.Formula;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 @Entity
 public class Task {
@@ -19,6 +16,7 @@ public class Task {
     private int submit;
     private int pass;
     private Integer currentVersion;
+    private Timestamp updateTime;
 
     public void setSubmit(Integer submit) {
         this.submit = submit;
@@ -54,7 +52,7 @@ public class Task {
     public String getDescription() {
         return description;
     }
-
+    
     public void setDescription(String description) {
         this.description = description;
     }
@@ -74,7 +72,7 @@ public class Task {
     public Integer getIdTopicSem() {
         return idTopicSem;
     }
-    
+
     public void setIdTopicSem(Integer idTopicSem) {
         this.idTopicSem = idTopicSem;
     }
@@ -127,6 +125,28 @@ public class Task {
 
     public void setCurrentVersion(Integer currentVersion) {
         this.currentVersion = currentVersion;
+    }
+
+
+    @Basic
+    @Column(name = "update_time")
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
+    }
+
+
+    private String topicName;
+
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
     }
 
 

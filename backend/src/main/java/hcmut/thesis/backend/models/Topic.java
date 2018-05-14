@@ -189,4 +189,5 @@ public class Topic {
     public void setReviewDate(Timestamp reviewDate) {
         this.reviewDate = reviewDate;
     }
+
 }

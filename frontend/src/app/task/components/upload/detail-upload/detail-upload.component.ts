@@ -9,6 +9,7 @@ export class DetailsUploadComponent implements OnInit {
 
   @Input() fileUpload: string;
   @Output() rmEmitter: EventEmitter<String> = new EventEmitter<String>();
+  @Input() canRemove = false;
   constructor() {}
 
   ngOnInit() {

@@ -8,6 +8,7 @@ package hcmut.thesis.backend.modelview;
 import hcmut.thesis.backend.models.Professor;
 import hcmut.thesis.backend.models.Student;
 import hcmut.thesis.backend.models.User;
+import hcmut.thesis.backend.repositories.ProfessorRepo;
 import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
 import hcmut.thesis.backend.services.IUserDAO;
@@ -32,6 +33,9 @@ public class UserSession {
     @Autowired
     StudentRepo studentRepo;
 
+    @Autowired
+    ProfessorRepo professorRepo;
+
     private int userID;
     
     public int getUserID(){
@@ -43,15 +47,15 @@ public class UserSession {
     }
 
     public Boolean isProf(){
-        return userDAO.findProfByUserId(userID) != null;
+        return professorRepo.getProfessorByIdUser(userID).isPresent();
     }
 
     public Boolean isStudent(){
-        return userDAO.findStudentByUserId(userID) != null;
+        return studentRepo.findStudentByIdUser(userID).isPresent();
     }
 
     public Boolean isUser(){
-        return userDAO.findUserByUserId(userID) != null;
+        return userRepo.findById(userID).isPresent();
     }
 
     public Professor getProf() {return userDAO.findProfByUserId(userID);}

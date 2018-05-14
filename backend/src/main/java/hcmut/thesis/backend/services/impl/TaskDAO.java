@@ -46,17 +46,8 @@ public class TaskDAO implements ITaskDAO {
     @Override
     public void createStudentTask(int taskID, List<Integer> studentIdList){
         List<StudentTask> studentTaskList = new LinkedList<>();
-        studentIdList.forEach(id->{
-            studentTaskList.add(new StudentTask(taskID, id));
-        });
+        studentIdList.forEach(id-> studentTaskList.add(new StudentTask(taskID, id)));
         stdTaskRepo.saveAll(studentTaskList);
-//        for(int i = 0; i< std.size(); i++){
-//            StudentTask stdTask = new StudentTask();
-//            stdTask.setIdTask(taskID);
-//            int userID = iuserDAO.getUser(std.get(i).getStdName()).getIdUser();
-//            stdTask.setIdStudent(stdRepo.getStdIDFromUserID(userID));
-//            stdTaskRepo.save(stdTask);
-//        }
     }
     
     @Override
@@ -66,7 +57,7 @@ public class TaskDAO implements ITaskDAO {
         newTask.setDescription(taskInfo.getDescription());
         newTask.setDeadline(taskInfo.getDeadline());
         newTask.setIdTopicSem(topicid);
-        Task task =  taskRepo.saveAndFlush(newTask);
+        Task task =  taskRepo.save(newTask);
         createStudentTask(task.getIdTask(), taskInfo.getStudentIdList());
         taskInfo.setTaskID(task.getIdTask());
         return task;

@@ -10,13 +10,11 @@ import {UserModule} from './user/user.module';
 import { MainPageComponent } from './main-page/main-page.component';
 import { CoreModule } from './core/core.module';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
-    MainPageComponent
+    MainPageComponent,
   ],
   imports: [
     CoreModule,

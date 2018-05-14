@@ -6,6 +6,7 @@ import * as SockJs from 'sockjs-client';
 import * as Stomp from 'stompjs';
 import { UserUpload } from '../models/UserUpload';
 import { AuthService } from '../core/auth.service';
+import { Task } from '../models/Task';
 
 @Injectable()
 export class TaskService {
@@ -94,10 +95,15 @@ export class TaskService {
 
   getListUserUpload(taskId) {
     const param = new HttpParams().append('id', taskId.toString());
-    return this.httpClient.get<UserUpload>('http://localhost:8080/getStudents', {params: param});
+    return this.httpClient.get<UserUpload[]>('http://localhost:8080/getStudents', {params: param});
   }
 
   isBelongToTask(listUserTask: any[]) {
     return listUserTask.filter(task => task.userId == this.authSv.getUserId()).length === 1;
+  }
+
+  getListTaskByApprove(approve) {
+    const param = new HttpParams().append('approve', approve);
+    return this.httpClient.get<Task[]>('http://localhost:8080/tasksapprove', {params: param});
   }
 }

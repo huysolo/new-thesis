@@ -5,7 +5,6 @@
  */
 package hcmut.thesis.backend.controllers;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import hcmut.thesis.backend.models.Task;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.modelview.ChatGroupInfo;
@@ -28,7 +27,6 @@ import hcmut.thesis.backend.services.IUserDAO;
 import hcmut.thesis.backend.services.TaskService;
 
 import hcmut.thesis.backend.services.TopicService;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
@@ -44,7 +42,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,7 +127,7 @@ public class TaskController {
     @RequestMapping(value = "/topiccount", method = RequestMethod.GET)
     @ResponseBody
     public List<Topic> getListTaskTest() {
-        return topicRepo.findTopicFromProfID(profRepo.getProfessorByIdUser(userSession.getUserID()));
+        return topicRepo.findTopicFromProfID(profRepo.getProfessorIdByIdUser(userSession.getUserID()));
     }
     
     @RequestMapping(value = "/getlisttopic", method = RequestMethod.GET)
@@ -158,12 +155,7 @@ public class TaskController {
         return topicRepo.findListSemFromProfID(userSession.getProf().getIdProfessor());
     }
 
-    @RequestMapping(value = "/getallstd", method = RequestMethod.GET)
-    @ResponseBody
-    public List<StudentDoTask> getAllStudentDoTopic() {
-        int topicid = taskService.getCurrTopicFromStdID(userSession.getStudent().getIdStudent()).getIdTop();
-        return taskService.getAllStudentDoTaskFromTopicID(topicid);
-    }
+
 
     @RequestMapping(value = "/submittask")
     @ResponseBody
@@ -279,6 +271,15 @@ public class TaskController {
             return ResponseEntity.ok(storageService.deleteFile(name, idTask, ver, general));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("tasksapprove")
+    public  ResponseEntity<?> getAllTaskByApprove(@RequestParam("approve") Integer approve) {
+        try {
+            return ResponseEntity.ok(taskService.getListTaskOfRecentTopicByApprove(approve));
+        } catch (Exception e) {
+            return  ResponseEntity.status(500).body(e.getMessage());
         }
     }
 

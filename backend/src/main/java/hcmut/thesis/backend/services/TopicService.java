@@ -2,12 +2,14 @@ package hcmut.thesis.backend.services;
 
 import hcmut.thesis.backend.models.*;
 import hcmut.thesis.backend.modelview.ReviewTopic;
+import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.TopicDetail;
 
 import java.util.List;
 public interface TopicService {
     List<Topic> getListTopicBySemester(Integer idFal, Integer semesterNo, Integer profId, Boolean available, Integer specialize);
     List<Topic> getListRecentTopicBySemester(Integer profId, Boolean available, Integer specialize);
+    List<Topic> getListOpenTopic();
     TopicDetail getTopicDetailById(Integer topId);
     Topic setTopicDetail(TopicDetail topicDetail, Boolean publish);
     Topic applyToTopic(Integer topId, Integer studentId);
@@ -33,5 +35,9 @@ public interface TopicService {
     boolean isTeamLeader(Integer idTopic, Integer idStudent);
     Topic getTopicById(int idTopic);
     StudentTopicSem getStudentTopicSem(Integer idTopic, Integer idStudent);
+    List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID);
+    Topic getTopicOfCurrentSem();
+    Topic getTopicById(Integer idTopic);
+
 
 }

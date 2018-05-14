@@ -27,6 +27,9 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
     
     @Query("SELECT t FROM Task t WHERE t.idTask = :taskID")
     Task getTaskFromTaskID(@Param("taskID") Integer taskID);
-    
+
+    @Query("SELECT st FROM Task st WHERE  st.idTopicSem = :idTopic AND  st.pass = :pass  AND st.submit = :submit order by st.updateTime")
+    List<Task> findAllByIdTopicSemAndApprove(@Param("idTopic") Integer idTopic, @Param("pass") Integer pass, @Param("submit") Integer submit);
+
 }
 

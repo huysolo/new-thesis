@@ -86,13 +86,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public Professor findProfByUserId(int id) {
-        List<Professor> listProf = profRepo.findAll();
-        for (int i = 0; i < listProf.size(); i++) {
-            if (listProf.get(i).getIdUser() == id) {
-                return listProf.get(i);
-            }
-        }
-        return null;
+        return profRepo.getProfessorByIdUser(id).orElseThrow(() -> new NullPointerException("Professor not found"));
     }
 
     @Override
@@ -165,13 +159,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public Student findStudentByUserId(int id) {
-        List<Student> listStudent = studentRepo.findAll();
-        for (int i = 0; i < listStudent.size(); i++) {
-            if (listStudent.get(i).getIdUser() == id) {
-                return listStudent.get(i);
-            }
-        }
-        return null;
+        return studentRepo.findStudentByIdUser(id).orElseThrow(() -> new NullPointerException("Student Not Found"));
     }
 
     @Override

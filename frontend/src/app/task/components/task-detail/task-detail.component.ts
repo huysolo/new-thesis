@@ -12,6 +12,7 @@ import { UploadFileService } from '../../upload-file.service';
 export class TaskDetailComponent implements OnInit {
   listTask: Array<any>;
   issubmit: String;
+  isTaskOwner = false;
   @Input() task: any;
 
   constructor(public authService: AuthService, public taskService: TaskService, public uploadSv: UploadFileService) { 
@@ -89,10 +90,9 @@ export class TaskDetailComponent implements OnInit {
     );
   }
   loadStudent() {
-    console.log(this.task.taskID);
-    
     this.taskService.getListUserUpload(this.task.taskID).subscribe(data => {
       this.task.student = data;
+      this.isTaskOwner = this.taskService.isBelongToTask(data);
     });
   }
 

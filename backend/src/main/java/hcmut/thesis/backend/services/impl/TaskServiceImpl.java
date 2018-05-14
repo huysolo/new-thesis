@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,21 +110,6 @@ public class TaskServiceImpl implements TaskService {
             listTask.add(temp);
         }
         return listTask;
-    }
-
-    @Override
-    public List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID) {
-        List<StudentDoTask> listStd = new ArrayList<>();
-        stdTopicSemRepo.getAllStudentByIdTopicSem(topicID).forEach(studentTopicSem -> {
-            try {
-                StudentDoTask studentDoTask = new StudentDoTask(studentTopicSem.getIdStudent(), userSession.getUserNameByIdStudent(studentTopicSem.getIdStudent()));
-                listStd.add(studentDoTask);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        });
-
-        return listStd;
     }
 
     @Override
@@ -292,8 +278,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public String deleteFile(String name, Integer idTask, Integer version, Integer idUser) {
-        System.out.println(version);
-        return fileRepo.findNameByIdTaskAndNameAndIdUser(idTask, name, version, idUser).map(file -> {
+        Optional<File> f = idUser == null ? fileRepo.findNameByIdTaskAndNameAndIdUserGeneral(idTask, name, version)
+                : fileRepo.findNameByIdTaskAndNameAndIdUser(idTask, name, version, idUser);
+        return f.map(file -> {
             fileRepo.delete(file);
             return file.getName();
         }).orElseThrow(() -> new  NullPointerException("File not found"));
@@ -318,6 +305,19 @@ public class TaskServiceImpl implements TaskService {
         });
         return userUploadList;
     }
+
+    @Override
+    public List<Task> findAllByIdTopicSemAndApprove(Integer idTopic, Integer approve) {
+        return taskRepo.findAllByIdTopicSemAndApprove(idTopic, approve, 1);
+    }
+
+    @Override
+    public List<Task> getListTaskOfRecentTopicByApprove(Integer approve) {
+        List<Task> tasks = new LinkedList<>();
+        topicService.getListOpenTopic().forEach(topic -> tasks.addAll(findAllByIdTopicSemAndApprove(topic.getIdTop(), approve)));
+        return tasks;
+    }
+
 
 
 }

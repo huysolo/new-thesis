@@ -12,20 +12,36 @@ import java.sql.Timestamp;
  * @author MinBui
  */
 public class StudentDoTask {
+    private Integer studentId;
+    private String stdName;
+
+    public int getTeamlead() {
+        return teamlead;
+    }
+
+    public void setTeamlead(int teamlead) {
+        this.teamlead = teamlead;
+    }
+
+    private int teamlead;
+
+    public StudentDoTask(Integer studentId, String stdName, int teamlead) {
+        this.studentId = studentId;
+        this.stdName = stdName;
+        this.teamlead = teamlead;
+    }
+
+    public StudentDoTask(Integer studentId, String stdName) {
+        this.studentId = studentId;
+        this.stdName = stdName;
+    }
+
     public Integer getStudentId() {
         return studentId;
     }
 
     public void setStudentId(Integer studentId) {
         this.studentId = studentId;
-    }
-
-    private Integer studentId;
-    private String stdName;
-
-    public StudentDoTask(Integer studentId, String stdName) {
-        this.studentId = studentId;
-        this.stdName = stdName;
     }
 
     public String getStdName(){

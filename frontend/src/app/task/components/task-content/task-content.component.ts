@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import { MatDialog } from '@angular/material';
 import { TaskCreateComponent } from '../task-create/task-create.component';
+import { TopicService } from '../../../topic/topic.service';
 
 
 @Component({
@@ -39,8 +40,8 @@ export class TaskContentComponent implements OnInit {
 
   constructor(
     public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute,
-    public dialog: MatDialog) {
-      this.taskService.getAllStudentDoTopic().subscribe(data => {
+    public dialog: MatDialog, private topicSv: TopicService) {
+      this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
         this.listAllStd = data;
       });
   }
@@ -141,18 +142,18 @@ export class TaskContentComponent implements OnInit {
   }
 
   openDialog(): void {
-    console.log(this.topicID);
     const dialogRef = this.dialog.open(TaskCreateComponent, {
       width: '400px',
       data: {students: this.listAllStd}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      console.log('The dialog was closed');
+      if (result.idTask != null) {
+        result.taskID = result.idTask;
+        this.listTask.unshift(result);
+      }
     });
   }
-  
 
 
 }

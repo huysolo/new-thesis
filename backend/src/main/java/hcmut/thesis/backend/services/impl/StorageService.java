@@ -130,12 +130,6 @@ public class StorageService {
 
     }
     public void init() {
-//        try {
-//            if (!Files.isDirectory(taskLocation)){
-//                Files.createDirectories(taskLocation);
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException("Could not initialize storage!");
-//        }
+
     }
 }

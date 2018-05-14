@@ -47,7 +47,7 @@ export class TaskCreateComponent implements OnInit {
         this.taskInfo.studentIdList.push(key.studentId);
       });
       this.taskService.createtask(this.taskInfo).subscribe(data => {
-        this.dialogRef.close();
+        this.dialogRef.close(data);
 
       });
     });

@@ -1,10 +1,7 @@
 package hcmut.thesis.backend.services.impl;
 
 import hcmut.thesis.backend.models.*;
-import hcmut.thesis.backend.modelview.ReviewTopic;
-import hcmut.thesis.backend.modelview.StandardScore;
-import hcmut.thesis.backend.modelview.TopicDetail;
-import hcmut.thesis.backend.modelview.UserSession;
+import hcmut.thesis.backend.modelview.*;
 import hcmut.thesis.backend.repositories.*;
 import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.ITopicDAO;
@@ -13,6 +10,7 @@ import hcmut.thesis.backend.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +69,12 @@ public class TopicServiceImpl implements TopicService {
         }
         return getListTopicBySemester(idFal, semNo, profId, aval, specialize);
 
+    }
+
+    @Override
+    public List<Topic> getListOpenTopic() {
+        Integer semNo = commonService.getSemOpen().getSemesterNo();
+        return topicRepo.findListTopicFromSemID(userSession.getProf().getIdProfessor(), semNo);
     }
 
     @Override
@@ -377,6 +381,34 @@ public class TopicServiceImpl implements TopicService {
         topicDetail.getTopicMission().forEach(topicMission -> topicMissionRepo.delete(topicMission));
         topicDetail.getTopicRequirement().forEach(topicRequirement -> topicReqRepo.delete(topicRequirement));
         return topicDetail.getTopic();
+    }
+
+    @Override
+    public List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID) {
+        List<StudentDoTask> listStd = new ArrayList<>();
+        studentTopicSemRepo.getAllStudentByIdTopicSem(topicID).forEach(studentTopicSem -> {
+            try {
+                String fullName = commonService.getFullName(userSession.getUserByIdStudent(studentTopicSem.getIdStudent()));
+                StudentDoTask studentDoTask = new StudentDoTask(studentTopicSem.getIdStudent(), fullName, studentTopicSem.getTeamLead());
+                listStd.add(studentDoTask);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return listStd;
+    }
+
+    @Override
+    public Topic getTopicOfCurrentSem() {
+        Integer semNo = commonService.getSemOpen().getSemesterNo();
+        return getAppliedTopic(semNo, userSession.getStudent().getIdStudent());
+
+    }
+
+    @Override
+    public Topic getTopicById(Integer idTopic) {
+        return topicRepo.findById(idTopic).orElseThrow(() -> new NullPointerException("Topic Not Found"));
     }
 
 }

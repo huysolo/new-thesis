@@ -12,14 +12,13 @@
 
     <div id="demo2" style="background-color: whitesmoke">
       <div *ngFor="let cmt of taskCmt" class="w3-row">
-        <hr style="margin-top: 0px;">
         <div class="w3-col l2 m3">
           <img src="https://bootdey.com/img/Content/user_1.jpg" style="width:90px;">
         </div>
         <div class="w3-col l10 m9">
-          <h4>{{cmt.username}}
+          <h5>{{cmt.username}}
             <span class="w3-opacity w3-medium">{{cmt.time | date}}</span>
-          </h4>
+          </h5>
           <p>{{cmt.content}}</p>
           <br>
         </div>

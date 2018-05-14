@@ -6,6 +6,7 @@ import hcmut.thesis.backend.models.Standard;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.models.TopicSemStandard;
 import hcmut.thesis.backend.modelview.ReviewTopic;
+import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.TopicDetail;
 import hcmut.thesis.backend.modelview.UserSession;
 import hcmut.thesis.backend.services.TopicService;
@@ -236,6 +237,14 @@ public class TopicController {
             return topicService.getStandardListByGeneralAndUserId(userSession.getUserID());
         }
         return  null;
+    }
+
+    @GetMapping(value = "student")
+    public List<StudentDoTask> getAllStudentDoTopic(@RequestParam(value = "id", required = false) Integer idTopic) {
+        if (idTopic == null) {
+            idTopic = topicService.getTopicOfCurrentSem().getIdTop();
+        }
+        return topicService.getAllStudentDoTaskFromTopicID(idTopic);
     }
 
 

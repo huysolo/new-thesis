@@ -10,20 +10,15 @@
       </div>
       <div class="pull-right">
         <div>
-          <div class="pull-right">
             <span (click)="showTask(task)" class="btn btn-default active">
               <i class="fa fa-close"></i>
             </span>
-          </div>
-          <div class="pull-left">
-            <span class="w3-opacity">1 min</span>
-          </div>
         </div>
         <div>
           <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor() && isrecent"
-            class="w3-button w3-white w3-border">
+            class="btn btn-default">
             <i class="fa fa-pencil"></i>Submit</button>
-          <button type="button " *ngIf="task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()" class="w3-button w3-white w3-border">
+          <button type="button " *ngIf="task.submit && !this.authService.isProfessor() && task.pass == 1" (click)="isSubmitTask()" class="btn btn-default">
             <i class="fa fa-pencil"></i>Submited</button>
         </div>
       </div>
@@ -34,26 +29,9 @@
         <b>Description: </b>
       </h5>
       <p class="card-text">{{task.description}}</p>
+
       <ng-container *ngIf="task.student != null && task.student.length > 0">
-        <h5 class="w3-opacity">
-          <b>Students:</b>
-        </h5>
-        <mat-accordion>
-          <mat-expansion-panel *ngFor="let std of task.student">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{std.username}}
-              </mat-panel-title>
-              <mat-panel-description>
-                Upload Detail Of {{std.username}}
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <app-list-upload [taskId]="task.taskID" [ver]="std.currentVersion" [userId]="std.userId"></app-list-upload>
-
-          </mat-expansion-panel>
-        </mat-accordion>
-
-        <ng-container *ngIf="taskService.isBelongToTask(task.student)">
+        <ng-container *ngIf="isTaskOwner">
           <h5 class="w3-opacity">
             <b>Upload File To Your Repo:</b>
           </h5>
@@ -64,8 +42,39 @@
             <b>Submit File To Proffesor:</b>
           </h5>
           <app-form-upload [id]="task.taskID" [general]="true"></app-form-upload>
-          <app-list-upload [taskId]="task.taskID" [ver]="task.currentVersion" [general]="true"></app-list-upload>
         </ng-container>
+        <h5 class="w3-opacity">
+          <b>Uploaded Files:</b>
+        </h5>
+        <mat-accordion>
+          <ng-container *ngIf="!authService.isProfessor()">
+            <mat-expansion-panel *ngFor="let std of task.student" >
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{std.username}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  Upload Detail Of {{std.username}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-list-upload [taskId]="task.taskID" [ver]="std.currentVersion" [userId]="std.userId" [isTaskOwner] ="isTaskOwner"></app-list-upload>  
+            </mat-expansion-panel>
+          </ng-container>
+          <mat-expansion-panel class="bg-primary">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="text-white">
+                Main
+              </mat-panel-title>
+              <mat-panel-description  class="text-white">
+                Upload Detail To Proffessor
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <app-list-upload class="text-white" [taskId]="task.taskID" [ver]="task.currentVersion" [general]="true"></app-list-upload>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+
+
       </ng-container>
       <span class="d-inline-block">
 
@@ -122,12 +131,8 @@
         <i class="fa fa-pencil"></i> Submited</button>
     </h6>
     <h6 class="col-1">
-      <button *ngIf="task.pass == 1" type="button" class="btn btn-danger active">
-        <i class="fa fa-close red" style="color:red;"></i>
-      </button>
-      <button *ngIf="task.pass == 2" type="button" class="btn btn-success active">
-        <i class="fa fa-check" style="color:green;"></i>
-      </button>
+      <i *ngIf="task.pass == 1" class="fa fa-close red" style="color:red;"></i>
+      <i *ngIf="task.pass == 2" class="fa fa-check" style="color:green;"></i>
     </h6>
     <h6 class="col-2">
       <button type="button" (click)="showTask(task)" class="btn btn-default active">

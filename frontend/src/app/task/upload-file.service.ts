@@ -64,8 +64,8 @@ export class UploadFileService {
     });
   }
 
-  deleteFile(idTask, version, name) {
-    const params = new HttpParams().append('name', name).append('ver', version).append('id', idTask);
+  deleteFile(idTask, version, name, general) {
+    const params = new HttpParams().append('name', name).append('ver', version).append('id', idTask).append('general', general);
     return this.http.delete<any>(this.fileUrl, {params: params});
   }
 }

@@ -24,7 +24,6 @@ export class LayoutComponent implements OnInit {
   getTopicCount() {
     this.taskService.getTopicCount().subscribe(
       res => {
-        console.log(res);
         this.topicCount = res;
       }
     );

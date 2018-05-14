@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import { UploadFileService } from '../../../upload-file.service';
+import { AuthService } from '../../../../core/auth.service';
 
 @Component({
   selector: 'app-list-upload',
@@ -16,14 +17,14 @@ export class ListUploadComponent implements OnInit {
   showFile = false;
   fileUploads: string[];
   currentVersion: number;
+  @Input() isTaskOwner = false;
   listVersion: Observable<number[]> = new Observable<number[]>();
 
-  constructor(public uploadService: UploadFileService) {
+  constructor(public uploadService: UploadFileService, public authoSv: AuthService) {
   }
 
   ngOnInit() {
     this.currentVersion = this.ver;
-    console.log(this.userId);
     this.listVersion = this.uploadService.getListVersion(this.ver);
   }
 
@@ -38,7 +39,7 @@ export class ListUploadComponent implements OnInit {
   }
 
   deleteFile(name) {
-      this.uploadService.deleteFile(this.taskId, this.currentVersion, this.filename(name)).subscribe(s => {
+      this.uploadService.deleteFile(this.taskId, this.currentVersion, this.filename(name), this.general).subscribe(s => {
       });
       this.fileUploads = this.fileUploads.filter(f => f !== name);
 

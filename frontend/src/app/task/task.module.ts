@@ -20,7 +20,7 @@ import { StudentTaskPipe } from './student-task.pipe';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule,
-  MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatDatepickerModule, MatListModule} from '@angular/material';
+  MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatDatepickerModule, MatListModule, MatSelectModule} from '@angular/material';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,7 +35,8 @@ import {MatInputModule,
     MatButtonToggleModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule
   ],
   declarations: [
     TaskContentComponent,
