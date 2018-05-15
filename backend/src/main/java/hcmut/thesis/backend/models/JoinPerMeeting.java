@@ -9,6 +9,8 @@ import java.util.Objects;
 public class JoinPerMeeting {
     private int idStudent;
     private int idMeeting;
+    private String diaryContent;
+    private String diaryPlan;
 
     @Id
     @Column(name = "id_student")
@@ -29,6 +31,26 @@ public class JoinPerMeeting {
     public void setIdMeeting(int idMeeting) {
         this.idMeeting = idMeeting;
     }
+    
+    @Basic
+    @Column(name = "diary_content")
+    public String getDiaryContent() {
+        return this.diaryContent;
+    }
+
+    public void setDiaryContent(String content) {
+        this.diaryContent= content;
+    }
+    
+    @Basic
+    @Column(name = "diary_plan")
+    public String getDiaryPlan() {
+        return this.diaryPlan;
+    }
+
+    public void setDiaryPlan(String plan) {
+        this.diaryPlan = plan;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -36,12 +58,14 @@ public class JoinPerMeeting {
         if (o == null || getClass() != o.getClass()) return false;
         JoinPerMeeting that = (JoinPerMeeting) o;
         return idStudent == that.idStudent &&
-                idMeeting == that.idMeeting;
+                idMeeting == that.idMeeting &&
+                Objects.equals(diaryContent, that.diaryContent) &&
+                Objects.equals(diaryPlan, that.diaryPlan) ;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idStudent, idMeeting);
+        return Objects.hash(idStudent, idMeeting,diaryContent, diaryPlan);
     }
 }

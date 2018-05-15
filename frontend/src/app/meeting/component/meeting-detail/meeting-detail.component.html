@@ -1,121 +1,112 @@
-<div class="container" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="container-fluid">
-      <div *ngIf="meeting.status == 2" class="alert alert-danger" role="alert">
-        <h4 class="alert-heading">Meeting is Canceled!</h4>
-        <hr>
-        <strong>Note: </strong>
-        <p>{{meeting.reason}}</p>
-        <br>
+<mat-accordion class="example-headers-align">
+  <mat-expansion-panel hideToggle="true" #matExpansionPanel>
+    <mat-expansion-panel-header>
+
+      <mat-panel-title *ngIf=" !isDiary && meeting.status == 0">
+        <mat-icon>history</mat-icon> Waiting</mat-panel-title>
+      <mat-panel-title *ngIf="!isDiary && meeting.status == 1">
+        <mat-icon style="color:#009688">assignment_turned_in</mat-icon> {{bookedSchedule.meetingTime | date}} - {{bookedSchedule.location}}</mat-panel-title>
+      <mat-panel-title *ngIf="!isDiary && meeting.status == 2">
+        <span matTooltip="{{meeting.reason}}">
+          <mat-icon style="color:#f55549">restore_from_trash</mat-icon>
+        </span> {{bookedSchedule.meetingTime | date}} - {{bookedSchedule.location}}
+      </mat-panel-title>
+
+      <mat-panel-title>
+        <span matTooltip="{{topicTitle}}">{{meeting.title}}</span>
+      </mat-panel-title>
+
+      <mat-panel-title *ngIf="isDiary">
+        <strong>
+          Meeting Diary
+        </strong>
+      </mat-panel-title>
+
+      <span matTooltip="Meeting Diary" hideToggle="false">
+        <mat-icon class="example-icon" *ngIf="!isDiary" (click)="isDiaryMeeting(matExpansionPanel)">event_note</mat-icon>
+      </span>
+      <span matTooltip="Meeting Content">
+        <mat-icon class="example-icon" *ngIf="isDiary" (click)="isDiaryMeeting(matExpansionPanel)">group</mat-icon>
+      </span>
+
+    </mat-expansion-panel-header>
+
+
+
+    <!-- <mat-toolbar>
+      <mat-toolbar-row>
+        <span>Third Line</span>
+        <span class="example-spacer"></span>
+        <mat-icon class="example-icon">favorite</mat-icon>
+        <mat-icon class="example-icon">delete</mat-icon>
+        <span  matTooltip="Meeting Diary" hideToggle="false">
+          <mat-icon class="example-icon" *ngIf="!isDiary" (click)="isDiaryMeeting()">event_note</mat-icon>
+        </span>
+        <span  matTooltip="Meeting Content">
+          <mat-icon class="example-icon" *ngIf="isDiary" (click)="isDiaryMeeting()">group</mat-icon>
+        </span>
+      </mat-toolbar-row>
+    </mat-toolbar> -->
+
+
+    <div *ngIf="!isDiary">
+        <mat-form-field class="mat-form-meeting-content">
+            <textarea readonly [(ngModel)]="meeting.content" matInput cols="10" rows="5" placeholder="Meeting Content: ">
+            </textarea>
+          </mat-form-field>
+      <!-- <p>{{meeting.content}}</p> -->
+      <div class="row">
+        <mat-form-field class="time-location-list col-md-6">
+          <mat-select placeholder="Student" [(ngModel)]="tempListStudent" multiple>
+            <mat-option *ngFor="let std of listAllStd" [value]="std">{{std.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="time-location-list col-md-5">
+          <mat-select placeholder="Time-Location" [(ngModel)]="bookedSchedule">
+            <mat-option *ngFor="let sch of meeting.timeLocation" [value]="sch">
+              {{sch.meetingTime | date}} - {{sch.location}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
 
-      <div class="modal-header">
-        <h5 class="modal-title">{{meeting.title}}</h5>
-
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+    <div *ngIf="isDiary" class="example-container">
+      <div *ngIf="meetingDiary">
+          <mat-form-field class="mat-form-meeting-content">
+              <textarea [(ngModel)]="meetingDiary.diaryContent" matInput cols="10" rows="5" placeholder="Content">
+              </textarea>
+            </mat-form-field>
+            <mat-form-field class="mat-form-meeting-content">
+              <textarea [(ngModel)]="meetingDiary.diaryPlan" matInput cols="10" rows="5" placeholder="Plan">
+              </textarea>
+            </mat-form-field>
       </div>
-      <div class="modal-body">
-        <div class="container-fluid">
-          <form #createTopicForm="ngForm" action="" method="post">
-            <div class="form-group">
-              <label>
-                <h5>
-                  <i class="fa fa-sticky-note-o"></i> Content </h5>
-              </label>
-              <p>{{meeting.content}}</p>
-            </div>
-            <div class="row">
-              <div *ngIf="authService.isStudent()" class="form-group col-md-5">
-                <label>
-                  <h5>
-                    <i class="fa fa-sticky-note-o"></i> Time-Location </h5>
-                </label>
-                <div *ngFor="let schedule of meeting.timeLocation" class="form-check">
-                  <input (change)="stdBookLocationTime($event, schedule)" ng-checked="(schedule.status == '1')" class="form-check-input" type="radio"
-                    name="exampleRadios" id="exampleRadios1">
-                  <label class="form-check-label" for="exampleRadios1">
-                    {{schedule.location}} - {{schedule.meetingTime | date:'dd-MM-yyyy HH:mm'}}
-                  </label>
-                </div>
-              </div>
-
-              <div *ngIf="meeting.status" class="form-group col-md-5">
-                <label>
-                  <h5>
-                    <i class="fa fa-sticky-note-o"></i> Booked Time-Location </h5>
-                </label>
-                <div *ngFor="let schedule of meeting.timeLocation">
-                  <p *ngIf="schedule.status">{{schedule.location}} - {{schedule.meetingTime | date:'dd-MM-yyyy HH:mm'}}</p>
-                </div>
-              </div>
-            </div>
-
-            <div *ngIf="this.authService.isProfessor() && !meeting.status" class="form-group">
-              <label>
-                <h5>
-                  <i class="fa fa-map-marker"></i> Time - Location</h5>
-              </label>
-              <ng-container *ngFor="let shedule of meeting.timeLocation; let i = index">
-                <div class="input-group mb-3">
-                  <div class="form-row">
-                    <div class="col-md-6">
-                      <input [(ngModel)]="shedule.meetingTime" name="time{{i}}" type="datetime-local" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                      <input placeholder="Location" [(ngModel)]="shedule.location" name="location{{i}}" type="text" class="form-control">
-                    </div>
-                  </div>
-                  <div class="input-group-append col-md-1">
-                    <i class="material-icons btn-icon" *ngIf="meeting.timeLocation > 1" (click)="removeMeeting(i)">remove</i>
-                  </div>
-                </div>
-              </ng-container>
-              <input (click)="addTimeLocation()" name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button"
-                value="Add">
-            </div>
-
-            <div *ngIf="authService.isStudent()" class="form-group">
-              <label>
-                <h5>
-                  <i class="fa fa-sticky-note-o"></i> Student </h5>
-              </label>
-              <ul class="list-group">
-                <li class="list-group-item {{list.class}}" (click)="isActiveStd(list)" *ngFor="let list of listAllStd">{{list.name}}</li>
-              </ul>
-            </div>
-
-            <div *ngIf="meeting.status && this.authService.isProfessor()" class="form-group">
-              <label>
-                <h5>
-                  <i class="fa fa-sticky-note-o"></i>Join Student </h5>
-              </label>
-              <ul class="list-group">
-                <li class="list-group-item" *ngFor="let list of meeting.student">{{list.name}}</li>
-              </ul>
-            </div>
-
-            <br>
-          </form>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button (click)="editMeeting()" type="button" class="btn btn-raised btn-primary">Save changes</button>
-        <button type="button" class="btn btn-raised btn-danger" data-toggle="modal" data-target="#cancelMeeting">Cancel Meeting</button>
+      
+      <div *ngIf="!meetingDiary">
+        <h3>You not join this meeting</h3>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="modal fade" id="cancelMeeting" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <mat-action-row>
+      <button mat-button *ngIf="!isDiary && authService.isProfessor()" class="btn btn-raised btn-primary" (click)="isCreateScheduleMeeting()">Schedule</button>
+      <button mat-button *ngIf="!isDiary && authService.isStudent()" class="btn btn-raised btn-primary" (click)="stdBookMeeting()">Book</button>
+      <button mat-button *ngIf="!isDiary && authService.isProfessor()" class="btn btn-raised btn-danger" (click)="isCancelMeeting()">Cancel</button>
+      <button mat-button *ngIf="isDiary" (click)="editMeetingDiary()" class="btn btn-raised btn-primary"  >Save</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+</mat-accordion>
+
+
+<div class="w3-modal {{isCancel}}">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Cancel Meeting</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" (click)="isCancelMeeting()" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -132,8 +123,52 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button (click)="cancelMeeting()" type="button" class="btn btn-primary">Save changes</button>
+        <button (click)="isCancelMeeting()" type="button" class="btn btn-secondary" class="btn btn-raised btn-danger" data-dismiss="modal">Close</button>
+        <button (click)="this.cancelMeeting()" type="button" class="btn btn-raised btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w3-modal {{isCreateSchedule}}">
+  <div class="modal-dialog" style="max-width: 600px" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Schedule</h5>
+        <button type="button" (click)="isCreateScheduleMeeting()" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="form-group">
+            <label>
+              <h5>
+                <i class="fa fa-map-marker"></i> Time - Location</h5>
+            </label>
+            <ng-container *ngFor="let shedule of meeting.timeLocation; let i = index">
+              <div class="input-group mb-3">
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <input [(ngModel)]="shedule.meetingTime" name="time{{i}}" type="datetime-local" class="form-control">
+                  </div>
+                  <div class="col-md-6">
+                    <input placeholder="Location" [(ngModel)]="shedule.location" name="location{{i}}" type="text" class="form-control">
+                  </div>
+                </div>
+                <div class="input-group-append col-md-1">
+                  <i class="material-icons btn-icon" *ngIf="meeting.timeLocation > 1" (click)="removeMeeting(i)">remove</i>
+                </div>
+              </div>
+            </ng-container>
+            <input (click)="addTimeLocation()" name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button"
+              value="Add">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="isCreateScheduleMeeting()" type="button" class="btn btn-raised btn-danger" data-dismiss="modal">Close</button>
+        <button (click)="profCreateScheduleMeeting()" type="button" class="btn btn-raised btn-primary">Save changes</button>
       </div>
     </div>
   </div>

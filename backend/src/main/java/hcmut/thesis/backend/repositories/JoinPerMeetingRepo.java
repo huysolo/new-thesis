@@ -20,4 +20,7 @@ import org.springframework.data.repository.query.Param;
 public interface JoinPerMeetingRepo extends JpaRepository<JoinPerMeeting, Integer> {
     @Query("SELECT jpm FROM JoinPerMeeting jpm WHERE jpm.idMeeting = :meetingid")
     List<JoinPerMeeting> getListStudentFromMeetingID(@Param("meetingid") Integer meetingid);
+    
+    @Query("SELECT jpm FROM JoinPerMeeting jpm WHERE jpm.idMeeting = :meetingid AND jpm.idStudent = :stdid")
+    JoinPerMeeting getJPMFromMeetingIDStdID(@Param("meetingid") Integer meetingid, @Param("stdid") Integer stdid);
 }

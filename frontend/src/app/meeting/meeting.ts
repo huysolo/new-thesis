@@ -3,7 +3,7 @@ import {TimeLocation} from './time-location';
 
 export class Meeting {
     title: String;
-    meetingid: String;
+    meetingID: number;
     content: String;
     reason: String;
     topicID: number;

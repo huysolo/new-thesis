@@ -1,0 +1,6 @@
+.float{
+	position:fixed;
+	bottom:58px;
+    right: 17px;
+    z-index: 99;
+}

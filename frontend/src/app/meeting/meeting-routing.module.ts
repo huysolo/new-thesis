@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MeetingCreateComponent } from './component/meeting-create/meeting-create.component';
 import { MeetingDetailComponent } from './component/meeting-detail/meeting-detail.component';
 import { MeetingContentComponent } from './component/meeting-content/meeting-content.component';
+import { MeetingListComponent } from './component/meeting-list/meeting-list.component';
 
 const meetingRoutes: Routes = [
   {
@@ -21,6 +22,16 @@ const meetingRoutes: Routes = [
     path: 'create',
     component: MeetingCreateComponent,
     pathMatch: 'full'
+  },
+  {
+    path: '',
+    component: MeetingListComponent,
+    children: [
+      {
+        path: ':typ',
+        component: MeetingContentComponent
+      }
+    ]
   }
 ];
 

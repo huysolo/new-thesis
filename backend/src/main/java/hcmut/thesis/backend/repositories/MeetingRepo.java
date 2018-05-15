@@ -22,4 +22,12 @@ public interface MeetingRepo extends JpaRepository<Meeting, Integer> {
     
     @Query("SELECT m FROM Meeting m WHERE m.idMeeting = :id")
     Meeting getMeetingFromMeetingID(@Param("id") Integer meetingID);
+    
+    @Query("SELECT m FROM Meeting m WHERE m.idTopicSem = :topicid AND m.status = 0")
+    List<Meeting> getListWaitingMeeting(@Param("topicid") Integer topicid);    
+    
+    @Query("SELECT m FROM Meeting m WHERE m.idTopicSem = :topicid AND (m.status = 1 OR m.status = 2)")
+    List<Meeting> getListBookedMeeting(@Param("topicid") Integer topicid);
+    
+    
 }
