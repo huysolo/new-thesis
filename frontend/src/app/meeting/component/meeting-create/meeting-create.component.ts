@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {Meeting} from '../../meeting';
 import { TimeLocation } from '../../time-location';
 import {TaskService} from '../../../task/task.service';
@@ -13,13 +13,15 @@ import { AuthService } from '../../../core/auth.service';
 })
 export class MeetingCreateComponent implements OnInit {
 
+  @Output('addNewMeeting') newMeeting = new EventEmitter<Meeting>();
+
   listAllStd: Array<any>;
   meetingCreate = new Meeting();
   listTopic: Array<any>;
 
   constructor(private taskService: TaskService, private meetingService: MeetingService,
      public authService: AuthService) { 
-    this.newMeeting();
+    this.InitNewMeeting();
   }
 
   ngOnInit() {
@@ -31,10 +33,14 @@ export class MeetingCreateComponent implements OnInit {
     
   }
 
-  newMeeting(){
+  InitNewMeeting(){
     const temp = new TimeLocation();
+    var date = new Date(); 
+    var JSONdate = date.toJSON();
+    temp.meetingTime = JSONdate.slice(0,16);
     this.meetingCreate.timeLocation.push(temp);
   }
+
 
   removeMeeting(i: number) {
     this.meetingCreate.timeLocation.splice(i, 1);
@@ -46,10 +52,9 @@ export class MeetingCreateComponent implements OnInit {
   }
 
   createMeeting(){
-    console.log(this.meetingCreate);
     this.meetingService.createMeeting(this.meetingCreate).subscribe(
       res => {
-        console.log(res);
+        this.newMeeting.emit(res);
       }
     );
   }
@@ -66,13 +71,5 @@ export class MeetingCreateComponent implements OnInit {
       }
     );
   }
-
-//   let d1 = new Date('2018-05-20 03:31:00.0')
-// undefined
-// d1.getTime
-// ƒ getTime() { [native code] }
-// d1.getTime()
-// 1526761860000
-
 }
 

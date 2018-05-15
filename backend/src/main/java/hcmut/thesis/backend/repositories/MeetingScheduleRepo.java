@@ -25,4 +25,10 @@ public interface MeetingScheduleRepo extends JpaRepository<MeetingSchelule, Inte
             + " AND ms.location = :location")
     MeetingSchelule getScheduleFromTimeLocationID(@Param("meetingid") Integer meetingid, 
             @Param("meetingTime") Timestamp meetingTime,@Param("location") String location);
+    
+    @Query("SELECT ms FROM MeetingSchelule ms WHERE ms.idMeeting = :meetingid AND(ms.status = 1) AND (ms.meetingTime - NOW() >= 0)")
+    MeetingSchelule getRecentSchedule(@Param("meetingid") Integer meetingid);
+    
+    @Query("SELECT ms FROM MeetingSchelule ms WHERE ms.idMeeting = :meetingid AND(ms.status = 1) AND (ms.meetingTime - NOW() < 0)")
+    MeetingSchelule getHistorySchedule(@Param("meetingid") Integer meetingid);
 }

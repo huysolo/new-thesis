@@ -10,10 +10,8 @@ import { MaterialModule } from '../core/material.module';
 import { TopidDetailComponent } from './components/topid-detail/topid-detail.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import {NgxPaginationModule} from 'ngx-pagination';
-import { ReviewTopicComponent } from './pages/review-topic/review-topic.component'; // <-- import the module
 import {MatTableModule} from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
-import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic-page.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,8 +29,6 @@ import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic
     ManageTopicComponent,
     CreateTopicComponent,
     TopidDetailComponent,
-    ReviewTopicComponent,
-    ReviewTopicPageComponent,
   ],
   entryComponents: [
     TopidDetailComponent,

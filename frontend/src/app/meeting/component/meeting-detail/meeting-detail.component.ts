@@ -5,6 +5,8 @@ import { TaskService } from '../../../task/task.service';
 import { StudentMeeting } from '../../student-meeting';
 import { MeetingService } from '../../meeting.service';
 import { AuthService } from '../../../core/auth.service';
+import {FormControl} from '@angular/forms';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-meeting-detail',
@@ -13,22 +15,35 @@ import { AuthService } from '../../../core/auth.service';
 })
 export class MeetingDetailComponent implements OnInit {
   @Input('meeting') meeting: Meeting;
-  listAllStd: Array<any>;
-  aaa: Boolean = true;
+  listAllStd: Array<StudentMeeting>;
+  isCancel: String;
+  isCreateSchedule: String;
+  topicTitle: String;
+  isDiary: Boolean = false;
+  aaa: Boolean = false;
 
-  constructor(private meetingService: MeetingService, public authService: AuthService) { }
+  bookedSchedule = new TimeLocation();
+  tempListStudent: Array<StudentMeeting> = [];
+  meetingDiary: any;
+
+  constructor(public snackBar: MatSnackBar , private meetingService: MeetingService, public authService: AuthService) { 
+    
+  }
 
   ngOnInit() {
+    this.isDiary = false;
+    this.getTopicTitleFromID();
+    this.findBookedSchedule();
     this.newTimeLocation();
-    if (this.authService.isStudent()) {
-      this.getAllStudentDoTopic();     
+    this.getAllStudentDoTopic();
+    if(this.authService.isStudent()){
+      this.getMeetingDiary();
+     
     }
-
-    this.toDateTimeLocal();
-
   }
 
   newTimeLocation() {
+
     if (this.authService.isProfessor() && this.meeting.timeLocation.length == 0) {
       this.meeting.timeLocation = [];
       const temp = new TimeLocation();
@@ -38,15 +53,16 @@ export class MeetingDetailComponent implements OnInit {
 
 
   getAllStudentDoTopic() {
-    this.meetingService.getAllStudentDoTopic().subscribe(
+    this.meetingService.getAllStudentDoTopic(this.meeting.topicID).subscribe(
       res => {
         if (res != null) {
-          this.listAllStd = res;
-          this.listActiveStd();
+          this.listAllStd = res;  
+          this.findBookedStudent();         
         }
         else {
           console.log('ko co gia tri');
         }
+       
       });
   }
 
@@ -65,17 +81,17 @@ export class MeetingDetailComponent implements OnInit {
     }
   }
 
-  listActiveStd(){
-    if(this.listAllStd != undefined){
-      for(let i = 0; i< this.meeting.student.length; i++){
-        for(let j = 0; j< this.listAllStd.length; j++){
-          if(this.meeting.student[i].name == this.listAllStd[j].name){
-            this.listAllStd[j].class = 'active';
-          }
-        }
-      }
-    }
-  }
+  // listActiveStd(){
+  //   if(this.listAllStd != undefined){
+  //     for(let i = 0; i< this.meeting.student.length; i++){
+  //       for(let j = 0; j< this.listAllStd.length; j++){
+  //         if(this.meeting.student[i].name == this.listAllStd[j].name){
+  //           this.listAllStd[j].class = 'active';
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   stdBookLocationTime(event, schedule) {
     if (this.authService.isTeamLead()) {
@@ -88,7 +104,6 @@ export class MeetingDetailComponent implements OnInit {
         }
       }
     }
-    console.log(this.meeting.timeLocation);
   }
 
   removeMeeting(i: number) {
@@ -101,7 +116,6 @@ export class MeetingDetailComponent implements OnInit {
   }
 
   editMeeting() {
-    console.log(this.meeting);
     this.meetingService.editMeeting(this.meeting).subscribe(
       res => {
         console.log(res);
@@ -110,7 +124,7 @@ export class MeetingDetailComponent implements OnInit {
   }
 
   toDateTimeLocal() {
-    if(this.meeting.timeLocation.length > 0){
+    if(this.meeting.timeLocation.length > 0 && this.meeting.timeLocation[0].location != null){
       for (let i = 0; i < this.meeting.timeLocation.length; i++) {
         var ts = this.meeting.timeLocation[i].meetingTime;
         var t1 = Number(ts);
@@ -133,9 +147,125 @@ export class MeetingDetailComponent implements OnInit {
   cancelMeeting(){
     this.meetingService.cancelMeeting(this.meeting).subscribe(
       res => {
-        if(res != null){
-          this.meeting.status = 2;
-          console.log(this.meeting);
+          if(res){
+            this.meeting.status = 2;
+            this.snackBar.open("    Cancel Success!!!    ","Close", {
+              duration: 2000,
+            });
+          }
+      }
+    );
+  }
+
+  isCancelMeeting(){
+    if(this.isCancel == undefined){
+      this.isCancel = 'popup';
+    } else {
+      this.isCancel = undefined;
+    }
+  }
+
+  isCreateScheduleMeeting(){
+    if(this.isCreateSchedule == undefined){
+      this.isCreateSchedule = 'popup';
+    } else{
+      this.isCreateSchedule = undefined;
+    }
+  }
+
+  findBookedSchedule(){
+    if(this.meeting.timeLocation.length > 0){
+      for(let i = 0; i< this.meeting.timeLocation.length; i++){
+        if(this.meeting.timeLocation[i].status){
+          this.bookedSchedule = this.meeting.timeLocation[i];
+        }
+      }
+    }
+  }
+  findBookedStudent(){
+    if(this.meeting.student.length > 0){
+      for(let i = 0; i< this.listAllStd.length; i++ ){
+        this.listAllStd[i].meetingID = this.meeting.meetingID;
+        for(let j = 0; j< this.meeting.student.length; j++){
+          if(this.meeting.student[j].name == this.listAllStd[i].name){
+            this.tempListStudent.push(this.listAllStd[i]);
+          }
+        }
+      }
+    }
+  }
+
+  showStudent(){
+    console.log(this.meeting.student);
+  }
+
+  profCreateScheduleMeeting(){
+    this.meetingService.profCreateScheduleMeeting(this.meeting).subscribe(
+      res => {
+        if(res){
+          this.meeting = res;
+          this.snackBar.open("    Schedule Success!!!    ","Close", {
+            duration: 2000,
+          });
+        }
+       
+      }
+    );
+    this.isCreateScheduleMeeting();
+  }
+
+  stdBookMeeting(){
+    for(let i = 0; i< this.meeting.timeLocation.length; i++){
+      if(this.meeting.timeLocation[i].location == this.bookedSchedule.location
+        && this.meeting.timeLocation[i].meetingTime == this.bookedSchedule.meetingTime){
+          this.meeting.timeLocation[i].status = 1;
+        }
+    }
+
+    this.meeting.student = this.tempListStudent;
+
+
+    this.meetingService.stdBookMeeting(this.meeting).subscribe(
+      res => {
+        
+        if(res){
+          this.meeting.status = 1 ;
+          this.snackBar.open("    Booking Success!!!    ","Close", {
+            duration: 2000,
+          });
+        }
+      }
+    );
+  }
+
+  getTopicTitleFromID(){
+    this.meetingService.getTopicTitleFromID(this.meeting.topicID).subscribe(
+      res => {
+        this.topicTitle = res.title;
+      }
+    );
+  }
+
+  isDiaryMeeting(matExpansionPanel){
+    matExpansionPanel.toggle();
+    this.isDiary = !this.isDiary;
+  }
+
+  getMeetingDiary(){
+    this.meetingService.getMeetingDiary(this.meeting.meetingID).subscribe(
+      res => {
+        this.meetingDiary = res;
+      }
+    );
+  }
+
+  editMeetingDiary(){
+    this.meetingService.editMeetingDiary(this.meetingDiary).subscribe(
+      res => {
+        if(res){
+          this.snackBar.open("    Edit Success!!!    ","Close", {
+            duration: 2000,
+          });
         }
       }
     );

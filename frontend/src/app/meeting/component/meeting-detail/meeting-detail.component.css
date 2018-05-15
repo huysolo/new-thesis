@@ -1,0 +1,25 @@
+.popup{
+    display: block;
+}
+.demo-chip-list {
+    width: 40%;
+  }
+.time-location-list{
+    width: 40%;
+}  
+
+.mat-form-meeting-content{
+    width: 100%;
+}
+
+.example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.toolbar-example{
+    width: 100%;
+}

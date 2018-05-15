@@ -23,18 +23,7 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.authService.isProfessor() === true) {
-      this.getTopicCount();
-    }
 
-  }
-
-  getTopicCount() {
-    this.taskService.getTopicCount().subscribe(
-      res => {
-        this.topicCount = res;
-      }
-    );
   }
 
   logout() {
