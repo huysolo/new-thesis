@@ -15,7 +15,7 @@ public class StudentTask {
 
     private int idTask;
     private int idStudent;
-    private Integer currentVersion;
+    private Integer currentVersion = 0;
 
     public StudentTask() {
     }
