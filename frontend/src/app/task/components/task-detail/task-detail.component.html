@@ -1,5 +1,5 @@
 <br>
-<div class="card card-position">
+<div class="card card-position" *ngIf="task != null">
   <ng-container *ngIf="task.showFullTask">
     <div class="button-x">
       <span (click)="showTask(task)" class="btn btn-default active">

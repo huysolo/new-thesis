@@ -110,4 +110,8 @@ export class TaskService {
   countTask() {
     return this.httpClient.get<number>('http://localhost:8080/taskcount');
   }
+
+  getTaskById(id) {
+    return this.httpClient.get<Task>('http://localhost:8080/task?id=' + id);
+  }
 }

@@ -69,7 +69,7 @@
       <br>
       <div class="form-group bmd-form-group">
         <label for="" class="bmd-label-static">
-          Missions
+          Reference
           <span style="color: red">*</span>
         </label>
         <ng-container *ngFor="let miss of createTopic.topicMission; let i = index">
@@ -80,7 +80,7 @@
             </div>
           </div>
           <div [hidden]="mission.valid || mission.pristine" class="alert alert-danger">
-            Misson is required
+            Reference is required
           </div>
         </ng-container>
         <input name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button" value="Add" (click)="addMission()">

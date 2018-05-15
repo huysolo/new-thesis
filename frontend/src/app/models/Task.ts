@@ -11,5 +11,5 @@ export class Task {
     showCmt;
     student;
     comment;
-    showFullTask;
+    showFullTask = false;
 }

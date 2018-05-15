@@ -42,9 +42,7 @@ export class TaskContentComponent implements OnInit {
   constructor(
     public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute,
     public dialog: MatDialog, private topicSv: TopicService) {
-      this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
-        this.listAllStd = data;
-      });
+
   }
 
   ngOnInit() {
@@ -52,12 +50,15 @@ export class TaskContentComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.type = params['typ'];
       if (this.type === 'recent') {
+        this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
+          this.listAllStd = data;
+        });
         this.listTask = null;
         this.page = 0;
         this.isrecent = true;
         this.ishistory = false;
-        if (this.isrecent == true) {
-          if (this.authService.isStudent() == true) {
+        if (this.isrecent) {
+          if (this.authService.isStudent()) {
             this.getPage(-1, this.page);
           } else {
             this.getTopicFromSemID(-1);
@@ -68,7 +69,7 @@ export class TaskContentComponent implements OnInit {
         this.page = 0;
         this.isrecent = false;
         this.ishistory = true;
-        if (this.authService.isProfessor() == true) {
+        if (this.authService.isProfessor()) {
           this.getSem();
         } else {
           this.stdGetListTopic();

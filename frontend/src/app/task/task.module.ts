@@ -22,6 +22,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule,
   MatButtonModule, MatButtonToggleModule, MatCheckboxModule,
   MatDatepickerModule, MatListModule, MatSelectModule, MatCardModule} from '@angular/material';
+import { TaskDetailPageComponent } from './pages/task-detail-page/task-detail-page.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -52,7 +53,8 @@ import {MatInputModule,
     TaskCreateComponent,
     TaskCommentComponent,
     TaskPaginationComponent,
-    StudentTaskPipe
+    StudentTaskPipe,
+    TaskDetailPageComponent
   ],
   providers: [TaskService, UploadFileService],
   entryComponents: [TaskContentComponent, TaskCreateComponent]

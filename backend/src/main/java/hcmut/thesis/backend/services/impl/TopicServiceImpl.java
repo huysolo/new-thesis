@@ -101,7 +101,6 @@ public class TopicServiceImpl implements TopicService {
         topicRepo.saveAndFlush(topic);
         for (TopicMission topicMis :
                 topicDetail.getTopicMission()) {
-
             topicMis.setIdTopic(topic.getIdTop());
         }
         topicMissionRepo.saveAll(topicDetail.getTopicMission());

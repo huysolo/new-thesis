@@ -27,7 +27,7 @@ public interface TopicRepo extends JpaRepository<Topic, Integer> {
     @Query("SELECT t FROM Topic t WHERE t.idProf = :idProf")
     List<Topic> findTopicFromProfID(@Param("idProf") Integer idProf);
     
-    @Query("SELECT DISTINCT t.semesterNo FROM Topic t WHERE t.idProf = :idProf")
+    @Query("SELECT DISTINCT t.semesterNo FROM Topic t WHERE t.idProf = :idProf AND t.semesterNo is not null ")
     List<Integer> findListSemFromProfID(@Param("idProf") Integer idProf);
     
     @Query("SELECT t FROM Topic t WHERE t.idProf = :idProf AND t.semesterNo = :semesterNo")

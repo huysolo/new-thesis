@@ -20,6 +20,10 @@ export class SemesterService {
     });
   }
 
+  getSemesterBySemId(semNo: number) {
+    return this.listSemester.find(sem => sem.semesterNo === semNo);
+  }
+
   getListSemster() {
     return this.listSemester;
   }

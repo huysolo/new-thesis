@@ -292,6 +292,15 @@ public class TaskController {
         }
     }
 
+    @GetMapping("task")
+    public ResponseEntity<?> getTaskByTaskId(@RequestParam("id") Integer taskId) {
+        try {
+            return ResponseEntity.ok(taskService.getTaskByTaskId(taskId));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
 
 
 

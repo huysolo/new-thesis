@@ -11,9 +11,8 @@ import { Task } from '../../../models/Task';
   styleUrls: ['./task-detail.component.css']
 })
 export class TaskDetailComponent implements OnInit {
-  listTask: Array<any>;
   issubmit: String;
-  isTaskOwner = false;
+  @Input() isTaskOwner = false;
   @Input() task: Task;
 
   constructor(public authService: AuthService, public taskService: TaskService, public uploadSv: UploadFileService) { 
@@ -55,21 +54,8 @@ export class TaskDetailComponent implements OnInit {
   getTaskComment() {
     if (this.task.showCmt === undefined) {
       this.task.showCmt = true;
-      // this.taskService.getTaskComment(this.task.taskID).subscribe(
-      //   res => {
-      //     this.task.comment = res;
-      //   }
-      // );
-
-      // const stompClient = this.taskService.receiveMessage();
-      // stompClient.connect({}, frame => {
-      //   this.task.disconnection = stompClient.subscribe<any>('/topic/comment' + this.task.taskID, res => {
-      //     this.task.comment.push(JSON.parse(res.body));
-      //   });
-      // });
     } else {
       this.task.showCmt = undefined;
-      // this.task.disconnection.unsubscribe();
     }
 
   }
