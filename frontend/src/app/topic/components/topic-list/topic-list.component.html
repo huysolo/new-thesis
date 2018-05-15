@@ -24,7 +24,7 @@
         <div class="col-md-4 form-group" *ngIf="topicSv.requestType === 'history'" >
           <select class="form-control" (change)="onChangeSemester($event.target.value)">
             <option selected [value]="0" >All Semester</option>
-            <option *ngFor="let sem of listSem | async" [value]="sem.semesterNo">Semester No: {{sem.semesterNo}}</option>
+            <option *ngFor="let sem of semSv.getListSemster()" [value]="sem.semesterNo">Semester No: {{sem.semesterNo}}</option>
           </select>
         </div>
         <div class="col-md-4 form-group" *ngIf="authoSv.isStudent()">

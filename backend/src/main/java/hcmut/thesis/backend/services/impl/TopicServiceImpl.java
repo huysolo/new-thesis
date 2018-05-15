@@ -191,7 +191,11 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Topic publish(Integer topicId) {
+        Integer profId = userSession.getProf().getIdProfessor();
         Topic topic = getTopicById(topicId);
+        if (topic.getIdProf() != profId) {
+            throw new NullPointerException("User Cannot Publish This Topic");
+        }
         return topicRepo.save(setPublish(topic));
 
     }

@@ -7,32 +7,41 @@ export class SemesterService {
   private listSemester: Semester[];
   private currentSemester: Semester;
   constructor(private commonSv: CommonService) {
+  }
+
+  init() {
     this.commonSv.getListSemester().subscribe(semList => {
       this.listSemester = semList;
       semList.forEach(sem => {
-        console.log(sem);
-        if (this.checkOpen(sem)) {
+        if (this.isOpen(sem)) {
           this.currentSemester = sem;
         }
       });
     });
   }
 
+  getListSemster() {
+    return this.listSemester;
+  }
 
   getCurrrentSem() {
     return this.currentSemester;
   }
 
-  canApply() {
-    return this.checkTime(this.currentSemester.applyOpenDate, this.currentSemester.applyCloseDate);
+  canApply(d: Semester) {
+    return this.checkTime(d.applyOpenDate, d.applyCloseDate);
   }
 
-  checkOpen(d: Semester) {
+  canUse(d: Semester) {
+    return this.checkTime(d, d.applyCloseDate);
+  }
+
+  isOpen(d: Semester) {
     return this.checkTime(d.applyOpenDate, d.closeDate);
   }
 
-  checkTime(st: Date, en: Date) {
-    const currentTime = new Date();
+  checkTime(st, en) {
+    const currentTime = new Date().getTime();
     return st < currentTime && en > currentTime;
   }
 

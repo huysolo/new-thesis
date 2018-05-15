@@ -13,6 +13,7 @@ import { TopicRequirement } from '../../../models/TopicRequirement';
 import { HttpParams } from '@angular/common/http';
 import { Specialize } from '../../../models/Specialize';
 import { MatSnackBar } from '@angular/material';
+import { SemesterService } from '../../../core/semester.service';
 
 declare var $: any;
 @Component({
@@ -35,7 +36,7 @@ export class TopicListComponent implements OnInit {
   title: String = 'New';
   p = 1;
 
-  constructor(public topicSv: TopicService, private zone: NgZone,
+  constructor(public topicSv: TopicService, private zone: NgZone, public semSv: SemesterService,
     public commonSv: CommonService, public authoSv: AuthService, private route: ActivatedRoute,  public snackBar: MatSnackBar) { }
 
   ngOnInit() {

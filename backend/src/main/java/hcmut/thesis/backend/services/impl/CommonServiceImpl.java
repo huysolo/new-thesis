@@ -37,7 +37,7 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public List<Semester> getListSemester() {
-        return this.semesterRepo.findSemesterInThePast();
+        return this.semesterRepo.findAll();
     }
 
     @Override

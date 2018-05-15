@@ -44,16 +44,12 @@ public class TopicController {
     }
 
     @RequestMapping(value = "listDraft", method = RequestMethod.GET)
-    List<Topic> getListTopic(
+    ResponseEntity<?> getListTopic(
     ){
         try {
-            if (userSession.isProf()) {
-                return topicService.getDraftTopics(userSession.getProf().getIdProfessor());
-            } else {
-                return null;
-            }
+            return ResponseEntity.ok(topicService.getDraftTopics(userSession.getProf().getIdProfessor()));
         } catch (NullPointerException e){
-            return null;
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
     @RequestMapping(value = "recentTopics", method = RequestMethod.GET)
@@ -77,11 +73,11 @@ public class TopicController {
     }
 
     @RequestMapping(value = "topicDetail",method = RequestMethod.GET)
-    TopicDetail getTopicDetail(@RequestParam(value = "topid",required = true) Integer topId){
+    ResponseEntity<?> getTopicDetail(@RequestParam(value = "topid",required = true) Integer topId){
         try {
-            return topicService.getTopicDetailById(topId);
+            return ResponseEntity.ok(topicService.getTopicDetailById(topId));
         } catch (NullPointerException e){
-            return null;
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
@@ -97,24 +93,21 @@ public class TopicController {
             TopicDetail topicDetailJS = obj.fromJson(topicDetail, TopicDetail.class);
             return ResponseEntity.ok(topicService.setTopicDetail(topicDetailJS, !topicDetailJS.getDraft()));
         } catch (EntityExistsException e){
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("INVALID REQUEST");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
         } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("INVALID REQUEST");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     @RequestMapping(value = "publish", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity<Object> setTopicDetail(@RequestBody Integer topicId) {
-        if (!userSession.isProf()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO PUBLISH TOPIC");
-        }
         try {
             return ResponseEntity.ok(topicService.publish(topicId));
         } catch (EntityExistsException e){
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("INVALID REQUEST");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
         }catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("INVALID REQUEST");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }

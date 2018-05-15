@@ -62,7 +62,7 @@ public class UserSession {
 
     public Student getStudent() {return userDAO.findStudentByUserId(userID);}
 
-    public Integer getCurrentUserFaculty() { return userRepo.getIdFalcutyByIdUser(userID); }
+    public Integer getCurrentUserFaculty() { return userRepo.getIdFacultyByIdUser(userID).orElseThrow(() -> new NullPointerException("Faculty Not Found")); }
 
     public Integer findIdUserFromStudentId(int idStudent) {
         return studentRepo.findIdUserFromStudentId(idStudent).orElseThrow(() -> new NullPointerException("User Not Found"));
