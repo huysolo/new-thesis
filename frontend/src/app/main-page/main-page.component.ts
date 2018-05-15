@@ -18,10 +18,14 @@ export class MainPageComponent implements OnInit {
   listRecentTask: Observable<Task[]>;
   listRecentTopic: Observable<Topic[]>;
   listStudentTopic: Observable<StudentDoTask[]>;
+  countTopic: Observable<Number>;
+  countTask: Observable<Number>;
   topic: Topic;
   constructor(public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService) {
     this.listRecentTask = taskSv.getListTaskByApprove(0);
     this.listRecentTopic = topicSv.getListRecentTopic();
+    this.countTopic = topicSv.countTopic();
+    this.countTask = taskSv.countTask();
   }
 
   ngOnInit() {

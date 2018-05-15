@@ -73,24 +73,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     UserSession userSession;
-
-    @Override
-    public List<StudentDoTask> getStudentDoTaskFromTaskID(int taskID) {
-//        List<StudentDoTask> listStd = new ArrayList<>();
-//        stdTaskRepo.getStudentDoTaskFromIDTask(taskID).forEach(studentTask -> {
-//            u
-//            listStd.add(new StudentDoTask(userRepo.fin))
-//
-//
-//        });
-//        for (StudentTask aT : t) {
-//            StudentDoTask temp = new StudentDoTask();
-//            temp.setStdName(userRepo.getUserNameFromID(aT.getIdStudent()));
-//
-//            listStd.add(temp);
-//        }
-        return null;
-    }
         
 
     @Override
@@ -98,17 +80,17 @@ public class TaskServiceImpl implements TaskService {
         List<TaskInfo> listTask = new ArrayList<>();
         List<Task> t = taskRepo.getTaskFromIDTopic(topicID);
 
-        for(int i = 0; i< t.size(); i++){
-            TaskInfo temp = new TaskInfo();
-            temp.setTaskID(t.get(i).getIdTask());
-            temp.setTitle(t.get(i).getTitle());
-            temp.setDescription(t.get(i).getDescription());
-            temp.setDeadline(t.get(i).getDeadline());
-            temp.setSubmit(t.get(i).getSubmit());
-            temp.setPass(t.get(i).getPass());
-            temp.setCurrentVerion(t.get(i).getCurrentVersion());
-            listTask.add(temp);
-        }
+//        for(int i = 0; i< t.size(); i++){
+//            TaskInfo temp = new TaskInfo();
+//            temp.setTaskID(t.get(i).getIdTask());
+//            temp.setTitle(t.get(i).getTitle());
+//            temp.setDescription(t.get(i).getDescription());
+//            temp.setDeadline(t.get(i).getDeadline());
+//            temp.setSubmit(t.get(i).getSubmit());
+//            temp.setPass(t.get(i).getPass());
+//            temp.setCurrentVerion(t.get(i).getCurrentVersion());
+//            listTask.add(temp);
+//        }
         return listTask;
     }
 
@@ -149,19 +131,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public PageInfo getPage(int pageNumber, int topicID, Boolean isStd) {
         PageInfo page = new PageInfo();
-        List<TaskInfo> listTask = new ArrayList<>();
+        List<Task> listTask = new ArrayList<>();
         List<Task> t = (isStd) ? taskRepo.getTaskFromIDTopic(topicID) : taskRepo.getTaskSubmitFromProf(topicID);
         for (int i = 8 * pageNumber; i < min(8 * (pageNumber + 1), t.size()); i++) {
-
-            TaskInfo temp = new TaskInfo();
-            temp.setTaskID(t.get(i).getIdTask());
-            temp.setTitle(t.get(i).getTitle());
-            temp.setDescription(t.get(i).getDescription());
-            temp.setDeadline(t.get(i).getDeadline());
-            temp.setSubmit(t.get(i).getSubmit());
-            temp.setPass(t.get(i).getPass());
-            temp.setCurrentVerion(t.get(i).getCurrentVersion());
-            listTask.add(temp);
+            listTask.add(t.get(i));
         }
         int count;
         if (t.size() % 8 == 0) {
@@ -231,7 +204,8 @@ public class TaskServiceImpl implements TaskService {
                 fileRepo.save(file);
 
             } else {
-                file = f.get();
+                fileRepo.save(f.get());
+
             }
             return true;
         }
@@ -318,6 +292,14 @@ public class TaskServiceImpl implements TaskService {
         return tasks;
     }
 
+    @Override
+    public Integer countTaskByProf() {
+        int count = 0;
+        for (Topic t : topicService.getListOpenTopic()) {
+            count = count + taskRepo.countTaskFromIDTopic(t.getIdTop());
+        }
+        return count;
+    }
 
 
 }

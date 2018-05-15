@@ -283,6 +283,15 @@ public class TaskController {
         }
     }
 
+    @GetMapping("taskcount")
+    public  ResponseEntity<?> countTaskByProf() {
+        try{
+            return ResponseEntity.ok(taskService.countTaskByProf());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
 
 
 

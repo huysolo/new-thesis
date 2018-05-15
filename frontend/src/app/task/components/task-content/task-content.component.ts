@@ -9,6 +9,7 @@ import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import { MatDialog } from '@angular/material';
 import { TaskCreateComponent } from '../task-create/task-create.component';
 import { TopicService } from '../../../topic/topic.service';
+import { Task } from '../../../models/Task';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { TopicService } from '../../../topic/topic.service';
   styleUrls: ['./task-content.component.css']
 })
 export class TaskContentComponent implements OnInit {
-  listTask: Array<any>;
+  listTask: Array<Task>;
 
   searchText: String = '';
   public page: number;

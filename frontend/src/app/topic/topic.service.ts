@@ -31,6 +31,7 @@ export class TopicService {
   private topicPublishtUrl = this.topicUrl +  'publish';
   private topicListReviewUrl = this.topicUrl +  'listReview';
   private topicStudentUrl = this.topicUrl + 'student';
+  private topicCountUrl = this.topicUrl + 'topicCount';
 
   /**
    * reject
@@ -100,7 +101,7 @@ export class TopicService {
    * publish
    */
   public publishTopic(topicId: Number) {
-    return this.http.post<any>(this.topicPublishtUrl, topicId).map(res => {
+    return this.http.post<Topic>(this.topicPublishtUrl, topicId).map(res => {
       return res;
     });
   }
@@ -137,6 +138,10 @@ export class TopicService {
     }
     const params = new HttpParams().append('id', idTopic);
     return this.http.get<StudentDoTask[]>(this.topicStudentUrl, {params: params});
+  }
+
+  countTopic() {
+    return this.http.get<Number>(this.topicCountUrl);
   }
 
 }

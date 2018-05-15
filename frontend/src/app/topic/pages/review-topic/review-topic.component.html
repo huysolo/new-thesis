@@ -92,10 +92,10 @@
 <br>
 <div class="row">
   <div class="col-sm-12" [ngClass]=" topicRvStandardDetail ? 'col-md-5':'col-md-12'">
+    <div class="mat-elevation-z8" *ngIf="dataSource != null">
     <mat-toolbar><i class="material-icons">
         history
         </i> Reviewed</mat-toolbar>
-    <div class="mat-elevation-z8" *ngIf="dataSource != null">
       <div class="filter-header">
         <mat-form-field>
           <mat-select placeholder="Semester No">

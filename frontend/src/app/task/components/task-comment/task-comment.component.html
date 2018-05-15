@@ -1,28 +1,19 @@
-<div class="w3-col m12">
-    <div class="w3-container w3-padding">
-      <form>
-        <div class="input-group">
-          <textarea class="form-control" rows="1" placeholder="Type Message ..." #input></textarea>
-          <span class="input-group-btn">
-            <button type="submit" (click)="sendComment(input.value)" class="btn btn-primary active">Send</button>
-          </span>
-        </div>
-      </form>
+<div class="comment-list">
+  <div *ngFor="let cmt of taskCmt">
+    <div class="comment-block">
+      <strong class="w3-text-blue">{{cmt.username}}: </strong> {{cmt.content}}
     </div>
-
-    <div id="demo2" style="background-color: whitesmoke">
-      <div *ngFor="let cmt of taskCmt" class="w3-row">
-        <div class="w3-col l2 m3">
-          <img src="https://bootdey.com/img/Content/user_1.jpg" style="width:90px;">
-        </div>
-        <div class="w3-col l10 m9">
-          <h5>{{cmt.username}}
-            <span class="w3-opacity w3-medium">{{cmt.time | date}}</span>
-          </h5>
-          <p>{{cmt.content}}</p>
-          <br>
-        </div>
-      </div>
-      <div class="w3-margin-bottom"></div>
+    <div class="text-right time">
+      {{cmt.time | date : 'shortTime'}} {{cmt.time | date : 'fullDate'}}
     </div>
   </div>
+
+</div>
+<div class="comment-form">
+  <mat-form-field style="width: 100%">
+    <textarea matInput placeholder="Message" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5" #input></textarea>
+  </mat-form-field>
+  <div class="text-right">
+    <button type="submit" (click)="sendComment(input.value)" class="btn btn-primary active" [disabled]="!input.value">Send</button>
+  </div>
+</div>

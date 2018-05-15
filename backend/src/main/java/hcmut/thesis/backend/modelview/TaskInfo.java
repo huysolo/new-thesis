@@ -20,6 +20,7 @@ public class TaskInfo {
     private int submit;
     private int pass;
     private List<Integer> studentIdList;
+    private Timestamp updateTime;
 
     public List<Integer> getStudentIdList() {
         return studentIdList;

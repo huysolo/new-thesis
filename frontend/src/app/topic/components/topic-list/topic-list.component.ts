@@ -128,6 +128,12 @@ export class TopicListComponent implements OnInit {
     });
   }
 
+  onRemove(event) {
+    this.topicSv.topicLst = this.topicSv.topicLst.map(topics => {
+      return topics.filter(top => top.idTop != event);
+    });
+  }
+
   onApply(event: Topic) {
     this.topicSv.topicLst = this.topicSv.topicLst.map(topicLst => {
       this.topicSv.appliedTopic = event;

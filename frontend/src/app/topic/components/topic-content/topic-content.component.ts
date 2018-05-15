@@ -12,11 +12,12 @@ import { TopidDetailComponent } from '../topid-detail/topid-detail.component';
   styleUrls: ['./topic-content.component.css']
 })
 export class TopicContentComponent implements OnInit {
-  @Input('topic') topic: Topic;
-  @Input('semno') semno;
+  @Input() topic: Topic;
+  @Input() semno;
   @Output('editTopic') editTopic = new EventEmitter<Number>();
   @Output('delTopic') delTopic = new EventEmitter<Number>();
   @Output('applyTopic') applyTopic = new EventEmitter<Topic>();
+  @Output() removeTopic = new EventEmitter<Number>();
 
   constructor(public dialog: MatDialog, public topicSv: TopicService, public authoSv: AuthService) { }
 
@@ -55,13 +56,7 @@ export class TopicContentComponent implements OnInit {
 
   publish() {
     this.topicSv.publishTopic(this.topic.idTop).subscribe(data => {
-      console.log(data);
-
-      // this.topicSv.topicLst = this.topicSv.topicLst.map(res => {
-      //   return res.filter(top => {
-      //     return top.idTop !== this.topic.idTop;
-      //   });
-      // });
+      this.removeTopic.emit(data.idTop);
     });
   }
 

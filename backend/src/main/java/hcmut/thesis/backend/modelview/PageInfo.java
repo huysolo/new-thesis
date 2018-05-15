@@ -5,6 +5,8 @@
  */
 package hcmut.thesis.backend.modelview;
 
+import hcmut.thesis.backend.models.Task;
+
 import java.util.List;
 
 /**
@@ -13,20 +15,20 @@ import java.util.List;
  */
 public class PageInfo {
     private int pageCount;
-    private List<TaskInfo> taskList;
+    private List<Task> taskList;
     
     public int getPageCount(){
         return this.pageCount;
     }
 
-    public List<TaskInfo> getTaskList(){
+    public List<Task> getTaskList(){
         return this.taskList;
     }
     
     public void setPageCount(int count){
         this.pageCount = count;
     }
-    public void setTaskList(List<TaskInfo> list){
+    public void setTaskList(List<Task> list){
         this.taskList = list;
     }
 }

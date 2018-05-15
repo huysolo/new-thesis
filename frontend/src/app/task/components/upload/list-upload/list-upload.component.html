@@ -1,21 +1,18 @@
-<div class="dropdown">
-	<mat-form-field>
-		<mat-select placeholder="Version">
-			<mat-option *ngFor="let v of listVersion | async" (click)="changeVersion(v)" value="v">{{v}} </mat-option>
-		</mat-select>
-	</mat-form-field>
-	<button class="btn btn-info active btn-sm" *ngIf='showFile' (click)='showFiles(false)'>Hide Files</button>
+<mat-form-field>
+	<mat-select placeholder="Version">
+		<mat-option *ngFor="let v of listVersion | async" (click)="changeVersion(v)" value="v">{{v}} </mat-option>
+	</mat-select>
+</mat-form-field>
+<button class="btn btn-info active btn-sm" *ngIf='showFile' (click)='showFiles(false)'>Hide Files</button>
 
-	<!-- <button class="btn btn-info btn-sm active" *ngIf='!showFile' (click)='showFiles(true)'>Show Files</button>  -->
-
-
-</div>
+<!-- <button class="btn btn-info btn-sm active" *ngIf='!showFile' (click)='showFiles(true)'>Show Files</button>  -->
 
 
-<div [hidden]="!showFile">
-	<mat-list *ngFor="let file of fileUploads">
-		<mat-list-item>
-			<app-detail-upload [fileUpload]='file' [canRemove]="ver==currentVersion && authoSv.isStudent() && (userId == authoSv.getUserId() || (general && authoSv.isTeamLead()))" (rmEmitter)="deleteFile($event)"></app-detail-upload>
-		</mat-list-item>
-	</mat-list>
-</div>
+
+
+<mat-list [hidden]="!showFile" *ngFor="let file of fileUploads">
+	<mat-list-item>
+		<app-detail-upload [fileUpload]='file' [canRemove]="ver==currentVersion && authoSv.isStudent() && (userId == authoSv.getUserId() || (general && authoSv.isTeamLead()))"
+		 (rmEmitter)="deleteFile($event)"></app-detail-upload>
+	</mat-list-item>
+</mat-list>

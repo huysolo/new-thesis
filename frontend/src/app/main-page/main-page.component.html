@@ -2,8 +2,8 @@
   <div class="col">
     <mat-card>
       <div class="widget-content">
-        <div class="pull-left widget-icon">
-          <i class="fa fa-user" style="font-size: 30px;">
+        <div class="pull-left widget-icon bg-success text-white">
+          <i class="fas fa-calendar-alt" style="font-size: 30px;">
           </i>
         </div>
 
@@ -11,7 +11,7 @@
           123
         </div>
         <div class="comment">
-          Comment
+          Meeting
         </div>
       </div>
     </mat-card>
@@ -20,15 +20,15 @@
     <mat-card>
       <div class="widget-content">
         <div class="pull-left widget-icon bg-danger text-white">
-          <i class="fa fa-user" style="font-size: 30px;">
+          <i class="fas fa-tasks" style="font-size: 30px;">
           </i>
         </div>
 
         <div class="title">
-          123
+          {{countTask | async}}
         </div>
         <div class="comment">
-          Comment
+          Task
         </div>
       </div>
     </mat-card>
@@ -36,16 +36,16 @@
   <div class="col">
     <mat-card>
       <div class="widget-content">
-        <div class="pull-left widget-icon">
-          <i class="fa fa-user" style="font-size: 30px;">
+        <div class="pull-left widget-icon bg-primary text-white">
+          <i class="fas fa-briefcase" style="font-size: 30px;">
           </i>
         </div>
 
         <div class="title">
-          123
+          {{countTopic | async}}
         </div>
         <div class="comment">
-          Comment
+          Topic
         </div>
       </div>
     </mat-card>

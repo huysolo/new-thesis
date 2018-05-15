@@ -15,7 +15,6 @@ import java.util.List;
  * @author MinBui
  */
 public interface TaskService {
-    List<StudentDoTask> getStudentDoTaskFromTaskID(int taskID);
     List<TaskInfo> getListTaskFromIDTopic(int topicID);
     List<TaskInfo> getListTaskFromProf(int topicID);
     Task updateTaskSubmit(int taskID, int submit);
@@ -37,5 +36,5 @@ public interface TaskService {
     List<UserUpload> getListStudentTask(Integer idTask);
     List<Task> findAllByIdTopicSemAndApprove(Integer idTopic, Integer approve);
     List<Task> getListTaskOfRecentTopicByApprove(Integer approve);
-
+    Integer countTaskByProf();
 }

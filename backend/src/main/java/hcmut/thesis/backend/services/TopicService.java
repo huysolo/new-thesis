@@ -38,6 +38,7 @@ public interface TopicService {
     List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID);
     Topic getTopicOfCurrentSem();
     Topic getTopicById(Integer idTopic);
+    Integer countTopicByProfId();
 
 
 }

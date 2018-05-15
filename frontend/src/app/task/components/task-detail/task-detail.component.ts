@@ -3,6 +3,7 @@ import {AuthService} from '../../../core/auth.service';
 import {TaskService} from '../../task.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UploadFileService } from '../../upload-file.service';
+import { Task } from '../../../models/Task';
 
 @Component({
   selector: 'app-task-detail',
@@ -13,7 +14,7 @@ export class TaskDetailComponent implements OnInit {
   listTask: Array<any>;
   issubmit: String;
   isTaskOwner = false;
-  @Input() task: any;
+  @Input() task: Task;
 
   constructor(public authService: AuthService, public taskService: TaskService, public uploadSv: UploadFileService) { 
   }
@@ -30,8 +31,8 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
-  isSubmitTask(){
-    if(this.issubmit == undefined){
+  isSubmitTask() {
+    if (this.issubmit == undefined) {
       this.issubmit = 'popup';
     } else {
       this.issubmit = undefined;
@@ -39,7 +40,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   submitToProf() {
-    this.taskService.submitTask(this.task.taskID, 1).subscribe(
+    this.taskService.submitTask(this.task.idTask, 1).subscribe(
       res => {
         if (res != null) {
           this.task.submit = 1;
@@ -74,14 +75,14 @@ export class TaskDetailComponent implements OnInit {
   }
 
   sendComment(comment: String) {
-    this.taskService.sendComment(comment, this.task.taskID).subscribe(
+    this.taskService.sendComment(comment, this.task.idTask).subscribe(
       res => {
       }
     );
   }
 
   reviewTask(pass: number) {
-    this.taskService.reviewTask(this.task.taskID, pass).subscribe(
+    this.taskService.reviewTask(this.task.idTask, pass).subscribe(
       res => {
         if (res != null) {
           this.task.pass = res.pass;
@@ -90,7 +91,7 @@ export class TaskDetailComponent implements OnInit {
     );
   }
   loadStudent() {
-    this.taskService.getListUserUpload(this.task.taskID).subscribe(data => {
+    this.taskService.getListUserUpload(this.task.idTask).subscribe(data => {
       this.task.student = data;
       this.isTaskOwner = this.taskService.isBelongToTask(data);
     });

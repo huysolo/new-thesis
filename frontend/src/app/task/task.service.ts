@@ -106,4 +106,8 @@ export class TaskService {
     const param = new HttpParams().append('approve', approve);
     return this.httpClient.get<Task[]>('http://localhost:8080/tasksapprove', {params: param});
   }
+
+  countTask() {
+    return this.httpClient.get<number>('http://localhost:8080/taskcount');
+  }
 }

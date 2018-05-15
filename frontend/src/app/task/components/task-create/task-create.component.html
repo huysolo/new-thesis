@@ -12,9 +12,9 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
-    <p>Students Of Task</p>
+    <p> <strong> Students Of Task </strong></p>
     <ng-container *ngFor="let st of listAllStd">
-      <mat-checkbox  (change)="getValue($event.checked, st)">{{st.stdName}}</mat-checkbox>
+      <mat-checkbox  (change)="getValue($event.checked, st)">{{st.stdName}} - {{st.studentId}}</mat-checkbox>
       <br>
     </ng-container>
     

@@ -15,7 +15,7 @@ public class Task {
     private Integer idTopicSem;
     private int submit;
     private int pass;
-    private Integer currentVersion;
+    private Integer currentVersion = 0;
     private Timestamp updateTime;
 
     public void setSubmit(Integer submit) {

@@ -92,6 +92,7 @@ public class TopicController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO SET TOPIC");
         }
         try {
+            System.out.println(topicDetail);
             Gson obj = new Gson();
             TopicDetail topicDetailJS = obj.fromJson(topicDetail, TopicDetail.class);
             return ResponseEntity.ok(topicService.setTopicDetail(topicDetailJS, !topicDetailJS.getDraft()));
@@ -245,6 +246,15 @@ public class TopicController {
             idTopic = topicService.getTopicOfCurrentSem().getIdTop();
         }
         return topicService.getAllStudentDoTaskFromTopicID(idTopic);
+    }
+
+    @GetMapping("topicCount")
+    public ResponseEntity<?> getAllTopicCount() {
+        try {
+            return ResponseEntity.ok(topicService.countTopicByProfId());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 

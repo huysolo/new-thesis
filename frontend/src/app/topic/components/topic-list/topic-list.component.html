@@ -50,7 +50,7 @@
 </div>
 <h3 class="text-center">List of Topics</h3>
 <div *ngFor="let topic of topicSv.topicLst | async | filter:filter | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
-  <app-topic-content [topic]="topic" (editTopic)="onEdit($event)" (delTopic)="onDelete($event)" [semno]="selectedSem" (applyTopic)="onApply($event)"></app-topic-content>
+  <app-topic-content [topic]="topic" (editTopic)="onEdit($event)" (delTopic)="onDelete($event)" (removeTopic)="onRemove($event)" [semno]="selectedSem" (applyTopic)="onApply($event)"></app-topic-content>
 </div>
 <div class="text-center">
   <pagination-controls (pageChange)="p = $event"></pagination-controls>
