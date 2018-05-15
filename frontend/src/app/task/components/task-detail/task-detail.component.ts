@@ -84,8 +84,6 @@ export class TaskDetailComponent implements OnInit {
   }
 
   addversion(general: boolean) {
-    console.log('haha');
-    
     if (general) {
       this.task.currentVersion = this.task.currentVersion + 1;
     } else {

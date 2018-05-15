@@ -17,7 +17,6 @@ const topicRoutes: Routes = [
       {
         path: ':typ',
         component: TopicListComponent,
-        // canActivate: [AuthTopicGuardService]
       }
     ]
   }, {
