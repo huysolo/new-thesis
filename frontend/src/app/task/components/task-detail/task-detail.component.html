@@ -30,13 +30,13 @@
           <h6>
             Upload to personal repository:
           </h6>
-          <app-form-upload [id]="task.idTask"></app-form-upload>
+          <app-form-upload [id]="task.idTask" (updateFile)="addversion(false)"></app-form-upload>
         </div>
         <div class="content-block" *ngIf="authService.isTeamLead()">
           <h6>
             Submit to main:
           </h6>
-          <app-form-upload [id]="task.idTask" [general]="true"></app-form-upload>
+          <app-form-upload [id]="task.idTask" [general]="true" (updateFile)="addversion(true)"></app-form-upload>
         </div>
         <div>
           <h6>

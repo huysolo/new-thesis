@@ -1,6 +1,6 @@
 <mat-form-field>
 	<mat-select placeholder="Version">
-		<mat-option *ngFor="let v of listVersion | async" (click)="changeVersion(v)" value="v">{{v}} </mat-option>
+		<mat-option *ngFor="let v of uploadService.getListVersion(ver) | async" (click)="changeVersion(v)" value="v">{{v}} </mat-option>
 	</mat-select>
 </mat-form-field>
 <button class="btn btn-info active btn-sm" *ngIf='showFile' (click)='showFiles(false)'>Hide Files</button>

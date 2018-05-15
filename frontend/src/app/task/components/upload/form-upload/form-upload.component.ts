@@ -13,7 +13,7 @@ export class FormUploadComponent implements OnInit {
   @Input() id;
   @Input() ver;
   @Input() general = false;
-  @Output() emitListVersion = new EventEmitter<Number>();
+  @Output() updateFile = new EventEmitter<Boolean>();
   selectedFiles: FileList;
   currentFileUpload: File;
   progress: { percentage: number } = { percentage: 0 };
@@ -37,6 +37,7 @@ export class FormUploadComponent implements OnInit {
         this.progress.percentage = Math.round(100 * event.loaded / event.total);
       } else if (event instanceof HttpResponse) {
         console.log('File is completely uploaded!');
+        this.updateFile.emit(this.general);
       }
     });
     this.selectedFiles = undefined;

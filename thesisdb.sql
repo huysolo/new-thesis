@@ -5,7 +5,8 @@ create table chat_group
   id_user      int                                 not null,
   content      varchar(50)                         not null,
   primary key (time, id_user)
-);
+)
+  charset = utf8mb4;
 
 create table comment_task
 (
@@ -16,7 +17,8 @@ create table comment_task
   content varchar(150)                        not null,
   primary key (time, id_task, id_user)
 )
-  comment 'Comment on each task';
+  comment 'Comment on each task'
+  charset = utf8mb4;
 
 create index comment_task_task_id_task_fk
   on comment_task (id_task);
@@ -33,18 +35,21 @@ create table faculty
   unique (id_faculty),
   constraint faculty_name_uindex
   unique (name)
-);
+)
+  charset = utf8mb4;
 
 create table file
 (
   id_file     int auto_increment
     primary key,
   name        varchar(45)                         null,
-  upload_date timestamp default CURRENT_TIMESTAMP null,
-  id_user     varchar(45)                         null,
+  upload_date timestamp default CURRENT_TIMESTAMP null
+  on update CURRENT_TIMESTAMP,
+  id_user     int                                 null,
   id_task     int                                 null,
-  version     int                                 not null
-);
+  version     int default '0'                     null
+)
+  charset = utf8mb4;
 
 create table general_standard
 (
@@ -54,20 +59,23 @@ create table general_standard
   coefficient         int unsigned not null,
   semester_no         int          not null,
   st_name             varchar(255) null
-);
+)
+  charset = utf8mb4;
 
 create table hibernate_sequence
 (
   next_val bigint null
 )
-  engine = MyISAM;
+  engine = MyISAM
+  charset = utf8mb4;
 
 create table join_per_meeting
 (
   id_student int not null,
   id_meeting int not null,
   primary key (id_student, id_meeting)
-);
+)
+  charset = utf8mb4;
 
 create index join_per_meeting_meeting_id_meeting_fk
   on join_per_meeting (id_meeting);
@@ -82,7 +90,8 @@ create table meeting
   id_topic_sem  int             null,
   reason        varchar(45)     null,
   title         varchar(45)     null
-);
+)
+  charset = utf8mb4;
 
 create index meeting_topic_per_semester_id_topic_semester_fk
   on meeting (id_topic_sem);
@@ -94,7 +103,8 @@ create table meeting_schelule
   id_meeting   int             not null,
   location     varchar(45)     not null,
   primary key (meeting_time, id_meeting, location)
-);
+)
+  charset = utf8mb4;
 
 create table notification
 (
@@ -106,7 +116,8 @@ create table notification
   notify_type varchar(45)                         null,
   constraint id_notify_UNIQUE
   unique (id_notify)
-);
+)
+  charset = utf8mb4;
 
 create table professor
 (
@@ -114,20 +125,20 @@ create table professor
     primary key,
   id_user      int         not null,
   degree       varchar(45) null,
-  skills       varchar(45) null,
-  constraint professor_id_user_uindex
-  unique (id_user)
-);
+  skills       varchar(45) null
+)
+  charset = utf8mb4;
 
 create table review
 (
   id_prof   int             not null,
   id_topic  int             not null,
-  score     int             null,
+  score     float           null,
   submitted int default '0' not null,
   id_review int auto_increment
     primary key
-);
+)
+  charset = utf8mb4;
 
 create table semester
 (
@@ -141,7 +152,8 @@ create table semester
   start_date       timestamp default '0000-00-00 00:00:00' not null,
   review_date      timestamp                               null,
   close_date       timestamp                               null
-);
+)
+  charset = utf8mb4;
 
 create table specialize
 (
@@ -149,7 +161,8 @@ create table specialize
     primary key,
   id_falcuty    int         not null,
   name          varchar(45) not null
-);
+)
+  charset = utf8mb4;
 
 create table standard
 (
@@ -160,7 +173,8 @@ create table standard
   coefficient int unsigned not null,
   semester_no int          null
 )
-  comment 'Standard for Professors';
+  comment 'Standard for Professors'
+  charset = utf8mb4;
 
 create table student
 (
@@ -171,18 +185,21 @@ create table student
   unique (id_student),
   constraint student_id_user_uindex
   unique (id_user)
-);
+)
+  charset = utf8mb4;
 
 create table student_task
 (
-  id_task     int                                 not null,
-  id_student  int                                 not null,
-  archive     varchar(100)                        null,
-  upload_date timestamp default CURRENT_TIMESTAMP null
+  id_task         int                                 not null,
+  id_student      int                                 not null,
+  archive         varchar(100)                        null,
+  upload_date     timestamp default CURRENT_TIMESTAMP null
   on update CURRENT_TIMESTAMP,
+  current_version int default '0'                     null,
   primary key (id_student, id_task)
 )
-  comment 'Student On Each Task';
+  comment 'Student On Each Task'
+  charset = utf8mb4;
 
 create table student_topic_sem
 (
@@ -193,7 +210,8 @@ create table student_topic_sem
 		other member 0',
   primary key (id_topic_sem, id_student)
 )
-  comment 'List of student belong to each topic per semester';
+  comment 'List of student belong to each topic per semester'
+  charset = utf8mb4;
 
 create index student_topic_sem_student_id_student_fk
   on student_topic_sem (id_student);
@@ -210,8 +228,11 @@ create table task
   pass            int                                 null,
   submit          int                                 null,
   current_version int default '0'                     null,
-  approve         int default '0'                     null
-);
+  update_time     timestamp default CURRENT_TIMESTAMP null
+  on update CURRENT_TIMESTAMP,
+  topic_name      varchar(255)                        null
+)
+  charset = utf8mb4;
 
 create index task_topic_per_semester_id_topic_semester_fk
   on task (id_topic_sem);
@@ -227,14 +248,16 @@ create table topic
   score         int(10) default '0'                 null,
   semester_no   int(10)                             null,
   id_specialize int                                 null,
-  upload_date   timestamp default CURRENT_TIMESTAMP null,
+  upload_date   timestamp default CURRENT_TIMESTAMP null
+  on update CURRENT_TIMESTAMP,
   publish_date  timestamp                           null,
   student_count int default '0'                     null,
   prof_score    int                                 null,
   review_date   datetime                            null,
   constraint topic_id_top_uindex
   unique (id_top)
-);
+)
+  charset = utf8mb4;
 
 create index topic_professor_id_professor_fk
   on topic (id_prof);
@@ -247,7 +270,8 @@ create table topic_mission
   detail     varchar(60) not null,
   constraint mission_topic_mission_id_uindex
   unique (id_mission)
-);
+)
+  charset = utf8mb4;
 
 create table topic_per_semester
 (
@@ -258,7 +282,8 @@ create table topic_per_semester
   constraint topic_per_semester_id_topic_semester_uindex
   unique (id_review)
 )
-  comment 'Topic on each semester';
+  comment 'Topic on each semester'
+  charset = utf8mb4;
 
 create table topic_requirement
 (
@@ -268,7 +293,8 @@ create table topic_requirement
   detail   varchar(50) null,
   constraint topic_requirement_req_id_uindex
   unique (id_req)
-);
+)
+  charset = utf8mb4;
 
 create table topic_sem_standard
 (
@@ -279,7 +305,8 @@ create table topic_sem_standard
   id_review             int                      not null,
   score                 int unsigned default '0' not null
 )
-  comment 'Standard foreach topic per semester';
+  comment 'Standard foreach topic per semester'
+  charset = utf8mb4;
 
 create table user
 (
@@ -302,6 +329,7 @@ create table user
   unique (user_name),
   constraint user_email_uindex
   unique (email)
-);
+)
+  charset = utf8mb4;
 
 
