@@ -2,6 +2,7 @@ package hcmut.thesis.backend.services;
 
 import hcmut.thesis.backend.models.Semester;
 import hcmut.thesis.backend.models.Specialize;
+import hcmut.thesis.backend.models.User;
 import hcmut.thesis.backend.modelview.ProfInfo;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public interface CommonService {
     List<Integer> getAllSemester();
     List<ProfInfo> getListProf();
     String getFullName(String fName, java.lang.String lName);
+    String getFullName(User user);
     Integer getCurrentApplySem();
     Integer getCurrentSem();
     Semester getSemOpen();

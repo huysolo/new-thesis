@@ -11,6 +11,8 @@ import { TaskInfo } from '../../task-info';
 export class FormUploadComponent implements OnInit {
 
   @Input() id;
+  @Input() ver;
+  @Input() general = false;
   @Output() emitListVersion = new EventEmitter<Number>();
   selectedFiles: FileList;
   currentFileUpload: File;
@@ -27,16 +29,24 @@ export class FormUploadComponent implements OnInit {
 
 
   newversion() {
-    this.uploadService.newVersion(this.id).subscribe(data => {
-      this.emitListVersion.emit(data);
+    this.progress.percentage = 0;
+
+    this.currentFileUpload = this.selectedFiles.item(0);
+    this.uploadService.newVersion(this.currentFileUpload, this.id, this.general).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        this.progress.percentage = Math.round(100 * event.loaded / event.total);
+      } else if (event instanceof HttpResponse) {
+        console.log('File is completely uploaded!');
+      }
     });
+    this.selectedFiles = undefined;
   }
 
   upload() {
     this.progress.percentage = 0;
 
     this.currentFileUpload = this.selectedFiles.item(0);
-    this.uploadService.pushFileToStorage(this.currentFileUpload, this.id).subscribe(event => {
+    this.uploadService.pushFileToStorage(this.currentFileUpload, this.id, this.ver, this.general).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
         this.progress.percentage = Math.round(100 * event.loaded / event.total);
       } else if (event instanceof HttpResponse) {

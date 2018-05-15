@@ -6,6 +6,7 @@ import hcmut.thesis.backend.models.Standard;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.models.TopicSemStandard;
 import hcmut.thesis.backend.modelview.ReviewTopic;
+import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.TopicDetail;
 import hcmut.thesis.backend.modelview.UserSession;
 import hcmut.thesis.backend.services.TopicService;
@@ -36,23 +37,19 @@ public class TopicController {
 
     ){
         if (userSession.isUser()) {
-            return topicService.getListTopicBySemester(userSession.getCurrentUserFalcuty(), semno, profId, available, specialize);
+            return topicService.getListTopicBySemester(userSession.getCurrentUserFaculty(), semno, profId, available, specialize);
         } else {
             return null;
         }
     }
 
     @RequestMapping(value = "listDraft", method = RequestMethod.GET)
-    List<Topic> getListTopic(
+    ResponseEntity<?> getListTopic(
     ){
         try {
-            if (userSession.isProf()) {
-                return topicService.getDraftTopics(userSession.getProf().getIdProfessor());
-            } else {
-                return null;
-            }
+            return ResponseEntity.ok(topicService.getDraftTopics(userSession.getProf().getIdProfessor()));
         } catch (NullPointerException e){
-            return null;
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
     @RequestMapping(value = "recentTopics", method = RequestMethod.GET)
@@ -76,11 +73,11 @@ public class TopicController {
     }
 
     @RequestMapping(value = "topicDetail",method = RequestMethod.GET)
-    TopicDetail getTopicDetail(@RequestParam(value = "topid",required = true) Integer topId){
+    ResponseEntity<?> getTopicDetail(@RequestParam(value = "topid",required = true) Integer topId){
         try {
-            return topicService.getTopicDetailById(topId);
+            return ResponseEntity.ok(topicService.getTopicDetailById(topId));
         } catch (NullPointerException e){
-            return null;
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
@@ -95,36 +92,33 @@ public class TopicController {
             TopicDetail topicDetailJS = obj.fromJson(topicDetail, TopicDetail.class);
             return ResponseEntity.ok(topicService.setTopicDetail(topicDetailJS, !topicDetailJS.getDraft()));
         } catch (EntityExistsException e){
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("INVALID REQUEST");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
         } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("INVALID REQUEST");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     @RequestMapping(value = "publish", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity<Object> setTopicDetail(@RequestBody Integer topicId) {
-        if (!userSession.isProf()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO PUBLISH TOPIC");
-        }
         try {
             return ResponseEntity.ok(topicService.publish(topicId));
         } catch (EntityExistsException e){
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("INVALID REQUEST");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
         }catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("INVALID REQUEST");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }
 
     @PostMapping(value = "apply")
     @ResponseBody
-    ResponseEntity<Object> applyToTopic(@RequestBody Integer topicId){
+    ResponseEntity<?> applyToTopic(@RequestBody Integer topicId){
         try {
             if(!userSession.isStudent()){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO APPLY");
             }
-            Topic topic =topicService.applyToTopic(topicId, userSession.getStudent().getIdUser());
+            Topic topic =topicService.applyToTopic(topicId, userSession.getStudent().getIdStudent());
             if (topic == null){
                 return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("INVALID REQUEST");
             }
@@ -140,7 +134,7 @@ public class TopicController {
         if(!userSession.isStudent()){
             return null;
         }
-        return topicService.getAppliedTopic(semno,  userSession.getStudent().getIdUser());
+        return topicService.getAppliedTopic(semno,  userSession.getStudent().getIdStudent());
     }
     @PostMapping(value = "reject")
     @ResponseBody
@@ -148,7 +142,7 @@ public class TopicController {
         if(!userSession.isStudent()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO REJECT");
         }
-        Topic topic =topicService.rejectTopic(topicId, userSession.getStudent().getIdUser());
+        Topic topic =topicService.rejectTopic(topicId, userSession.getStudent().getIdStudent());
         if (topic == null){
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("INVALID REQUEST");
         }
@@ -236,6 +230,23 @@ public class TopicController {
             return topicService.getStandardListByGeneralAndUserId(userSession.getUserID());
         }
         return  null;
+    }
+
+    @GetMapping(value = "student")
+    public List<StudentDoTask> getAllStudentDoTopic(@RequestParam(value = "id", required = false) Integer idTopic) {
+        if (idTopic == null) {
+            idTopic = topicService.getTopicOfCurrentSem().getIdTop();
+        }
+        return topicService.getAllStudentDoTaskFromTopicID(idTopic);
+    }
+
+    @GetMapping("topicCount")
+    public ResponseEntity<?> getAllTopicCount() {
+        try {
+            return ResponseEntity.ok(topicService.countTopicByProfId());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 

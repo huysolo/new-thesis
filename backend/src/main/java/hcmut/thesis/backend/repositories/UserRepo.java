@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -24,7 +25,7 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     List<User> getAllByIdFalcuty(@Param("idFalcuty") Integer idFalcuty);
 
     @Query("SELECT u.idFalcuty FROM  User u WHERE u.idUser = :idUser")
-    Integer getIdFalcutyByIdUser(@Param("idUser") Integer idUser);
+    Optional<Integer> getIdFacultyByIdUser(@Param("idUser") Integer idUser);
 
     @Query("SELECT u FROM User  u WHERE u.userName = :userName")
     User getUserByUsername(@Param("userName") String userName);

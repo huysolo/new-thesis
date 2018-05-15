@@ -11,6 +11,7 @@ public class TopicRequirement {
     private String detail;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_req")
     public int getIdReq() {
         return idReq;

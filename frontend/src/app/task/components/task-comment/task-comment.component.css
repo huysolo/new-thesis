@@ -1,0 +1,20 @@
+.comment-block {
+    background-color: #f2f3f5;
+    border: none;
+    padding: 10px;
+    border-radius: 25px;
+}
+
+.time {
+    font-size: 12px;
+    color: #98a6ad;
+}
+
+.comment-list {
+    max-height: 200px;
+    overflow: auto;
+}
+
+.comment-form{
+    padding-top: 8px;
+}

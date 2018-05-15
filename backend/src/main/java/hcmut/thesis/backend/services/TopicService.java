@@ -1,16 +1,15 @@
 package hcmut.thesis.backend.services;
 
-import hcmut.thesis.backend.models.Review;
-import hcmut.thesis.backend.models.Standard;
-import hcmut.thesis.backend.models.Topic;
-import hcmut.thesis.backend.models.TopicSemStandard;
+import hcmut.thesis.backend.models.*;
 import hcmut.thesis.backend.modelview.ReviewTopic;
+import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.TopicDetail;
 
 import java.util.List;
 public interface TopicService {
     List<Topic> getListTopicBySemester(Integer idFal, Integer semesterNo, Integer profId, Boolean available, Integer specialize);
     List<Topic> getListRecentTopicBySemester(Integer profId, Boolean available, Integer specialize);
+    List<Topic> getListOpenTopic();
     TopicDetail getTopicDetailById(Integer topId);
     Topic setTopicDetail(TopicDetail topicDetail, Boolean publish);
     Topic applyToTopic(Integer topId, Integer studentId);
@@ -33,5 +32,13 @@ public interface TopicService {
     List<TopicSemStandard> getListReviewedTopicStandard(Integer topicId, Integer profId);
     List<Standard> getGeneralStandardOfCurrentSemester();
     List<Standard> getStandardListByGeneralAndUserId(Integer userId);
+    boolean isTeamLeader(Integer idTopic, Integer idStudent);
+    Topic getTopicById(int idTopic);
+    StudentTopicSem getStudentTopicSem(Integer idTopic, Integer idStudent);
+    List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID);
+    Topic getTopicOfCurrentSem();
+    Topic getTopicById(Integer idTopic);
+    Integer countTopicByProfId();
+
 
 }

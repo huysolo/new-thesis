@@ -1,123 +1,127 @@
 <br>
-<div class="card">
-  
-  <ng-container class="card-body" *ngIf="task.showFullTask">
-    <div class="card-title">
-      <div class="pull-left">
-        <h2>
-          <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>{{task.title}}
-        </h2>
-      </div>
-      <div class="pull-right">
-        <div>
-          <div class="pull-right">
-            <span (click)="showTask(task)" class="btn btn-default active" >
-              <i class="fa fa-close"></i>
-            </span>
-          </div>
-          <div class="pull-left">
-            <span class="w3-opacity">1 min</span>
-          </div>
-        </div>
-        <div>
-          <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor() && isrecent"
-          (click)="isRenderPopup(task.taskID)" class="w3-button w3-white w3-border">
-            <i class="fa fa-pencil"></i>Submit</button>
-          <button type="button " *ngIf="task.submit && !this.authService.isProfessor()"
-          (click)="isSubmitTask()"  class="w3-button w3-white w3-border">
-            <i class="fa fa-pencil"></i>Submited</button>
-        </div>
-      </div>
-    </div>
-    <div class="card-body"> 
-
-      <h5 class="w3-opacity">
-        <b>Description: </b>
-      </h5>
-      <p class="card-text">{{task.description}}</p>
-      <h5 class="w3-opacity">
-        <b>Students:</b>
-      </h5>
-      <table class="table table-secondary">
-        <tr *ngFor="let std of task.student">
-          <td>
-              <strong>
-                  {{std.stdName}}
-              </strong>
-            <!-- <span class="w3-xlarge"></span> -->
-            <br>
-          </td>
-        </tr>
-      </table>
-      <!-- <div class="w3-container">
-        <br>
-      </div> -->
-      <h5 class="w3-opacity">
-          <b>Upload:</b>
-        </h5>
-      <app-list-upload [id]="task.taskID" [ver]="task.currentVersion"></app-list-upload>
-      <span class="d-inline-block">
-
-        <h5 class="w3-opacity">
-          <b>Deadline: </b>
-        </h5>
-        <h6 class="w3-text-teal">
-          <i class="fa fa-calendar fa-fw w3-margin-right"></i>{{task.deadline | date}}
-        </h6>
+<div class="card card-position" *ngIf="task != null">
+  <ng-container *ngIf="task.showFullTask">
+    <div class="button-x">
+      <span (click)="showTask(task)" class="btn btn-default active">
+        <i class="fas fa-times"></i>
       </span>
-  
-  
-      <div class="w3-dropdown-hover w3-margin-bottom ">
+    </div>
+    <div class="card-header">
+      <h5>{{task.title}}</h5>
+      <span class="time">{{task.updateTime | date : 'fullDate'}}</span>
+    </div>
+    <div class="card-body">
+      <!-- <div>
+        <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor() && isrecent"
+          class="btn btn-default">
+          <i class="fa fa-pencil"></i>Submit</button>
+        <button type="button " *ngIf="task.submit && !this.authService.isProfessor() && task.pass == 1" (click)="isSubmitTask()"
+          class="btn btn-default">
+          <i class="fa fa-pencil"></i>Submited</button>
+      </div> -->
+      <div class="content-block">
+        <h6>
+          Description:
+        </h6>
+        <p class="card-text">{{task.description}}</p>
+      </div>
+      <ng-container *ngIf="task.student != null && task.student.length > 0">
+        <div class="content-block" *ngIf="isTaskOwner">
+          <h6>
+            Upload to personal repository:
+          </h6>
+          <app-form-upload [id]="task.idTask"></app-form-upload>
+        </div>
+        <div class="content-block" *ngIf="authService.isTeamLead()">
+          <h6>
+            Submit to main:
+          </h6>
+          <app-form-upload [id]="task.idTask" [general]="true"></app-form-upload>
+        </div>
+        <div>
+          <h6>
+            Uploaded Files:
+          </h6>
+          <mat-accordion>
+            <ng-container *ngIf="!authService.isProfessor()">
+              <mat-expansion-panel *ngFor="let std of task.student">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{std.username}}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    Files Of {{std.username}}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <app-list-upload [taskId]="task.idTask" [ver]="std.currentVersion" [userId]="std.userId" [isTaskOwner]="isTaskOwner"></app-list-upload>
+              </mat-expansion-panel>
+            </ng-container>
+            <mat-expansion-panel class="bg-primary">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="text-white">
+                  Main
+                </mat-panel-title>
+                <mat-panel-description class="text-white">
+                  Main Files
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-list-upload class="text-white" [taskId]="task.idTask" [ver]="task.currentVersion" [general]="true"></app-list-upload>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+
+
+      </ng-container>
+      <div class="content-block">
+        <h6>
+          Deadline:
+        </h6>
+        <i class="w3-text-teal fa fa-calendar fa-fw w3-margin-right"></i>{{task.deadline | date}}
+      </div>
+
+
+      <div class="w3-dropdown-hover ">
         <button *ngIf="this.authService.isProfessor() && task.pass == 0" type="button" class="w3-button w3-white w3-border">
           <i class="fa fa-pencil"></i> Review</button>
         <button *ngIf="task.pass == 2" type="button" class="w3-button w3-white w3-border w3-border-green">
           <i class="fa fa-check"></i> Passed</button>
         <button *ngIf="task.pass == 1" type="button" class="w3-button w3-white w3-border w3-border-red">
-          <i class="fa fa-close"></i> Not Passed</button>
+          <i class="fas fa-times"></i> Not Passed</button>
         <div id="Demo" *ngIf="this.authService.isProfessor()" class="w3-dropdown-content w3-bar-block">
           <a (click)="reviewTask(2)" class="w3-bar-item w3-button w3-show w3-border">Pass</a>
           <a (click)="reviewTask(1)" class="w3-bar-item w3-button w3-show w3-border">Not Pass</a>
         </div>
       </div>
-  
+
+      <hr>
+      <a (click)="getTaskComment(task)" class="btn btn-primary">
+        <b>Replies </b>
+        <span *ngIf="task.comment" class="w3-tag w3-white"> {{task.comment.length}}</span>
+      </a>
+      <app-task-comment *ngIf="task.showCmt == true" [taskid]="task.idTask"></app-task-comment>
     </div>
-    <hr>
-        <p class="text-center">
-          <button (click)="getTaskComment(task)" class="btn btn-primary">
-            <b>Replies </b>
-            <span *ngIf="task.comment" class="w3-tag w3-white"> {{task.comment.length}}</span>
-          </button>
-        </p>
-        <p class="w3-clear"></p>
-    
-        <app-task-comment *ngIf="task.showCmt == true" [taskid]="task.taskID"></app-task-comment>
 
 
   </ng-container>
 
   <div class="card-body row" *ngIf="task.showFullTask == undefined">
-    <h4 class="col-3">
-      <i class="fa fa-certificate fa-fw w3-large w3-text-teal"></i>{{task.title}}
+    <h4 class="col-3">{{task.title}}
     </h4>
-    <h6 class="col-3 text-center w3-text-teal" >
-          <i class="material-icons" style="vertical-align:middle">date_range</i> {{task.deadline | date}}
-      
+    <h6 class="col-3 text-center w3-text-teal">
+      <i class="material-icons" style="vertical-align:middle">date_range</i> {{task.deadline | date}}
+
     </h6>
     <h6 class="col-3 text-center">
       <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()"
         class="btn btn-primary active">
         <i class="fa fa-pencil"></i> Submit</button>
-      <button type="button " *ngIf="task.submit && !this.authService.isProfessor()"  (click)="isSubmitTask()"
-        class="btn btn-secondary active">
+      <button type="button " *ngIf="task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()" class="btn btn-secondary active">
         <i class="fa fa-pencil"></i> Submited</button>
     </h6>
     <h6 class="col-1">
-      <button *ngIf="task.pass == 1" type="button" class="btn btn-danger active">
-        <i class="fa fa-close red" style="color:red;"></i>
-      </button>
-      <button *ngIf="task.pass == 2" type="button" class="btn btn-success active">
-        <i class="fa fa-check" style="color:green;"></i>
-      </button>
+      <span *ngIf="task.pass == 1" class="fas fa-times red" style="color:red;"></span>
+      <span *ngIf="task.pass == 2" class="fa fa-check" style="color:green;"></span>
     </h6>
     <h6 class="col-2">
       <button type="button" (click)="showTask(task)" class="btn btn-default active">
@@ -129,18 +133,17 @@
 </div>
 
 <div class="w3-modal {{issubmit}}" *ngIf="this.authService.isTeamLead()">
-    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="padding:32px;max-width:600px">
-      <div class="w3-container w3-white w3-center">
-        <h3 class="w3-wide">Do you want to submit this task?</h3>
-        <div class="w3-row">
-          <div class="w3-half">
-            <button type="submit" (click)="submitToProf()" class="w3-button w3-block w3-green">Submit</button>
-          </div>
-          <div class="w3-half">
-            <button type="button" (click)="isSubmitTask()" class="w3-button w3-block w3-red">Cancel</button>
-          </div>
+  <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="padding:32px;max-width:400px">
+    <div class="w3-container w3-white w3-center">
+      <h3 class="w3-wide">Do you want to submit this task?</h3>
+      <div class="w3-row">
+        <div class="w3-half">
+          <button type="submit" (click)="submitToProf()" class="w3-button w3-block w3-green">Submit</button>
+        </div>
+        <div class="w3-half">
+          <button type="button" (click)="isSubmitTask()" class="w3-button w3-block w3-red">Cancel</button>
         </div>
       </div>
     </div>
   </div>
-
+</div>

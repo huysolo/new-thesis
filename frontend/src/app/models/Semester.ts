@@ -1,8 +1,9 @@
 export class Semester {
-  semesterNo: number;
-  applyOpenDate: number;
-  applyCloseDate: number;
-  endDate: number;
-  startDate: number;
+   semesterNo: Number;
+   applyOpenDate: Date;
+   applyCloseDate: Date;
+   endDate: Date;
+   startDate: Date;
+   closeDate: Date;
 
 }

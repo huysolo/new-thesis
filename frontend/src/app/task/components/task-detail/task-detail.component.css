@@ -1,3 +1,31 @@
 .popup{
     display: block;
+}
+.card-position {
+  position: relative;
+  display: block;
+}
+.button-x {
+  position: absolute;
+  height: 0;
+  top: 0;
+  right: 0;
+}
+  
+.parent {
+    display: table;
   }
+  
+  .child {
+    display: table-cell;
+      vertical-align: middle;
+  }
+.time {
+  display: inline-block;
+  font-size: 12px;
+  color: #98a6ad;
+}
+
+.content-block {
+  padding-top: 8px;
+}

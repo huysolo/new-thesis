@@ -12,33 +12,45 @@ import java.sql.Timestamp;
  * @author MinBui
  */
 public class StudentDoTask {
-   private String stdName;
-   private String archive;
-   private Timestamp uploadDate;
-   
-   public String getStdName(){
+    private Integer studentId;
+    private String stdName;
+
+    public int getTeamlead() {
+        return teamlead;
+    }
+
+    public void setTeamlead(int teamlead) {
+        this.teamlead = teamlead;
+    }
+
+    private int teamlead;
+
+    public StudentDoTask(Integer studentId, String stdName, int teamlead) {
+        this.studentId = studentId;
+        this.stdName = stdName;
+        this.teamlead = teamlead;
+    }
+
+    public StudentDoTask(Integer studentId, String stdName) {
+        this.studentId = studentId;
+        this.stdName = stdName;
+    }
+
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getStdName(){
        return this.stdName;
    }
-   public String getArchive(){
-       return this.archive;
-   }
-   public Timestamp getUploadDate(){
-       return this.uploadDate;
-   }
+
    
-   public void setStdName(String name){
+    public void setStdName(String name){
        this.stdName = name;
    }
-   public void setArchive(String archive){
-       this.archive = archive;
-   }
-   public void setUploadDate(Timestamp date){
-       this.uploadDate = date;
-   }
-   
-//   public StudentDoTask(String name, String archive, Timestamp date){
-//       this.stdName = name;
-//       this.archive = archive;
-//       this.uploadDate = date;
-//   }
+
 }

@@ -15,6 +15,7 @@ import { AuthTopicGuardService } from '../topic/auth-topic-guard.service';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 import { StandardService } from '../standard.service';
+import { SemesterService } from './semester.service';
 
 
 
@@ -35,8 +36,12 @@ import { StandardService } from '../standard.service';
     CommonService,
     AuthGuardUserService,
     TaskService,
+    SemesterService,
     StandardService,
     AuthTopicGuardService
+  ],
+  exports: [
+    MaterialModule
   ]
 })
 export class CoreModule { }

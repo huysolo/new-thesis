@@ -5,6 +5,7 @@
  */
 package hcmut.thesis.backend.services;
 
+import hcmut.thesis.backend.models.Task;
 import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.TaskInfo;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author MinBui
  */
 public interface ITaskDAO {
-    TaskInfo createTask(TaskInfo taskInfo, int topicid);
-    void createStudentTask(int taskID, List<StudentDoTask> std);
+    Task createTask(TaskInfo taskInfo, int topicid);
+    void createStudentTask(int taskID, List<Integer> std);
     List<StudentDoTask> getStudentDoTask (int topicID);
 }

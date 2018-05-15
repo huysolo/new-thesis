@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import { UploadFileService } from '../../../upload-file.service';
+import { AuthService } from '../../../../core/auth.service';
 
 @Component({
   selector: 'app-list-upload',
@@ -9,14 +10,17 @@ import { UploadFileService } from '../../../upload-file.service';
   styleUrls: ['./list-upload.component.css']
 })
 export class ListUploadComponent implements OnInit {
-  @Input() id;
+  @Input() taskId;
   @Input() ver;
+  @Input() general: Boolean = false;
+  @Input() userId: number;
   showFile = false;
   fileUploads: string[];
   currentVersion: number;
+  @Input() isTaskOwner = false;
   listVersion: Observable<number[]> = new Observable<number[]>();
 
-  constructor(public uploadService: UploadFileService) {
+  constructor(public uploadService: UploadFileService, public authoSv: AuthService) {
   }
 
   ngOnInit() {
@@ -28,14 +32,14 @@ export class ListUploadComponent implements OnInit {
     this.showFile = enable;
 
     if (enable) {
-      this.uploadService.getFiles(this.id, this.currentVersion).subscribe(data => {
+      this.uploadService.getFiles(this.taskId, this.currentVersion, this.userId).subscribe(data => {
         this.fileUploads = data;
       });
     }
   }
 
   deleteFile(name) {
-      this.uploadService.deleteFile(this.id, this.currentVersion, this.filename(name)).subscribe(s => {
+      this.uploadService.deleteFile(this.taskId, this.currentVersion, this.filename(name), this.general).subscribe(s => {
       });
       this.fileUploads = this.fileUploads.filter(f => f !== name);
 

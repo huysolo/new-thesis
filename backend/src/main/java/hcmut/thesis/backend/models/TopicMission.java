@@ -1,5 +1,7 @@
 package hcmut.thesis.backend.models;
 
+import org.hibernate.annotations.GeneratorType;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,6 +13,7 @@ public class TopicMission {
     private String detail;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_mission")
     public int getIdMission() {
         return idMission;

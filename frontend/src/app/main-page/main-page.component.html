@@ -1,59 +1,143 @@
-<header class="jumbotron my-4">
-  <h1 class="display-3">Hello {{authoSv.getUsername()}}</h1>
-  <p class="lead">Welcome to Thesis Management Website!</p>
-</header>
-<div class="row text-center">
-
-  <div class="col-lg-3 col-md-6 mb-4">
-    <div class="card">
-      <img class="card-img-top" src="../../assets/svg/ic_account_box_white_24px.svg" style="background-color:#01579b">
-      <div class="card-body">
-        <h4 class="card-title">Account</h4>
-        <p class="card-text">Manage, edit your account</p>
-      </div>
-      <div class="card-footer">
-        <a name="btn-acc" id="btn-acc" class="btn btn-primary" href="#" role="button" [routerLink]="">Detail</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-lg-3 col-md-6 mb-4">
-    <div class="card">
-      <img class="card-img-top" src="../../assets/svg/ic_assignment_white_24px.svg" alt="" style="background-color:#c62828">
-      <div class="card-body">
-        <h4 class="card-title">Task</h4>
-        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
-      </div>
-      <div class="card-footer">
-        <a href="#" class="btn btn-primary">Find Out More!</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-lg-3 col-md-6 mb-4">
-    <div class="card">
-      <img class="card-img-top" src="../../assets/svg/ic_assignment_turned_in_white_24px.svg" alt="" style="background-color: #827717">
-      <div class="card-body">
-        <h4 class="card-title">Topic</h4>
-        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
-      </div>
-      <div class="card-footer">
-          <a name="btn-acc" id="btn-acc" class="btn btn-primary" href="#" role="button" [routerLink]="['/topic']">Detail</a>
-      </div>
-    </div>
-  </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="card">
-        <img class="card-img-top" src="../../assets/svg/ic_today_white_24px.svg" alt="" style="background-color: #00695c">
-        <div class="card-body">
-          <h4 class="card-title">Meeting</h4>
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+<div class="row">
+  <div class="col">
+    <mat-card>
+      <div class="widget-content">
+        <div class="pull-left widget-icon bg-success text-white">
+          <i class="fas fa-calendar-alt" style="font-size: 30px;">
+          </i>
         </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Find Out More!</a>
+
+        <div class="title">
+          123
+        </div>
+        <div class="comment">
+          Meeting
         </div>
       </div>
-    </div>
+    </mat-card>
+  </div>
+  <div class="col">
+    <mat-card>
+      <div class="widget-content">
+        <div class="pull-left widget-icon bg-danger text-white">
+          <i class="fas fa-tasks" style="font-size: 30px;">
+          </i>
+        </div>
 
+        <div class="title">
+          {{countTask | async}}
+        </div>
+        <div class="comment">
+          Task
+        </div>
+      </div>
+    </mat-card>
+  </div>
+  <div class="col">
+    <mat-card>
+      <div class="widget-content">
+        <div class="pull-left widget-icon bg-primary text-white">
+          <i class="fas fa-briefcase" style="font-size: 30px;">
+          </i>
+        </div>
+
+        <div class="title">
+          {{countTopic | async}}
+        </div>
+        <div class="comment">
+          Topic
+        </div>
+      </div>
+    </mat-card>
+  </div>
 </div>
+<br>
+<br>
+<div class="row">
+  <div class="col-md-8 col-sm-12">
+    <mat-card class="recent-task-list">
+      <h3 class="box-title">
+        <strong class="w3-text-blue">RECENT TASKS </strong>
+      </h3>
+      <div class="task-center" *ngFor="let task of listRecentTask | async">
+        <div class="task-comment">
+          <h5>{{task.title}}</h5>
+          <span class="time">{{task.updateTime | date : 'fullDate'}}</span>
+          <div class="task-content">{{task.description}}</div>
+        </div>
+        <div class="text-right">
+          <button class="btn btn-default btn-small" (click)="navigateToTaskDetail(task.idTask)">Detail</button>
+        </div>
+        <mat-divider></mat-divider>
+      </div>
+    </mat-card>
+  </div>
+  <div class="col-md-4 col-sm-12">
+    <mat-card>
+      <h3 class="box-title">
+        <strong class="w3-text-green">MEETINGS </strong>
+      </h3>
+    </mat-card>
+  </div>
+</div>
+<br>
+<br>
+<mat-card>
+
+  <div class="row">
+
+    <div class="col-md-7 col-sm-12">
+      <mat-toolbar class="w3-text-green">RECENT TOPIC</mat-toolbar>
+      <div class="container-table">
+        <mat-table #table [dataSource]="listRecentTopic | async">
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+            <mat-cell *matCellDef="let topic"> {{topic.idTop}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+            <mat-cell *matCellDef="let topic"> {{topic.title}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="publishDate">
+            <mat-header-cell *matHeaderCellDef> Publish Date </mat-header-cell>
+            <mat-cell *matCellDef="let topic"> {{topic.publishDate | date : 'fullDate'}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="studentCount">
+            <mat-header-cell *matHeaderCellDef> Student </mat-header-cell>
+            <mat-cell *matCellDef="let topic"> {{topic.studentCount}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+            <mat-cell *matCellDef="let topic">
+              <button class="btn btn-success" (click)="getStudentTopic(topic)">Detail</button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+    <div class="col-md-5 col-sm-12">
+      <mat-toolbar>USER LIST OF TOPIC </mat-toolbar>
+      <div class="container-table">
+        <mat-table #table [dataSource]="listStudentTopic | async">
+          <ng-container matColumnDef="studentId">
+            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+            <mat-cell *matCellDef="let student"> {{student.studentId}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="stdName">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let student"> {{student.stdName}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="teamlead">
+            <mat-header-cell *matHeaderCellDef> Team Leader </mat-header-cell>
+            <mat-cell *matCellDef="let student"> {{student.teamlead}} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumnsUser"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumnsUser;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </div>
+</mat-card>

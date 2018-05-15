@@ -7,6 +7,9 @@ package hcmut.thesis.backend.modelview;
 
 import hcmut.thesis.backend.models.Professor;
 import hcmut.thesis.backend.models.Student;
+import hcmut.thesis.backend.models.User;
+import hcmut.thesis.backend.repositories.ProfessorRepo;
+import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
 import hcmut.thesis.backend.services.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,12 @@ public class UserSession {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    StudentRepo studentRepo;
+
+    @Autowired
+    ProfessorRepo professorRepo;
+
     private int userID;
     
     public int getUserID(){
@@ -38,22 +47,32 @@ public class UserSession {
     }
 
     public Boolean isProf(){
-        return userDAO.findProfByUserId(userID) != null;
+        return professorRepo.getProfessorByIdUser(userID).isPresent();
     }
 
     public Boolean isStudent(){
-        return userDAO.findStudentByUserId(userID) != null;
+        return studentRepo.findStudentByIdUser(userID).isPresent();
     }
 
     public Boolean isUser(){
-        return userDAO.findUserByUserId(userID) != null;
+        return userRepo.findById(userID).isPresent();
     }
 
     public Professor getProf() {return userDAO.findProfByUserId(userID);}
 
     public Student getStudent() {return userDAO.findStudentByUserId(userID);}
 
-    public Integer getCurrentUserFalcuty() { return userRepo.getIdFalcutyByIdUser(userID); }
+    public Integer getCurrentUserFaculty() { return userRepo.getIdFacultyByIdUser(userID).orElseThrow(() -> new NullPointerException("Faculty Not Found")); }
 
+    public Integer findIdUserFromStudentId(int idStudent) {
+        return studentRepo.findIdUserFromStudentId(idStudent).orElseThrow(() -> new NullPointerException("User Not Found"));
+    }
 
+    public User getUserByIdStudent(Integer idStudent) {
+        Integer userId = findIdUserFromStudentId(idStudent);
+        return userRepo.findById(userId).orElseThrow(() -> new NullPointerException("User Not Found Of Student"));
+    }
+     public String getUserNameByIdStudent(Integer idStudent) {
+        return getUserByIdStudent(idStudent).getUserName();
+     }
 }

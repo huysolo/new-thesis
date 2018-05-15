@@ -19,11 +19,13 @@ import hcmut.thesis.backend.repositories.TopicRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
 import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.IUserDAO;
+import hcmut.thesis.backend.services.TopicService;
 import hcmut.thesis.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -56,6 +58,9 @@ public class UserDAO implements IUserDAO {
     @Autowired
     CommonService commonService;
 
+    @Autowired
+    TopicService topicService;
+
     @Override
     public User getUser(String username, String password) {
         List<User> listUser = userRepo.findAll();
@@ -81,13 +86,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public Professor findProfByUserId(int id) {
-        List<Professor> listProf = profRepo.findAll();
-        for (int i = 0; i < listProf.size(); i++) {
-            if (listProf.get(i).getIdUser() == id) {
-                return listProf.get(i);
-            }
-        }
-        return null;
+        return profRepo.getProfessorByIdUser(id).orElseThrow(() -> new NullPointerException("Professor not found"));
     }
 
     @Override
@@ -160,13 +159,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public Student findStudentByUserId(int id) {
-        List<Student> listStudent = studentRepo.findAll();
-        for (int i = 0; i < listStudent.size(); i++) {
-            if (listStudent.get(i).getIdUser() == id) {
-                return listStudent.get(i);
-            }
-        }
-        return null;
+        return studentRepo.findStudentByIdUser(id).orElseThrow(() -> new NullPointerException("Student Not Found"));
     }
 
     @Override
@@ -221,9 +214,10 @@ public class UserDAO implements IUserDAO {
     @Override
     public StudentTopicSem getStdTopicSem(int stdid, int semid) {
         List<Integer> listTopicID = topicRepo.findTopIDBySemesterNo(semid);
-        for (int i = 0; i < listTopicID.size(); i++) {
-            if (stdTopicSemRepo.getStdTopicSemFromTopicID(listTopicID.get(i), stdid) != null) {
-                return stdTopicSemRepo.getStdTopicSemFromTopicID(listTopicID.get(i), stdid);
+        for (Integer aListTopicID : listTopicID) {
+            Optional<StudentTopicSem> studentTopicSem = stdTopicSemRepo.getStdTopicSemFromTopicID(aListTopicID, stdid);
+            if (studentTopicSem.isPresent()) {
+                return studentTopicSem.get();
             }
         }
         return null;

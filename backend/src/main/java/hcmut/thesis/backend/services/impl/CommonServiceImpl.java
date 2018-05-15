@@ -37,7 +37,7 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public List<Semester> getListSemester() {
-        return this.semesterRepo.findSemesterInThePast();
+        return this.semesterRepo.findAll();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public List<ProfInfo> getListProf() {
         List<ProfInfo> result = new ArrayList<>();
-        Integer idFaculty = userSession.getCurrentUserFalcuty();
+        Integer idFaculty = userSession.getCurrentUserFaculty();
         professorRepo.findAll().forEach(professor -> {
             Optional<User> user = userRepo.findById(professor.getIdUser());
             if (user.isPresent()){
@@ -66,6 +66,11 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public String getFullName(String fNamme, String lname) {
         return fNamme + " " + lname;
+    }
+
+    @Override
+    public String getFullName(User user) {
+        return getFullName(user.getFirstName(), user.getLastName());
     }
 
     @Override

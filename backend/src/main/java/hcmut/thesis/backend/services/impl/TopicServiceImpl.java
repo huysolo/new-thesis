@@ -1,17 +1,16 @@
 package hcmut.thesis.backend.services.impl;
 
 import hcmut.thesis.backend.models.*;
-import hcmut.thesis.backend.modelview.ReviewTopic;
-import hcmut.thesis.backend.modelview.StandardScore;
-import hcmut.thesis.backend.modelview.TopicDetail;
-import hcmut.thesis.backend.modelview.UserSession;
+import hcmut.thesis.backend.modelview.*;
 import hcmut.thesis.backend.repositories.*;
 import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.ITopicDAO;
+import hcmut.thesis.backend.services.TaskService;
 import hcmut.thesis.backend.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +48,9 @@ public class TopicServiceImpl implements TopicService {
     ReviewRepo reviewRepo;
 
     @Autowired
+    TaskService taskService;
+
+    @Autowired
     TopicSemStandardRepo  topicSemStandardRepo;
 
     @Override
@@ -63,22 +65,25 @@ public class TopicServiceImpl implements TopicService {
 
         Integer idFal = null;
         if (userSession.isUser()) {
-            idFal = userSession.getCurrentUserFalcuty();
+            idFal = userSession.getCurrentUserFaculty();
         }
         return getListTopicBySemester(idFal, semNo, profId, aval, specialize);
 
     }
 
     @Override
+    public List<Topic> getListOpenTopic() {
+        Integer semNo = commonService.getSemOpen().getSemesterNo();
+        return topicRepo.findListTopicFromSemID(userSession.getProf().getIdProfessor(), semNo);
+    }
+
+    @Override
     public TopicDetail getTopicDetailById(Integer topId) {
-        Optional<Topic> optionalTopic = topicRepo.findById(topId);
-        if (optionalTopic.isPresent()){
-            Topic topic = optionalTopic.get();
-            List<TopicMission> topicMissionList = topicMissionRepo.findAllByTopicId(topId);
-            List<TopicRequirement> topicRequirementList = topicReqRepo.findAllByTopicId(topId);
-            return new TopicDetail(topic, topicMissionList, topicRequirementList);
-        }
-        return null;
+        Topic topic = getTopicById(topId);
+        List<TopicMission> topicMissionList = topicMissionRepo.findAllByTopicId(topId);
+        List<TopicRequirement> topicRequirementList = topicReqRepo.findAllByTopicId(topId);
+        return new TopicDetail(topic, topicMissionList, topicRequirementList);
+
     }
 
     @Override
@@ -91,7 +96,7 @@ public class TopicServiceImpl implements TopicService {
             topic = setPublish(topic);
         }
         if (topic == null) {
-            return null;
+            throw new NullPointerException("Cannot set empty topic");
         }
         topicRepo.saveAndFlush(topic);
         for (TopicMission topicMis :
@@ -114,27 +119,27 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Topic applyToTopic(Integer topId, Integer studentId) {
         Integer semester = commonService.getCurrentApplySem();
-        Optional<Topic> topicOp = topicRepo.findById(topId);
-        if (!topicOp.isPresent() || !semester.equals(topicOp.get().getSemesterNo())) {
-            return null;
+        Topic topic = getTopicById(topId);
+        if (!semester.equals(topic.getSemesterNo())) {
+            throw new NullPointerException("Cannot Apply To Old Topic");
         }
         List<Topic> topicList = topicRepo.findTopBySemesterNo(semester);
-        for (Topic topic :
+        for (Topic top :
                 topicList) {
-            if(studentTopicSemRepo.getStudentTopicSemByAll(studentId, topic.getIdTop()).size() > 0){
-                return null;
+            if(studentTopicSemRepo.getStudentTopicSemByAll(studentId, top.getIdTop()).size() > 0){
+                throw new NullPointerException("Student have already apply to this topic");
             }
-            if (!availableTopic(topic)){
-                return null;
+            if (!availableTopic(top)){
+                throw  new NullPointerException("Topic is full");
             }
         }
-        topicOp.get().setStudentCount(topicOp.get().getStudentCount() + 1);
-        topicRepo.save(topicOp.get());
+        topic.setStudentCount(topic.getStudentCount() + 1);
+        topicRepo.save(topic);
         StudentTopicSem studentTopicSem = new StudentTopicSem();
         studentTopicSem.setIdStudent(studentId);
-        studentTopicSem.setIdTopicSem(topicOp.get().getIdTop());
+        studentTopicSem.setIdTopicSem(topic.getIdTop());
         studentTopicSemRepo.save(studentTopicSem);
-        return topicOp.get();
+        return topic;
     }
 
     @Override
@@ -142,9 +147,8 @@ public class TopicServiceImpl implements TopicService {
         if (semesterNo == null){
             semesterNo = commonService.getCurrentApplySem();
         }
-        List<Topic> topicList = topicRepo.findTopBySemesterNo(semesterNo);
         for (Topic topic :
-                topicList) {
+                topicRepo.findTopBySemesterNo(semesterNo)) {
             if (studentTopicSemRepo.getStudentTopicSemByAll(studentId, topic.getIdTop()).size() > 0){
                 return topic;
             }
@@ -171,30 +175,28 @@ public class TopicServiceImpl implements TopicService {
     public Topic rejectTopic(Integer topId, Integer studentId) {
         commonService.getCurrentApplySem();
 
-        Optional<Topic> topic = topicRepo.findById(topId);
-        if (topic.isPresent()) {
-            topic.get().setStudentCount(topic.get().getStudentCount() - 1);
-            topicRepo.save(topic.get());
+        Topic topic = getTopicById(topId);
+
+            topic.setStudentCount(topic.getStudentCount() - 1);
+            topicRepo.save(topic);
             StudentTopicSem studentTopicSem = new StudentTopicSem();
             studentTopicSem.setIdTopicSem(topId);
             studentTopicSem.setIdStudent(studentId);
             studentTopicSemRepo.delete(studentTopicSem);
-            return topic.get();
-        } else {
-            return null;
-        }
+            return topic;
+
 
     }
 
     @Override
     public Topic publish(Integer topicId) {
-        try{
-            Topic topic = topicRepo.findById(topicId).get();
-            topicRepo.save(topic);
-            return topic;
-        } catch (Exception e){
-            return null;
+        Integer profId = userSession.getProf().getIdProfessor();
+        Topic topic = getTopicById(topicId);
+        if (topic.getIdProf() != profId) {
+            throw new NullPointerException("User Cannot Publish This Topic");
         }
+        return topicRepo.save(setPublish(topic));
+
     }
 
     private Topic setPublish(Topic topic) {
@@ -237,14 +239,9 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Integer delete(Integer topicId) {
-        try {
-            Topic topic = deleteTopicMissionAndRequirement(topicId);
-            assert topic != null;
-            topicRepo.delete(topic);
-            return topicId;
-        } catch (NullPointerException e) {
-            return null;
-        }
+        Topic topic = deleteTopicMissionAndRequirement(topicId);
+        topicRepo.delete(topic);
+        return topicId;
     }
 
     @Override
@@ -273,8 +270,8 @@ public class TopicServiceImpl implements TopicService {
     public Review reviewTopic(ReviewTopic reviewTopic, Integer profId) {
         Optional<Review> review = reviewRepo.findReviewByIdProfAndIdTopic(profId, reviewTopic.getTopicId());
         List<TopicSemStandard> topicSemStandards = new LinkedList<>();
-        Integer numerator = 0;
-        Integer denominator = 0;
+        float numerator = 0;
+        float denominator = 0;
         if (review.isPresent() && review.get().getSubmitted() == 0){
             Optional<Topic> topic = topicRepo.findById(review.get().getIdTopic());
             if (!topic.isPresent() ||
@@ -346,22 +343,66 @@ public class TopicServiceImpl implements TopicService {
         return standardRepo.getAllBySemesterNoAnAndIdUser(semester.getSemesterNo(), userId);
     }
 
+    @Override
+    public boolean isTeamLeader(Integer idTopic, Integer idStudent) {
+        return getStudentTopicSem(idTopic, idStudent).getTeamLead() == 1;
+    }
+
+    @Override
+    public Topic getTopicById(int idTopic) {
+        return topicRepo.findById(idTopic).orElseThrow(() -> new NullPointerException("Topic Not Found"));
+    }
+
+    @Override
+    public StudentTopicSem getStudentTopicSem(Integer idTopic, Integer idStudent) {
+        return studentTopicSemRepo.getStdTopicSemFromTopicID(idTopic, idStudent).orElseThrow(() -> new NullPointerException("Student Not Belong To Topic"));
+    }
+
     private Topic deleteTopicMissionAndRequirement(Integer topicId) throws NullPointerException {
         TopicDetail topicDetail = getTopicDetailById(topicId);
 
         if (userSession.getProf().getIdProfessor() != topicDetail.getTopic().getIdProf()){
-            throw new NullPointerException("Cannot Delete This Topic");
+            throw new NullPointerException("User Don't Have Permission To Delete This Topic");
         }
         if (topicDetail.getTopic().getSemesterNo() != null) {
-            throw new NullPointerException("Cannot Delete This Topic");
+            throw new NullPointerException("Cannot Delete Published Topic");
         }
-        topicDetail.getTopicMission().forEach(topicMission -> {
-            topicMissionRepo.delete(topicMission);
-        });
-        topicDetail.getTopicRequirement().forEach(topicRequirement -> {
-            topicReqRepo.delete(topicRequirement);
-        });
+        topicDetail.getTopicMission().forEach(topicMission -> topicMissionRepo.delete(topicMission));
+        topicDetail.getTopicRequirement().forEach(topicRequirement -> topicReqRepo.delete(topicRequirement));
         return topicDetail.getTopic();
+    }
+
+    @Override
+    public List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID) {
+        List<StudentDoTask> listStd = new ArrayList<>();
+        studentTopicSemRepo.getAllStudentByIdTopicSem(topicID).forEach(studentTopicSem -> {
+            try {
+                String fullName = commonService.getFullName(userSession.getUserByIdStudent(studentTopicSem.getIdStudent()));
+                StudentDoTask studentDoTask = new StudentDoTask(studentTopicSem.getIdStudent(), fullName, studentTopicSem.getTeamLead());
+                listStd.add(studentDoTask);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return listStd;
+    }
+
+    @Override
+    public Topic getTopicOfCurrentSem() {
+        Integer semNo = commonService.getSemOpen().getSemesterNo();
+        return getAppliedTopic(semNo, userSession.getStudent().getIdStudent());
+
+    }
+
+    @Override
+    public Topic getTopicById(Integer idTopic) {
+        return topicRepo.findById(idTopic).orElseThrow(() -> new NullPointerException("Topic Not Found"));
+    }
+
+    @Override
+    public Integer countTopicByProfId() {
+        return topicRepo.countTopicByIdProf(userSession.getProf().getIdProfessor());
     }
 
 }

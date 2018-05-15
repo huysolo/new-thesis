@@ -5,7 +5,6 @@
  */
 package hcmut.thesis.backend.controllers;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import hcmut.thesis.backend.models.Task;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.modelview.ChatGroupInfo;
@@ -43,7 +42,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,9 +101,8 @@ public class TaskController {
 
     @RequestMapping(value = "/crttask", method = RequestMethod.POST)
     @ResponseBody
-    public TaskInfo createTask(@RequestBody TaskInfo createInfo) {
+    public Task createTask(@RequestBody TaskInfo createInfo) {
         int topicid = taskService.getCurrTopicFromStdID(userSession.getStudent().getIdStudent()).getIdTop();
-        System.out.println(createInfo.getDeadline());
         return itaskDAO.createTask(createInfo, topicid);
     }
 
@@ -130,7 +127,7 @@ public class TaskController {
     @RequestMapping(value = "/topiccount", method = RequestMethod.GET)
     @ResponseBody
     public List<Topic> getListTaskTest() {
-        return topicRepo.findTopicFromProfID(profRepo.getProfessorByIdUser(userSession.getUserID()));
+        return topicRepo.findTopicFromProfID(profRepo.getProfessorIdByIdUser(userSession.getUserID()));
     }
     
     @RequestMapping(value = "/getlisttopic", method = RequestMethod.GET)
@@ -158,12 +155,7 @@ public class TaskController {
         return topicRepo.findListSemFromProfID(userSession.getProf().getIdProfessor());
     }
 
-    @RequestMapping(value = "/getallstd", method = RequestMethod.GET)
-    @ResponseBody
-    public List<StudentDoTask> getAllStudentDoTopic() {
-        int topicid = taskService.getCurrTopicFromStdID(userSession.getStudent().getIdStudent()).getIdTop();
-        return taskService.getAllStudentDoTaskFromTopicID(topicid);
-    }
+
 
     @RequestMapping(value = "/submittask")
     @ResponseBody
@@ -199,39 +191,61 @@ public class TaskController {
 
 
     @PostMapping("/post")
-    public ResponseEntity<String> handleFileUpload(
+    public ResponseEntity<?> handleFileUpload(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("id") Integer taskId
+            @RequestParam("id") Integer taskId,
+            @RequestParam( value = "ver", required = false) Integer version,
+            @RequestParam("general") boolean general
     ) {
         String message;
-        try {
-            storageService.storeTask(file, taskId);
 
+
+        try {
+            storageService.storeTask(file, taskId, version, general);
             message = "You successfully uploaded " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } catch (Exception e) {
+            e.printStackTrace();
             message = "FAIL to upload " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
         }
     }
 
-    @PostMapping("addversion")
-    public ResponseEntity<Integer> addNewVersion(@RequestBody Integer idTask){
-//        try {
-//            return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
-//        } catch (NullPointerException e) {
-//            return  ResponseEntity.status(500).body(0);
-//        }
-     return  ResponseEntity.status(HttpStatus.CREATED).body(taskService.addNewVersion(idTask));
+    @GetMapping("getStudents")
+    public ResponseEntity<?> getListStudent(@RequestParam("id") Integer idTask){
+        try {
+            return ResponseEntity.ok(taskService.getListStudentTask(idTask));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/addversion")
+    public ResponseEntity<?> addNewVersion(
+            @RequestParam("general") boolean general,
+            @RequestParam("id") Integer taskId,
+            @RequestParam("file") MultipartFile file
+            ){
+
+        String message;
+        try {
+            storageService.submitNewVersionAndStore(file, taskId, general);
+
+            message = "You successfully uploaded " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
+        }
     }
 
     @GetMapping("/getallfiles")
     public ResponseEntity<List<String>> getListFiles(Model model,
-        @RequestParam("id") Integer taskId, @RequestParam(value = "ver", required = false) Integer version
-    ) {
-        List<String> fileNames = taskService.getFileByTaskId(taskId, version)
+        @RequestParam("id") Integer taskId, @RequestParam(value = "ver", required = false) Integer version,
+                                                     @RequestParam(value = "idUser", required = false) Integer idUser) {
+        System.out.println(idUser);
+        List<String> fileNames = taskService.getFileByTaskId(taskId, version, idUser)
                 .stream().map(f -> MvcUriComponentsBuilder
-                        .fromMethodName(TaskController.class, "getFile", f.getName(), f.getIdTask(), f.getVersion()).build().toString())
+                        .fromMethodName(TaskController.class, "getFile", f.getName(), f.getIdTask(), f.getVersion(), f.getIdUser()).build().toString())
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(fileNames);
@@ -239,17 +253,49 @@ public class TaskController {
 
     @GetMapping("/files/{fileName:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName, Integer taskId, Integer version) {
-        Resource file = storageService.loadFile(fileName, taskId, version);
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName, Integer taskId, Integer version, Integer idUser) {
+        Resource file = storageService.loadFile(fileName, taskId, version, idUser);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
     }
 
     @DeleteMapping("file")
-    public ResponseEntity<String> deleteFile(@RequestParam("name") String name, @RequestParam("ver") Integer ver, @RequestParam("id") Integer idTask) {
+    public ResponseEntity<String> deleteFile(
+            @RequestParam("name") String name,
+            @RequestParam("ver") Integer ver,
+            @RequestParam("id") Integer idTask,
+            @RequestParam("general") boolean general
+    ) {
         try {
-            return ResponseEntity.ok(storageService.deleteFile(name, idTask, ver));
+            return ResponseEntity.ok(storageService.deleteFile(name, idTask, ver, general));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("tasksapprove")
+    public  ResponseEntity<?> getAllTaskByApprove(@RequestParam("approve") Integer approve) {
+        try {
+            return ResponseEntity.ok(taskService.getListTaskOfRecentTopicByApprove(approve));
+        } catch (Exception e) {
+            return  ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("taskcount")
+    public  ResponseEntity<?> countTaskByProf() {
+        try{
+            return ResponseEntity.ok(taskService.countTaskByProf());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("task")
+    public ResponseEntity<?> getTaskByTaskId(@RequestParam("id") Integer taskId) {
+        try {
+            return ResponseEntity.ok(taskService.getTaskByTaskId(taskId));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }

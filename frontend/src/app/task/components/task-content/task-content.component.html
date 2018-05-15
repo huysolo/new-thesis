@@ -32,7 +32,7 @@
                 </select>
               </div>
 
-              <button type="button" *ngIf="this.authService.isTeamLead() && isrecent == true" (click)="createTask()" class="w3-button w3-white w3-border">
+              <button mat-raised-button (click)="openDialog()" type="button" *ngIf="this.authService.isTeamLead() && isrecent == true" (click)="createTask()" class="w3-button w3-white w3-border">
                 <i class="fa fa-pencil"></i>Create Task</button>
 
               <input [(ngModel)]="searchText" style="width: 160px" class="w3-input w3-right" type="text" placeholder="Enter Task title....">
@@ -41,12 +41,10 @@
         </div>
       </div>
 
-      <app-task-create *ngIf="isCreateTask" (addNewTask)="addNewTask($event)" (checkCreate)="switchIsCreate($event)"></app-task-create>
-
       <div *ngFor="let task of listTask | filter : searchText">
         <app-task-detail [task]="task"></app-task-detail>
       </div>
-
+      <br>
       <app-task-pagination *ngIf="listTask?.length > 0" (setPage)="setPage($event)" [page]="page" [pageCount]="pagecount" ></app-task-pagination>
 
     </div>

@@ -6,7 +6,7 @@
 	</label>
 
 	<button class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">Upload</button>
-	<button type="button" name="btnNewVer" id="btnNewVer" class="btn btn-success active" (click)="newversion()">New Version</button>
+	<button type="button"  [disabled]="!selectedFiles" name="btnNewVer" id="btnNewVer" class="btn btn-success active" (click)="newversion()">New Version</button>
 	<div *ngIf="currentFileUpload" class="progress">
 		<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
 		 aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width:progress.percentage+'%'}" style="height: 20px;">

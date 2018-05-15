@@ -9,11 +9,11 @@ public class File {
     private int idFile;
     private String name;
     private Timestamp uploadDate;
-    private int idUser;
+    private Integer idUser;
     private Integer idTask;
-    private int version;
+    private Integer version = 0;
 
-    public File(String name, int idUser, Integer idTask, Integer version) {
+    public File(String name, Integer idUser, Integer idTask, Integer version) {
         this.name = name;
         this.idUser = idUser;
         this.idTask = idTask;
@@ -57,11 +57,11 @@ public class File {
 
     @Basic
     @Column(name = "id_user")
-    public int getIdUser() {
+    public Integer getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(int idUser) {
+    public void setIdUser(Integer idUser) {
         this.idUser = idUser;
     }
 
@@ -95,11 +95,11 @@ public class File {
 
     @Basic
     @Column(name = "version")
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 

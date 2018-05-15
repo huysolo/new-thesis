@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Topic } from '../models/Topic';
 import { TopicDetail } from '../models/TopicDetail';
 import { AuthService } from '../core/auth.service';
+import { StudentDoTask } from '../task/components/student-do-task';
 
 @Injectable()
 export class TopicService {
@@ -29,6 +30,8 @@ export class TopicService {
   private topicListDraftUrl = this.topicUrl +  'listDraft';
   private topicPublishtUrl = this.topicUrl +  'publish';
   private topicListReviewUrl = this.topicUrl +  'listReview';
+  private topicStudentUrl = this.topicUrl + 'student';
+  private topicCountUrl = this.topicUrl + 'topicCount';
 
   /**
    * reject
@@ -50,6 +53,10 @@ export class TopicService {
    */
   public getListTopic(params: HttpParams): Observable<Topic[]> {
     return this.http.get<Topic[]>(this.topicRecentListUrl, {params: params});
+  }
+
+  public getListRecentTopic() {
+    return this.http.get<Topic[]>(this.topicRecentListUrl);
   }
 
   /**
@@ -94,7 +101,7 @@ export class TopicService {
    * publish
    */
   public publishTopic(topicId: Number) {
-    return this.http.post<any>(this.topicPublishtUrl, topicId).map(res => {
+    return this.http.post<Topic>(this.topicPublishtUrl, topicId).map(res => {
       return res;
     });
   }
@@ -125,5 +132,16 @@ export class TopicService {
     return this.http.delete<any>(this.topicUrl, {params: params});
   }
 
+  getAllStudentDoTopic(idTopic) {
+    if (idTopic == null) {
+      return this.http.get<StudentDoTask[]>(this.topicStudentUrl);
+    }
+    const params = new HttpParams().append('id', idTopic);
+    return this.http.get<StudentDoTask[]>(this.topicStudentUrl, {params: params});
+  }
+
+  countTopic() {
+    return this.http.get<Number>(this.topicCountUrl);
+  }
 
 }

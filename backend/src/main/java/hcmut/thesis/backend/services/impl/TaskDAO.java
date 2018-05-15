@@ -17,6 +17,7 @@ import hcmut.thesis.backend.repositories.TaskRepo;
 import hcmut.thesis.backend.services.ITaskDAO;
 import hcmut.thesis.backend.services.IUserDAO;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,32 +44,28 @@ public class TaskDAO implements ITaskDAO {
     StudentRepo stdRepo;
     
     @Override
-    public void createStudentTask(int taskID, List<StudentDoTask> std){
-        for(int i = 0; i< std.size(); i++){
-            StudentTask stdTask = new StudentTask();
-            stdTask.setIdTask(taskID);
-            int userID = iuserDAO.getUser(std.get(i).getStdName()).getIdUser();
-            stdTask.setIdStudent(stdRepo.getStdIDFromUserID(userID));
-            stdTaskRepo.save(stdTask);
-        }
+    public void createStudentTask(int taskID, List<Integer> studentIdList){
+        List<StudentTask> studentTaskList = new LinkedList<>();
+        studentIdList.forEach(id-> studentTaskList.add(new StudentTask(taskID, id)));
+        stdTaskRepo.saveAll(studentTaskList);
     }
     
     @Override
-    public TaskInfo createTask(TaskInfo taskInfo, int topicid){
+    public Task createTask(TaskInfo taskInfo, int topicid){
         Task newTask = new Task();
         newTask.setTitle(taskInfo.getTitle());
         newTask.setDescription(taskInfo.getDescription());
         newTask.setDeadline(taskInfo.getDeadline());
         newTask.setIdTopicSem(topicid);
-        Task task =  taskRepo.saveAndFlush(newTask);
-        createStudentTask(task.getIdTask(), taskInfo.getStudent());
+        Task task =  taskRepo.save(newTask);
+        createStudentTask(task.getIdTask(), taskInfo.getStudentIdList());
         taskInfo.setTaskID(task.getIdTask());
-        return taskInfo;
+        return task;
     }
     
     @Override
     public List<StudentDoTask> getStudentDoTask (int topicID){
-        List<StudentDoTask> listStd = new ArrayList<StudentDoTask>();
+        List<StudentDoTask> listStd = new ArrayList<>();
         List<StudentTopicSem> stdTopicSem = stdTopicSemRepo.findAll();
         
 //        for(int i = 0; i< stdTopicSem.size(); i++){

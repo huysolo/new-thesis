@@ -3,6 +3,7 @@ import {AuthService} from '../core/auth.service';
 import { Router } from '@angular/router';
 import { TopicService } from '../topic/topic.service';
 import {TaskService} from '../task/task.service';
+import { SemesterService } from '../core/semester.service';
 
 @Component({
   selector: 'app-layout',
@@ -11,14 +12,18 @@ import {TaskService} from '../task/task.service';
 })
 export class LayoutComponent implements OnInit {
   topicCount: Array<any>;
-  constructor(public taskService: TaskService, public authService: AuthService, private router: Router, private topicSv: TopicService) {
+  constructor(
+    public taskService: TaskService,
+    public authService: AuthService,
+    private router: Router,
+    private topicSv: TopicService,
+    private semSv: SemesterService
+  ) {
+      semSv.init();
   }
 
   ngOnInit() {
 
-  }
-
-  getTopicCount() {
   }
 
   logout() {

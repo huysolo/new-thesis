@@ -48,7 +48,7 @@ public class CommonController {
         if (!userSession.isUser()){
             return null;
         }
-        return commonService.getAllByIdFaculty(userSession.getCurrentUserFalcuty());
+        return commonService.getAllByIdFaculty(userSession.getCurrentUserFaculty());
     }
 
     @RequestMapping(value = "spec", method = RequestMethod.GET)

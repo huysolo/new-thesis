@@ -6,10 +6,7 @@
 package hcmut.thesis.backend.services.impl;
 
 import hcmut.thesis.backend.models.*;
-import hcmut.thesis.backend.modelview.PageInfo;
-import hcmut.thesis.backend.modelview.StudentDoTask;
-import hcmut.thesis.backend.modelview.TaskComment;
-import hcmut.thesis.backend.modelview.TaskInfo;
+import hcmut.thesis.backend.modelview.*;
 import hcmut.thesis.backend.repositories.SemesterRepo;
 import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.StudentTaskRepo;
@@ -26,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,19 +71,8 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     FileRepo fileRepo;
 
-    @Override
-    public List<StudentDoTask> getStudentDoTaskFromTaskID(int taskID) {
-        List<StudentDoTask> listStd = new ArrayList<>();
-        List<StudentTask> t = stdTaskRepo.getStudentDoTaskFromIDTask(taskID);
-        for (StudentTask aT : t) {
-            StudentDoTask temp = new StudentDoTask();
-            temp.setStdName(userRepo.getUserNameFromID(aT.getIdStudent()));
-            temp.setArchive(aT.getArchive());
-            temp.setUploadDate(aT.getUploadDate());
-            listStd.add(temp);
-        }
-        return listStd;
-    }
+    @Autowired
+    UserSession userSession;
         
 
     @Override
@@ -93,32 +80,18 @@ public class TaskServiceImpl implements TaskService {
         List<TaskInfo> listTask = new ArrayList<>();
         List<Task> t = taskRepo.getTaskFromIDTopic(topicID);
 
-        for(int i = 0; i< t.size(); i++){
-            TaskInfo temp = new TaskInfo();
-            temp.setTaskID(t.get(i).getIdTask());
-            temp.setTitle(t.get(i).getTitle());
-            temp.setDescription(t.get(i).getDescription());
-            temp.setDeadline(t.get(i).getDeadline());
-            temp.setSubmit(t.get(i).getSubmit());
-            temp.setPass(t.get(i).getPass());
-            temp.setStudent(getStudentDoTaskFromTaskID(t.get(i).getIdTask()));
-            temp.setCurrentVerion(t.get(i).getCurrentVersion());
-            listTask.add(temp);
-        }
+//        for(int i = 0; i< t.size(); i++){
+//            TaskInfo temp = new TaskInfo();
+//            temp.setTaskID(t.get(i).getIdTask());
+//            temp.setTitle(t.get(i).getTitle());
+//            temp.setDescription(t.get(i).getDescription());
+//            temp.setDeadline(t.get(i).getDeadline());
+//            temp.setSubmit(t.get(i).getSubmit());
+//            temp.setPass(t.get(i).getPass());
+//            temp.setCurrentVerion(t.get(i).getCurrentVersion());
+//            listTask.add(temp);
+//        }
         return listTask;
-    }
-
-    @Override
-    public List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID) {
-        List<StudentDoTask> listStd = new ArrayList<>();
-        List<StudentTopicSem> t = stdTopicSemRepo.getAllStudentByIdTopicSem(topicID);
-
-        for (StudentTopicSem aT : t) {
-            StudentDoTask temp = new StudentDoTask();
-            temp.setStdName(userRepo.getUserNameFromID(aT.getIdStudent()));
-            listStd.add(temp);
-        }
-        return listStd;
     }
 
     @Override
@@ -134,7 +107,6 @@ public class TaskServiceImpl implements TaskService {
             temp.setDeadline(aT.getDeadline());
             temp.setSubmit(aT.getSubmit());
             temp.setPass(aT.getPass());
-            temp.setStudent(getStudentDoTaskFromTaskID(aT.getIdTask()));
             listTask.add(temp);
         }
         return listTask;
@@ -159,20 +131,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public PageInfo getPage(int pageNumber, int topicID, Boolean isStd) {
         PageInfo page = new PageInfo();
-        List<TaskInfo> listTask = new ArrayList<>();
+        List<Task> listTask = new ArrayList<>();
         List<Task> t = (isStd) ? taskRepo.getTaskFromIDTopic(topicID) : taskRepo.getTaskSubmitFromProf(topicID);
         for (int i = 8 * pageNumber; i < min(8 * (pageNumber + 1), t.size()); i++) {
-
-            TaskInfo temp = new TaskInfo();
-            temp.setTaskID(t.get(i).getIdTask());
-            temp.setTitle(t.get(i).getTitle());
-            temp.setDescription(t.get(i).getDescription());
-            temp.setDeadline(t.get(i).getDeadline());
-            temp.setSubmit(t.get(i).getSubmit());
-            temp.setPass(t.get(i).getPass());
-            temp.setStudent(getStudentDoTaskFromTaskID(t.get(i).getIdTask()));
-            temp.setCurrentVerion(t.get(i).getCurrentVersion());
-            listTask.add(temp);
+            listTask.add(t.get(i));
         }
         int count;
         if (t.size() % 8 == 0) {
@@ -232,14 +194,18 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Boolean saveFileToTask(File file) {
+        System.out.println(file.getIdTask());
         Optional<Task> task = taskRepo.findById(file.getIdTask());
+
         if (task.isPresent()){
-            Optional<File> f = fileRepo.findNameByIdTaskAndName(file.getIdTask(), file.getName(), file.getVersion());
+            System.out.println(task.get().getIdTask());
+            Optional<File> f = fileRepo.findNameByIdTaskAndNameAndIdUser(file.getIdTask(), file.getName(), file.getVersion(), file.getIdUser());
             if (!f.isPresent()) {
                 fileRepo.save(file);
 
             } else {
-                file = f.get();
+                fileRepo.save(f.get());
+
             }
             return true;
         }
@@ -247,32 +213,92 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<File> getFileByTaskId(Integer taskId, Integer version) {
-        return fileRepo.findAllByIdTaskAndVersion(taskId, version);
+    public List<File> getFileByTaskId(Integer taskId, Integer version, Integer idUser) {
+        return idUser == null ? fileRepo.findAllByIdTaskAndVersionGeneral(taskId, version): fileRepo.findAllByIdTaskAndVersion(taskId, version, idUser);
     }
 
     @Override
     public Integer getCurrentVersionOfTaskId(Integer taskId) {
-        return taskRepo.findById(taskId).map(Task::getCurrentVersion).orElse(null);
+        return getTaskByTaskId(taskId).getCurrentVersion();
     }
 
     @Override
     public Integer addNewVersion(Integer taskId) {
-        return taskRepo.findById(taskId).map(task -> {
-            task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
-            taskRepo.save(task);
-            return task.getCurrentVersion();
-        }).orElseThrow(() -> new NullPointerException("Task Not Found"));
+        Task task = getTaskByTaskId(taskId);
+        task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
+        taskRepo.save(task);
+        return task.getCurrentVersion();
+    }
+
+    @Override
+    public Integer addNewVersionForStudentTask(Integer taskId, Integer idStudent) {
+        StudentTask studentTask = getStudentTaskByIdTaskAndIdStudent(taskId, idStudent);
+        studentTask.setCurrentVersion(studentTask.getCurrentVersion() == null ? 0 : studentTask.getCurrentVersion() + 1);
+        stdTaskRepo.save(studentTask);
+        return studentTask.getCurrentVersion();
+    }
+
+    @Override
+    public Integer addNewVersionForGeneral(Integer taskId, Integer idStudent) {
+        Task task = getTaskByTaskId(taskId);
+        if (!topicService.isTeamLeader(task.getIdTopicSem(), idStudent)){
+            throw new NullPointerException("User Don't Have Permission To Add New Version");
+        }
+        task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
+
+        return taskRepo.save(task).getCurrentVersion();
     }
 
 
     @Override
-    public String deleteFile(String name, Integer idTask, Integer version) {
-        System.out.println(version);
-        return fileRepo.findNameByIdTaskAndName(idTask, name,version).map(file -> {
+    public String deleteFile(String name, Integer idTask, Integer version, Integer idUser) {
+        Optional<File> f = idUser == null ? fileRepo.findNameByIdTaskAndNameAndIdUserGeneral(idTask, name, version)
+                : fileRepo.findNameByIdTaskAndNameAndIdUser(idTask, name, version, idUser);
+        return f.map(file -> {
             fileRepo.delete(file);
             return file.getName();
         }).orElseThrow(() -> new  NullPointerException("File not found"));
+    }
+
+    @Override
+    public StudentTask getStudentTaskByIdTaskAndIdStudent(Integer idTask, Integer idStudent) {
+        return stdTaskRepo.findByIdTaskAndIdStudent(idTask, idStudent).orElseThrow(() -> new NullPointerException("Task Of Student Not Found"));
+    }
+
+    @Override
+    public Task getTaskByTaskId(Integer taskId) {
+        return taskRepo.findById(taskId).orElseThrow(() -> new NullPointerException("Task Not Found"));
+    }
+
+    @Override
+    public List<UserUpload> getListStudentTask(Integer idTask) {
+        List<UserUpload> userUploadList = new ArrayList<>();
+        stdTaskRepo.getStudentDoTaskFromIDTask(idTask).forEach(studentTask -> {
+            User user = userSession.getUserByIdStudent(studentTask.getIdStudent());
+            userUploadList.add(new UserUpload(user.getUserName(), user.getIdUser(), studentTask.getCurrentVersion()));
+        });
+        return userUploadList;
+    }
+
+    @Override
+    public List<Task> findAllByIdTopicSemAndApprove(Integer idTopic, Integer approve) {
+        return taskRepo.findAllByIdTopicSemAndApprove(idTopic, approve, 1);
+    }
+
+    @Override
+    public List<Task> getListTaskOfRecentTopicByApprove(Integer approve) {
+        List<Task> tasks = new LinkedList<>();
+        topicService.getListOpenTopic().forEach(topic -> tasks.addAll(findAllByIdTopicSemAndApprove(topic.getIdTop(), approve)));
+        return tasks;
+    }
+
+    @Override
+    public Integer countTaskByProf() {
+        int count = 0;
+        for (Topic t : topicService.getListOpenTopic()) {
+            count = count + taskRepo.countTaskFromIDTopic(t.getIdTop());
+        }
+        return count;
     }
 
 

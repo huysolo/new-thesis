@@ -16,7 +16,7 @@ import { CommonService } from '../../../core/common.service';
 })
 export class CreateTopicComponent implements OnInit {
   constructor(public authoSv: AuthService, public topicSv: TopicService, private commonSv: CommonService) { }
-  @Input('createTopic') createTopic: TopicDetail = new TopicDetail();
+  @Input() createTopic: TopicDetail = new TopicDetail();
   specLst: Observable<Specialize[]>;
   @Output('created') created = new EventEmitter<Boolean>();
   ngOnInit() {
@@ -24,6 +24,7 @@ export class CreateTopicComponent implements OnInit {
   }
 
   submitTopic(draft: boolean) {
+    this.createTopic.topic.publishDate = null;
     this.createTopic.draft = draft;
     this.topicSv.createTopic(this.createTopic).subscribe(data => {
         this.created.emit(true);

@@ -9,9 +9,9 @@ import {TaskService} from '../../task.service';
 export class TaskCommentComponent implements OnInit, OnDestroy {
   taskCmt: Array<any>;
   connection: any;
-  @Input('taskid') taskid: number;
-  constructor(private taskService: TaskService) { 
-    
+  @Input() taskid: number;
+  constructor(private taskService: TaskService) {
+
   }
 
   ngOnInit() {

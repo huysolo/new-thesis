@@ -6,6 +6,10 @@ import { StudentDoTask } from '../student-do-task';
 import { AuthService } from '../../../core/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import { MatDialog } from '@angular/material';
+import { TaskCreateComponent } from '../task-create/task-create.component';
+import { TopicService } from '../../../topic/topic.service';
+import { Task } from '../../../models/Task';
 
 
 @Component({
@@ -14,7 +18,7 @@ import {TaskDetailComponent} from '../task-detail/task-detail.component';
   styleUrls: ['./task-content.component.css']
 })
 export class TaskContentComponent implements OnInit {
-  listTask: Array<any>;
+  listTask: Array<Task>;
 
   searchText: String = '';
   public page: number;
@@ -30,10 +34,15 @@ export class TaskContentComponent implements OnInit {
 
   topicID: any;
   isCreateTask: Boolean;
+  listAllStd: Array<StudentDoTask>;
 
 
 
-  constructor(public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute) {
+
+  constructor(
+    public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute,
+    public dialog: MatDialog, private topicSv: TopicService) {
+
   }
 
   ngOnInit() {
@@ -41,12 +50,15 @@ export class TaskContentComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.type = params['typ'];
       if (this.type === 'recent') {
+        this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
+          this.listAllStd = data;
+        });
         this.listTask = null;
         this.page = 0;
         this.isrecent = true;
         this.ishistory = false;
-        if (this.isrecent == true) {
-          if (this.authService.isStudent() == true) {
+        if (this.isrecent) {
+          if (this.authService.isStudent()) {
             this.getPage(-1, this.page);
           } else {
             this.getTopicFromSemID(-1);
@@ -57,7 +69,7 @@ export class TaskContentComponent implements OnInit {
         this.page = 0;
         this.isrecent = false;
         this.ishistory = true;
-        if (this.authService.isProfessor() == true) {
+        if (this.authService.isProfessor()) {
           this.getSem();
         } else {
           this.stdGetListTopic();
@@ -73,7 +85,6 @@ export class TaskContentComponent implements OnInit {
         this.pagecount = new Array(res.pageCount);
         this.listTask = res.taskList;
         this.topicID = topicID;
-        console.log(this.listTask);
       }
     );
   }
@@ -123,7 +134,7 @@ export class TaskContentComponent implements OnInit {
     this.isCreateTask = true;
   }
 
-  switchIsCreate(event: Boolean){
+  switchIsCreate(event: Boolean) {
     this.isCreateTask = event;
   }
 
@@ -131,5 +142,20 @@ export class TaskContentComponent implements OnInit {
     this.listTask.push(event);
     this.isCreateTask = false;
   }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(TaskCreateComponent, {
+      width: '400px',
+      data: {students: this.listAllStd}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.idTask != null) {
+        result.taskID = result.idTask;
+        this.listTask.unshift(result);
+      }
+    });
+  }
+
 
 }

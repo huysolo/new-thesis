@@ -27,13 +27,16 @@ public interface TopicRepo extends JpaRepository<Topic, Integer> {
     @Query("SELECT t FROM Topic t WHERE t.idProf = :idProf")
     List<Topic> findTopicFromProfID(@Param("idProf") Integer idProf);
     
-    @Query("SELECT DISTINCT t.semesterNo FROM Topic t WHERE t.idProf = :idProf")
+    @Query("SELECT DISTINCT t.semesterNo FROM Topic t WHERE t.idProf = :idProf AND t.semesterNo is not null ")
     List<Integer> findListSemFromProfID(@Param("idProf") Integer idProf);
     
-    @Query("SELECT t FROM Topic t WHERE t.idProf = :idProf AND t.semesterNo = :semid")
-    List<Topic> findListTopicFromSemID(@Param("idProf") Integer idProf, @Param("semid") Integer semid);
+    @Query("SELECT t FROM Topic t WHERE t.idProf = :idProf AND t.semesterNo = :semesterNo")
+    List<Topic> findListTopicFromSemID(@Param("idProf") Integer idProf, @Param("semesterNo") Integer semesterNo);
     
-    @Query("SELECT t FROM Topic t WHERE t.idTop = :topicid ")
-    Topic getTopicFromTopicID(@Param("topicid") Integer topicid);
+    @Query("SELECT t FROM Topic t WHERE t.idTop = :idTopic ")
+    Topic getTopicFromTopicID(@Param("idTopic") Integer idTopic);
+
+    @Query("SELECT COUNT (t) FROM Topic t WHERE t.idProf = :idProf")
+    Integer countTopicByIdProf(@Param("idProf") Integer idProf);
 }
 

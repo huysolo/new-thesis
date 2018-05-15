@@ -19,7 +19,21 @@ public class TaskInfo {
     private Timestamp deadline;
     private int submit;
     private int pass;
-    private List<StudentDoTask> student;
+    private List<Integer> studentIdList;
+    private Timestamp updateTime;
+
+    public List<Integer> getStudentIdList() {
+        return studentIdList;
+    }
+
+    public void setStudentIdList(List<Integer> studentIdList) {
+        this.studentIdList = studentIdList;
+    }
+
+    public void setCurrentVersion(Integer currentVersion) {
+        this.currentVersion = currentVersion;
+    }
+
     private Integer currentVersion;
 
     public Integer getCurrentVersion() {
@@ -41,9 +55,6 @@ public class TaskInfo {
     public String getDescription(){
         return this.description;
     }
-    public List<StudentDoTask> getStudent(){
-        return this.student;
-    }
     public Timestamp getDeadline(){
         return this.deadline;
     }
@@ -62,9 +73,6 @@ public class TaskInfo {
     }
     public void setDescription(String description){
         this.description = description;
-    }
-    public void setStudent(List<StudentDoTask> student){
-        this.student = student;
     }
     public void setDeadline(Timestamp deadline){
         this.deadline = deadline;
