@@ -38,7 +38,11 @@ export class StandardService {
     return this.http.get<TopicSemStandard[]>(this.reviewUrl, {params: params});
   }
 
-  getListGeneralStandard() {
+  getListGeneralStandard(semNo) {
+    const params = new HttpParams().append('semNo', semNo);
+    if (semNo != null) {
+      return this.http.get<Standard[]>(this.generalStandardUrl, {params: params});
+    }
     return this.http.get<Standard[]>(this.generalStandardUrl);
   }
 

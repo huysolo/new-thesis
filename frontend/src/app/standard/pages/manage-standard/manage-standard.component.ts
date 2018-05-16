@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { StandardService } from '../../../standard.service';
 import { Observable } from 'rxjs/Observable';
 import { Standard } from '../../../models/Standard';
@@ -11,29 +11,47 @@ import { StandardScore } from '../../../models/StandardScore';
 import { TopicReview } from '../../../models/TopicReview';
 import { TopicSemStandard } from '../../../models/TopicSemStandard';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { SemesterService } from '../../../core/semester.service';
 
 @Component({
   selector: 'app-manage-standard',
   templateUrl: './manage-standard.component.html',
   styleUrls: ['./manage-standard.component.css']
 })
-export class ManageStandardComponent implements OnInit {
+export class ManageStandardComponent implements OnInit,  AfterViewInit {
 
-  constructor(public standardSv: StandardService, public topicSv: TopicService, public authoSv: AuthService) { }
+  constructor(public standardSv: StandardService, public topicSv: TopicService, public authoSv: AuthService, 
+    public semesterSv: SemesterService) { }
   standardList: Observable<Standard[]>;
   standardListReview: Standard[];
   standardCreate: Standard;
   standdardSelected: Standard;
   standardSrc: MatTableDataSource<Standard>;
+  standardGeneral: MatTableDataSource<Standard>;
   @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginatorGeneral') paginatorGeneral: MatPaginator;
+  
+  displayedColumns = ['idStandard', 'stName', 'coefficient', 'action'];
+  displayedColumnsGeneral = ['idStandard', 'stName', 'coefficient', 'semester'];
   ngOnInit() {
     this.standdardSelected = new Standard();
     this.standardCreate = new Standard();
-    this.standardList = this.standardSv.getCurrentSemStandard();
-    // this.standardSv.getCurrentSemStandard().subscribe(data => {
-    //   this.standardSrc = new MatTableDataSource(data);
-    // });
+    // this.standardList = this.standardSv.getCurrentSemStandard();
+    this.standardSv.getCurrentSemStandard().subscribe(data => {
+      this.standardSrc = new MatTableDataSource(data);
+      this.standardSrc.paginator = this.paginator;
 
+    });
+    this.standardSv.getListGeneralStandard(null).subscribe(data => {
+      this.standardGeneral = new MatTableDataSource(data);
+            this.standardGeneral.paginator = this.paginatorGeneral;
+
+    })
+
+  }
+
+  ngAfterViewInit() {
+    // this.standardSrc.paginator = this.paginator;
   }
 
   reset() {
@@ -43,10 +61,9 @@ export class ManageStandardComponent implements OnInit {
   addStandard() {
     this.standardCreate.idUser = parseInt(this.authoSv.getUserId());
     this.standardSv.postStandard(this.standardCreate).subscribe(data => {
-      // this.standardSrc.data.push(data);
-      this.standardList = this.standardList.map(st => {
-        return st;
-      });
+      this.standardSrc.data = this.standardSrc.data.concat(data);
+      this.standardCreate = new Standard();
+
     });
   }
 
@@ -55,8 +72,9 @@ export class ManageStandardComponent implements OnInit {
   }
   submitEdit() {
     this.standardSv.postStandard(this.standdardSelected).subscribe(data => {
-      this.standardList = this.standardList.map(st => {
-        return st;
+      this.standardSv.getCurrentSemStandard().subscribe(dt => {
+        this.standardSrc = new MatTableDataSource(dt  );
+        this.standardSrc.paginator = this.paginator;  
       });
       this.reset();
     });
@@ -64,10 +82,23 @@ export class ManageStandardComponent implements OnInit {
 
   removeStandard(standardId: Number) {
     this.standardSv.deleteStandard(standardId).subscribe(data => {
-      this.standardList = this.standardList.map(lst => {
-        return lst.filter(st => st.idStandard != data);
-      });
+      this.standardSrc.data = this.standardSrc.data.filter(sta => sta.idStandard !== data);
     });
+  }
+
+  changeSemester(semNo) {
+    this.standardSv.getListGeneralStandard(semNo).subscribe(data => {
+      this.standardGeneral = new MatTableDataSource(data);
+            this.standardGeneral.paginator = this.paginatorGeneral;
+
+    });
+
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.standardSrc.filter = filterValue;
   }
 
 

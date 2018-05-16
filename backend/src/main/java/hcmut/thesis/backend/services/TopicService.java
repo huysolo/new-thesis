@@ -30,7 +30,7 @@ public interface TopicService {
     Boolean isStandardOwner(Integer userId, Standard standard);
     Integer deleteStandard(Integer standardId, Integer idUser);
     List<TopicSemStandard> getListReviewedTopicStandard(Integer topicId, Integer profId);
-    List<Standard> getGeneralStandardOfCurrentSemester();
+    List<Standard> getGeneralStandardOfCurrentSemester(Integer semesterNo);
     List<Standard> getStandardListByGeneralAndUserId(Integer userId);
     boolean isTeamLeader(Integer idTopic, Integer idStudent);
     Topic getTopicById(int idTopic);

@@ -185,12 +185,7 @@ public class TopicController {
 
     @PostMapping("standard")
     Standard addByUserId(@RequestBody Standard standard){
-        if (userSession.isUser())
-        {
-            return topicService.setStandard(userSession.getUserID(), standard);
-        } else {
-            return null;
-        }
+        return topicService.setStandard(userSession.getUserID(), standard);
     }
 
     @DeleteMapping("standard")
@@ -220,8 +215,8 @@ public class TopicController {
     }
 
     @GetMapping("generalStandard")
-    List<Standard> getGeneralStandards() {
-        return topicService.getGeneralStandardOfCurrentSemester();
+    List<Standard> getGeneralStandards(@RequestParam(value = "semNo", required = false) Integer semNo) {
+        return topicService.getGeneralStandardOfCurrentSemester(semNo);
     }
 
     @GetMapping("standardAndGeneral")

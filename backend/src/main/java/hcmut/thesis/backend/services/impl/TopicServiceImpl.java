@@ -252,7 +252,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Standard setStandard(Integer userId, Standard standard) {
         standard.setIdUser(userId);
-        return standardRepo.save(standard);
+        return standardRepo.saveAndFlush(standard);
     }
 
     @Override
@@ -332,9 +332,11 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Standard> getGeneralStandardOfCurrentSemester() {
-        Semester semester = commonService.getSemOpen();
-        return standardRepo.getAllBySemesterNo(semester.getSemesterNo());
+    public List<Standard> getGeneralStandardOfCurrentSemester(Integer semesterNo) {
+        if (semesterNo == null) {
+            semesterNo = commonService.getSemOpen().getSemesterNo();
+        }
+        return standardRepo.getAllBySemesterNo(semesterNo);
     }
 
     @Override

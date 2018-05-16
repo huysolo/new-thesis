@@ -6,7 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatGridListModule} from '@angular/material/grid-list';
-import { MatTableModule } from '@angular/material';
+import { MatTableModule,
+  MatFormFieldModule, MatInputModule, MatPaginatorModule, MatToolbarModule, MatSelectModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
@@ -17,7 +18,12 @@ import { CdkTableModule } from '@angular/cdk/table';
     StandardRoutingModule,
     MatGridListModule,
     MatTableModule,
-    CdkTableModule
+    CdkTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatToolbarModule,
+    MatSelectModule
   ],
   declarations: [ManageStandardComponent]
 })

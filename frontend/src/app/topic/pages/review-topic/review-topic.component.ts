@@ -120,8 +120,7 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
   }
 
   applyFilter(filterValue: string, isReviewed: boolean) {
-    console.log(filterValue);
-    // filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     if (isReviewed) {
       this.dataSource.filter = filterValue;
