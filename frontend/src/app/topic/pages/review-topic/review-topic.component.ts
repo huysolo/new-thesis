@@ -94,6 +94,8 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
         this.dataSourceRe = new MatTableDataSource(lst);
         this.dataSourceRe.paginator = this.paginatorRe;
         this.dataSourceRe.sort = this.sortRe;
+        this.standardListReview = null;
+
       });
       this.onChangeSemester(this.selectedSem);
     });
@@ -109,6 +111,19 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
           rs = rs + (this.reviewTp.standardScores[i].score as number) * dt.coefficient ;
         }
       });
+    }
+    return (rs / (co === 0 ? 0 : co)).toFixed(2);
+  }
+
+  finalScored() {
+    let rs = 0;
+    let co = 0;
+    if (this.topicRvStandardDetail != null) {
+        this.topicRvStandardDetail.forEach((dt, i) => {
+            co = co + dt.coefficient ;
+            rs = rs + dt.score * dt.coefficient ;
+        });
+
     }
     return (rs / (co === 0 ? 0 : co)).toFixed(2);
   }

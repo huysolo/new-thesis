@@ -1,7 +1,7 @@
 export class TopicSemStandard {
     idTopicSemStandard: Number;
-    score: Number;
+    score: number;
     content: String;
-    coefficient: Number;
+    coefficient: number;
     idReview: Number;
 }
