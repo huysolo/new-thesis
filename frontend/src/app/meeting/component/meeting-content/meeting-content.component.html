@@ -1,25 +1,41 @@
-<div class="container" >
-    <div *ngIf="this.authService.isProfessor()" class="form-group">
-        <label>
-          <h5>
-            <i class="fa fa-pencil-square-o"></i> Topic </h5>
-        </label>
-        <select (change)="getListMeetingFromTopicID($event.target.value)" name="topicid" class="custom-select">
-          <option selected [value]="0">Choose Topic</option>
-          <option *ngFor="let topic of listTopic" [value]="topic.idTop">{{topic.title}}</option>
-        </select>
+<div class="container">
+
+
+
+
+  <div *ngIf="this.authService.isProfessor()" class="form-group">
+    <label>
+      <h5>
+        <i class="fa fa-pencil-square-o"></i> Topic </h5>
+    </label>
+    <!-- <select (change)="getListMeetingFromTopicID($event.target.value)" name="topicid" class="custom-select">
+      <option selected [value]="0">Choose Topic</option>
+      <option *ngFor="let topic of listTopic" [value]="topic.idTop">{{topic.title}}</option>
+    </select> -->
+    <div class="container example-container">
+      <div class="row">
+        <mat-form-field class="mat-form-topic col-md-8">
+          <mat-select (selectionChange)="getListMeetingFromTopicID(value)" [(ngModel)]="topicID" placeholder="Select Topic">
+            <mat-option *ngFor="let topic of listTopic" [value]="topic.idTop">{{topic.title}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="mat-form-search col-md-4">
+          <input matInput [(ngModel)]="searchText" placeholder="Search">
+        </mat-form-field>
       </div>
-  <div *ngFor="let meeting of listMeeting">
+    </div>
+  </div>
+  <div *ngFor="let meeting of listMeeting | filter : searchText">
     <app-meeting-detail [meeting]="meeting"></app-meeting-detail>
   </div>
 </div>
 
-<a class="float" >
+<a class="float">
   <button type="button" class="btn btn-primary bmd-btn-fab" name="new" id="new" data-toggle="modal" data-target="#createTopic">
     <i class="material-icons">add</i>
   </button>
 </a>
 
 <div class="modal" id="createTopic" tabindex="-1" role="dialog" aria-labelledby="topicTitleId">
-  <app-meeting-create (addNewMeeting)="addNewMeeting($event)" ></app-meeting-create>
+  <app-meeting-create (addNewMeeting)="addNewMeeting($event)"></app-meeting-create>
 </div>

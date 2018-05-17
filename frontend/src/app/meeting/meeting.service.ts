@@ -17,8 +17,13 @@ export class MeetingService {
     return this.httpClient.post<any>(loginUrl, createMeeting);
   }
 
-  getListMeetingFromTopicID(topicid: number) {
-    const loginUrl = `http://localhost:8080/meeting/getlistmeeting`;
+  getListRecentMeetingFromTopicID(topicid: number) {
+    const loginUrl = `http://localhost:8080/meeting/getlistrecentmeetingfromtopicid`;
+    return this.httpClient.get<any>(loginUrl + '?topicid=' + topicid);
+  }
+
+  getListHistoryMeetingFromTopicID(topicid: number) {
+    const loginUrl = `http://localhost:8080/meeting/getlisthistorymeetingfromtopicid`;
     return this.httpClient.get<any>(loginUrl + '?topicid=' + topicid);
   }
 

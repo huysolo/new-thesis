@@ -17,6 +17,7 @@ export class MeetingContentComponent implements OnInit {
   t: Date;
   listTopic: Array<any>;
   type: String;
+  topicID: number;
 
   constructor(private route: ActivatedRoute, private meetingService: MeetingService, public authService: AuthService, private taskService: TaskService) { }
 
@@ -29,6 +30,7 @@ export class MeetingContentComponent implements OnInit {
         }
         if(this.authService.isProfessor()){
           this.profGetRecentMeeting();
+          this.getTopicFromSemID(-1);
         }
       } else {
         if(this.authService.isStudent()){
@@ -41,13 +43,21 @@ export class MeetingContentComponent implements OnInit {
 
   }
 
-  getListMeetingFromTopicID(topicid: number) {
-    return this.meetingService.getListMeetingFromTopicID(topicid).subscribe(
-      res => {
-        this.listMeeting = res;
-        console.log(this.listMeeting);
-      }
-    );
+  getListMeetingFromTopicID() {
+    if(this.type == 'recent'){
+      return this.meetingService.getListRecentMeetingFromTopicID(this.topicID).subscribe(
+        res => {
+          this.listMeeting = res;
+        }
+      );
+    } else {
+      return this.meetingService.getListHistoryMeetingFromTopicID(this.topicID).subscribe(
+        res => {
+          this.listMeeting = res;
+        }
+      );
+    }
+    
 
   }
 
@@ -94,7 +104,7 @@ stdGetHistoryMeeting(){
   );
 }
 
-addNewMeeting(event: any){
+addNewMeeting(event: Meeting){
   this.listMeeting.push(event);
 }
 

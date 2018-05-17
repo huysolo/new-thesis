@@ -5,6 +5,7 @@ import {TaskService} from '../../../task/task.service';
 import { StudentMeeting } from '../../student-meeting';
 import {MeetingService} from '../../meeting.service';
 import { AuthService } from '../../../core/auth.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-meeting-create',
@@ -19,7 +20,7 @@ export class MeetingCreateComponent implements OnInit {
   meetingCreate = new Meeting();
   listTopic: Array<any>;
 
-  constructor(private taskService: TaskService, private meetingService: MeetingService,
+  constructor(public snackBar: MatSnackBar, private taskService: TaskService, private meetingService: MeetingService,
      public authService: AuthService) { 
     this.InitNewMeeting();
   }
@@ -54,7 +55,13 @@ export class MeetingCreateComponent implements OnInit {
   createMeeting(){
     this.meetingService.createMeeting(this.meetingCreate).subscribe(
       res => {
-        this.newMeeting.emit(res);
+        if(res){
+          this.newMeeting.emit(res);
+          this.snackBar.open("    Create Success!!!    ","Close", {
+            duration: 2000,
+          });
+        }
+        
       }
     );
   }

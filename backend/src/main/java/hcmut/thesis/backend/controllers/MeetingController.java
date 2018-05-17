@@ -99,20 +99,23 @@ public class MeetingController {
         return null;
     }
 
-    @RequestMapping(value = "/getlistmeeting", method = RequestMethod.GET)
+    @RequestMapping(value = "/getlistrecentmeetingfromtopicid", method = RequestMethod.GET)
     @ResponseBody
-    public List<MeetingInfo> getListMeetingFromTopicID(@RequestParam("topicid") Integer topicid) {
-        if (topicid == -1) {
-            int stdid = userSession.getStudent().getIdStudent();
-
-            try {
-                topicid = taskService.getCurrTopicFromStdID(stdid).getIdTop();
-            } catch (Exception e) {
-                return null;
-            }
+    public List<MeetingInfo> getListRecentMeetingFromTopicID(@RequestParam("topicid") Integer topicid) {
+        try {
+            return meetingService.stdGetListRecentMeeting(topicid);
+        } catch (Exception e) {
+            return null;
         }
-
-        return meetingService.getListMeetingFromTopicID(topicid);
+    }
+    @RequestMapping(value = "/getlisthistorymeetingfromtopicid", method = RequestMethod.GET)
+    @ResponseBody
+    public List<MeetingInfo> getListHistoryMeetingFromTopicID(@RequestParam("topicid") Integer topicid) {
+        try {
+            return meetingService.stdGetListHistoryMeeting(topicid);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @RequestMapping(value = "/profgetrecentmeeting", method = RequestMethod.GET)

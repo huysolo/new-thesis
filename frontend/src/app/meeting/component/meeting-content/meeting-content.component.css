@@ -4,3 +4,15 @@
     right: 17px;
     z-index: 99;
 }
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+}
+  
+.mat-form-search{
+    width: 100%;
+}
+.mat-form-topic{
+    width: 100%;
+}
