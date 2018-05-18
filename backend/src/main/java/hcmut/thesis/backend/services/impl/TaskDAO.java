@@ -16,6 +16,8 @@ import hcmut.thesis.backend.repositories.StudentTopicSemRepo;
 import hcmut.thesis.backend.repositories.TaskRepo;
 import hcmut.thesis.backend.services.ITaskDAO;
 import hcmut.thesis.backend.services.IUserDAO;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,15 +36,6 @@ public class TaskDAO implements ITaskDAO {
     @Autowired
     StudentTaskRepo stdTaskRepo;
     
-    @Autowired
-    StudentTopicSemRepo stdTopicSemRepo;
-    
-    @Autowired
-    IUserDAO iuserDAO;
-    
-    @Autowired
-    StudentRepo stdRepo;
-    
     @Override
     public void createStudentTask(int taskID, List<Integer> studentIdList){
         List<StudentTask> studentTaskList = new LinkedList<>();
@@ -51,31 +44,16 @@ public class TaskDAO implements ITaskDAO {
     }
     
     @Override
-    public Task createTask(TaskInfo taskInfo, int topicid){
+    public Task createTask(TaskInfo taskInfo, int topicId){
         Task newTask = new Task();
         newTask.setTitle(taskInfo.getTitle());
         newTask.setDescription(taskInfo.getDescription());
         newTask.setDeadline(taskInfo.getDeadline());
-        newTask.setIdTopicSem(topicid);
+        newTask.setIdTopicSem(topicId);
+        newTask.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         Task task =  taskRepo.save(newTask);
         createStudentTask(task.getIdTask(), taskInfo.getStudentIdList());
-        taskInfo.setTaskID(task.getIdTask());
         return task;
     }
-    
-    @Override
-    public List<StudentDoTask> getStudentDoTask (int topicID){
-        List<StudentDoTask> listStd = new ArrayList<>();
-        List<StudentTopicSem> stdTopicSem = stdTopicSemRepo.findAll();
-        
-//        for(int i = 0; i< stdTopicSem.size(); i++){
-//            if(stdTopicSem.get(i).getIdTopicSem() == topicID){
-//                StudentDoTask temp = new StudentDoTask();
-//                System.out.println("userID: "+ stdTopicSem.get(i).getIdStudent() );
-//                temp.setStdName(iuserDAO.findUserByUserId(stdTopicSem.get(i).getIdStudent()).getUserName());
-//                listStd.add(temp);
-//            }
-//        }
-        return listStd;
-    }
+
 }

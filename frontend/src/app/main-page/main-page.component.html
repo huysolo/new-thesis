@@ -1,68 +1,13 @@
-<div class="row">
-  <div class="col">
-    <mat-card>
-      <div class="widget-content">
-        <div class="pull-left widget-icon bg-success text-white">
-          <i class="fas fa-calendar-alt" style="font-size: 30px;">
-          </i>
-        </div>
-
-        <div class="title">
-          123
-        </div>
-        <div class="comment">
-          Meeting
-        </div>
-      </div>
-    </mat-card>
-  </div>
-  <div class="col">
-    <mat-card>
-      <div class="widget-content">
-        <div class="pull-left widget-icon bg-danger text-white">
-          <i class="fas fa-tasks" style="font-size: 30px;">
-          </i>
-        </div>
-
-        <div class="title">
-          {{countTask | async}}
-        </div>
-        <div class="comment">
-          Task
-        </div>
-      </div>
-    </mat-card>
-  </div>
-  <div class="col">
-    <mat-card>
-      <div class="widget-content">
-        <div class="pull-left widget-icon bg-primary text-white">
-          <i class="fas fa-briefcase" style="font-size: 30px;">
-          </i>
-        </div>
-
-        <div class="title">
-          {{countTopic | async}}
-        </div>
-        <div class="comment">
-          Topic
-        </div>
-      </div>
-    </mat-card>
-  </div>
-</div>
-<br>
-<br>
 
 <div class="row">
   <div class="col-md-6">
     <div class="example-container mat-elevation-z8">
       <div class="example-header">
         <div class="row">
-          <h5 class="col-md-6">
-              <span><mat-icon>build</mat-icon></span>
-            Task
-          </h5>
+          <h5 class="col-md-6 title-header">
+            <span><mat-icon>build</mat-icon></span>
+            Task           
+          </h5 >
           <mat-form-field class="col-md-6">
             <input matInput placeholder="Filter">
           </mat-form-field>
@@ -100,7 +45,7 @@
     <div class="example-container mat-elevation-z8 ">
       <div class="example-header">
         <div class="row">
-          <h5 class="col-md-6">
+          <h5 class="col-md-6 title-header">
               <span><mat-icon>people</mat-icon></span>
             Meeting
           </h5>
@@ -132,7 +77,11 @@
         <ng-container matColumnDef="bookedSchedule" class="col-md-1">
           <mat-header-cell *matHeaderCellDef class="mat-column-meeting-schedule text-center"> Time-Location </mat-header-cell>
           <mat-cell *matCellDef="let meeting" class="text-center mat-column-meeting-schedule">
-            <div *ngIf="meeting.bookedSchedule != null">{{meeting.bookedSchedule.meetingTime | date}} - {{meeting.bookedSchedule.location}}</div>
+            <div *ngIf="meeting.bookedSchedule != null">
+                {{meeting.bookedSchedule.meetingTime | date}}
+                <br>
+                {{meeting.bookedSchedule.location}}
+            </div>
           </mat-cell>
         </ng-container>
 
@@ -178,6 +127,7 @@
             </button>
           </mat-cell>
         </ng-container>
+
 
         <mat-header-row *matHeaderRowDef="displayedColumnsTopic"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumnsTopic;"></mat-row>

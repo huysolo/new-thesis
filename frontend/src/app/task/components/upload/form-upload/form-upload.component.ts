@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpResponse, HttpEventType } from '@angular/common/http';
 import { UploadFileService } from '../../../upload-file.service';
-import { TaskInfo } from '../../task-info';
 
 @Component({
   selector: 'app-form-upload',

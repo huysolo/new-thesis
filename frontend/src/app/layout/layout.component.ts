@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TopicService } from '../topic/topic.service';
 import {TaskService} from '../task/task.service';
 import { SemesterService } from '../core/semester.service';
+import { ProfService } from '../core/prof.service';
 
 @Component({
   selector: 'app-layout',
@@ -17,9 +18,11 @@ export class LayoutComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private topicSv: TopicService,
-    private semSv: SemesterService
+    private semSv: SemesterService,
+    private profSv: ProfService
   ) {
       semSv.init();
+      profSv.init();
   }
 
   ngOnInit() {

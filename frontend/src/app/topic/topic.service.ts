@@ -6,6 +6,7 @@ import { Topic } from '../models/Topic';
 import { TopicDetail } from '../models/TopicDetail';
 import { AuthService } from '../core/auth.service';
 import { StudentDoTask } from '../task/components/student-do-task';
+import { Review } from '../models/Review';
 
 @Injectable()
 export class TopicService {
@@ -32,7 +33,9 @@ export class TopicService {
   private topicListReviewUrl = this.topicUrl +  'listReview';
   private topicStudentUrl = this.topicUrl + 'student';
   private topicCountUrl = this.topicUrl + 'topicCount';
-
+  private appliedListUrl = this.topicUrl + 'appliedList';
+  private listProfTopicUrl = this.topicUrl + 'listProfTopic';
+  private reviewsUrl = this.topicUrl + 'reviews';
   /**
    * reject
    */
@@ -79,6 +82,13 @@ export class TopicService {
     } else {
       return this.getListReview(params);
     }
+  }
+
+  /**
+   * getListTopic
+   */
+  public getAppliedList() {
+    return this.http.get<Topic[]>(this.appliedListUrl);
   }
 
   public createTopic(topicDetail: TopicDetail) {
@@ -142,6 +152,22 @@ export class TopicService {
 
   countTopic() {
     return this.http.get<Number>(this.topicCountUrl);
+  }
+
+  getTopicById(id) {
+    return this.http.get<Topic>(this.topicUrl + '?id=' + id);
+  }
+
+  getListTopicForProf(semNo = null) {
+    let param = new HttpParams();
+    if (semNo != null) {
+      param = param.append('semNo', semNo);
+    }
+    return this.http.get<Topic[]>(this.listProfTopicUrl, {params: param});
+  }
+
+  getReviewsByIdTopic(id) {
+    return this.http.get<Review[]>(this.reviewsUrl + '?id=' + id);
   }
 
 }

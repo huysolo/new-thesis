@@ -17,6 +17,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 import { StandardService } from '../standard.service';
 import { SemesterService } from './semester.service';
+import { ProfService } from './prof.service';
 
 
 
@@ -37,6 +38,7 @@ import { SemesterService } from './semester.service';
     CommonService,
     AuthGuardUserService,
     TaskService,
+    ProfService,
     SemesterService,
     StandardService,
     AuthTopicGuardService,

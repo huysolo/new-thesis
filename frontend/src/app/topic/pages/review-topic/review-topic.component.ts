@@ -49,16 +49,12 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
       this.topicSv.getListTopicReview(null, 0, this.typ === 'guide').subscribe(lst => {
         this.dataSourceRe = new MatTableDataSource(lst);
         this.dataSourceRe.paginator = this.paginatorRe;
-        this.dataSourceRe.sort = this.sortRe;
       });
       this.topicSv.getListTopicReview(null, 1, this.typ === 'guide').subscribe(lst => {
         this.dataSource = new MatTableDataSource(lst);
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
       });
       this.listSem = this.comSv.getAllSemNo();
-
-
     });
   }
 
@@ -93,11 +89,10 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
       this.topicSv.getListTopicReview(null, 0, this.typ === 'guide').subscribe(lst => {
         this.dataSourceRe = new MatTableDataSource(lst);
         this.dataSourceRe.paginator = this.paginatorRe;
-        this.dataSourceRe.sort = this.sortRe;
         this.standardListReview = null;
 
+        this.onChangeSemester(this.selectedSem);
       });
-      this.onChangeSemester(this.selectedSem);
     });
   }
 

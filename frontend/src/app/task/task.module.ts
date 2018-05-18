@@ -23,6 +23,7 @@ import {MatInputModule,
   MatButtonModule, MatButtonToggleModule, MatCheckboxModule,
   MatDatepickerModule, MatListModule, MatSelectModule, MatCardModule} from '@angular/material';
 import { TaskDetailPageComponent } from './pages/task-detail-page/task-detail-page.component';
+import { TaskListService } from './task-list.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -56,7 +57,7 @@ import { TaskDetailPageComponent } from './pages/task-detail-page/task-detail-pa
     StudentTaskPipe,
     TaskDetailPageComponent
   ],
-  providers: [TaskService, UploadFileService],
+  providers: [TaskService, UploadFileService, TaskListService],
   entryComponents: [TaskContentComponent, TaskCreateComponent]
 })
 export class TaskModule { }

@@ -30,6 +30,8 @@
         <mapping class="hcmut.thesis.backend.models.Review"/>
         <mapping class="hcmut.thesis.backend.models.MeetingSchelule"/>
         <mapping class="hcmut.thesis.backend.models.GeneralStandard"/>
+        <mapping class="hcmut.thesis.backend.models.Council"/>
+        <mapping class="hcmut.thesis.backend.models.CouncilUser"/>
         <!-- <property name="connection.username"/> -->
         <!-- <property name="connection.password"/> -->
 

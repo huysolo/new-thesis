@@ -1,0 +1,36 @@
+<div class="mat-elevation-z1">
+    <div class="white-box">
+        <div class="box-title">
+           Score
+        </div>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Weight</th>
+              <th scope="col">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tp of topicRvStandardDetail; let i = index">
+              <th scope="row">{{i}}</th>
+              <td>{{tp.content}}</td>
+              <td>{{tp.coefficient}}</td>
+              <td>
+                {{tp.score}}
+              </td>
+            </tr>
+            <tr style="font-weight: bolder">
+                <td colspan="3" class="text-center">
+                  Final Score
+                </td>
+                <td>
+                  {{finalScored()}}
+                </td>
+              </tr>
+          </tbody>
+        </table>
+        <button type="button" name="cancelRv" id="cancelRv" class="btn btn-secondary btn-lg btn-block" (click)="close.emit(true)">Cancel</button>
+      </div>
+</div>

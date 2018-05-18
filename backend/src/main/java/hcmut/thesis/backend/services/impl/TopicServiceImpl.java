@@ -7,7 +7,9 @@ import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.ITopicDAO;
 import hcmut.thesis.backend.services.TaskService;
 import hcmut.thesis.backend.services.TopicService;
+import hcmut.thesis.backend.specifications.TopicSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -54,20 +56,15 @@ public class TopicServiceImpl implements TopicService {
     TopicSemStandardRepo  topicSemStandardRepo;
 
     @Override
-    public List<Topic> getListTopicBySemester(Integer idFal, Integer semesterNo, Integer profId, Boolean aval, Integer specialize) {
+    public List<Topic> getListTopicBySemester( Integer semesterNo, Integer profId, Boolean aval, Integer specialize) {
         aval = aval == null ? true : aval;
-        return topicDAO.getFilteredTopicList(idFal, profId, specialize, semesterNo);
+        return topicDAO.getFilteredTopicList(userSession.getCurrentUserFaculty(), profId, specialize, semesterNo);
     }
 
     @Override
     public List<Topic> getListRecentTopicBySemester(Integer profId, Boolean aval, Integer specialize) {
         Integer semNo = commonService.getCurrentApplySem();
-
-        Integer idFal = null;
-        if (userSession.isUser()) {
-            idFal = userSession.getCurrentUserFaculty();
-        }
-        return getListTopicBySemester(idFal, semNo, profId, aval, specialize);
+        return getListTopicBySemester(semNo, profId, aval, specialize);
 
     }
 
@@ -211,15 +208,6 @@ public class TopicServiceImpl implements TopicService {
         if (semNo == null) {
             semNo = commonService.getSemOpen().getSemesterNo();
         }
-//        if (semNo == null) {
-//
-//            if (isSubmitted == null) {
-//                return topicDAO.getListReviewTopicByProfId(profId, semester.getSemesterNo(), isGuide);
-//            } else {
-//                return topicDAO.getListReviewTopicByProfId(profId, isSubmitted, isGuide);
-//            }
-//
-//        }
         return topicDAO.getListReviewTopicByProfIdAndSemesterNo(profId, semNo, isGuide, isSubmitted);
     }
 
@@ -270,7 +258,7 @@ public class TopicServiceImpl implements TopicService {
     public Review reviewTopic(ReviewTopic reviewTopic, Integer profId) {
         Optional<Review> review = reviewRepo.findReviewByIdProfAndIdTopic(profId, reviewTopic.getTopicId());
         List<TopicSemStandard> topicSemStandards = new LinkedList<>();
-        float numerator = 0;
+        double numerator = 0;
         float denominator = 0;
         if (review.isPresent() && review.get().getSubmitted() == 0){
             Optional<Topic> topic = topicRepo.findById(review.get().getIdTopic());
@@ -351,11 +339,6 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Topic getTopicById(int idTopic) {
-        return topicRepo.findById(idTopic).orElseThrow(() -> new NullPointerException("Topic Not Found"));
-    }
-
-    @Override
     public StudentTopicSem getStudentTopicSem(Integer idTopic, Integer idStudent) {
         return studentTopicSemRepo.getStdTopicSemFromTopicID(idTopic, idStudent).orElseThrow(() -> new NullPointerException("Student Not Belong To Topic"));
     }
@@ -406,5 +389,35 @@ public class TopicServiceImpl implements TopicService {
     public Integer countTopicByProfId() {
         return topicRepo.countTopicByIdProf(userSession.getProf().getIdProfessor());
     }
+
+    @Override
+    public List<Topic> getAllTopicAppliedByStudent() {
+        List<Topic> topicList = new LinkedList<>();
+        studentTopicSemRepo.getAllByIdStudent(userSession.getStudent().getIdStudent()).forEach(studentTopicSem -> {
+            try {
+                topicList.add(getTopicById(studentTopicSem.getIdTopicSem()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return topicList;
+    }
+
+    @Override
+    public List<Topic> getListTopicForProf(Integer semesterNo) {
+        Specification<Topic> topicSpecification = TopicSpecification.isProf(userSession.getProf().getIdProfessor());
+        if (semesterNo != null) {
+            topicSpecification = topicSpecification.and(TopicSpecification.hasSem(semesterNo));
+        } else {
+            topicSpecification = topicSpecification.and(TopicSpecification.isNotDraft());
+        }
+        return topicRepo.findAll(topicSpecification);
+    }
+
+    @Override
+    public List<Review> getListReviewByIdTopic(int idTopic) {
+        return reviewRepo.findReviewByIdTopic(idTopic);
+    }
+
 
 }

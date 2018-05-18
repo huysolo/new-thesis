@@ -7,7 +7,7 @@ import hcmut.thesis.backend.modelview.TopicDetail;
 
 import java.util.List;
 public interface TopicService {
-    List<Topic> getListTopicBySemester(Integer idFal, Integer semesterNo, Integer profId, Boolean available, Integer specialize);
+    List<Topic> getListTopicBySemester(Integer semesterNo, Integer profId, Boolean available, Integer specialize);
     List<Topic> getListRecentTopicBySemester(Integer profId, Boolean available, Integer specialize);
     List<Topic> getListOpenTopic();
     TopicDetail getTopicDetailById(Integer topId);
@@ -33,12 +33,14 @@ public interface TopicService {
     List<Standard> getGeneralStandardOfCurrentSemester(Integer semesterNo);
     List<Standard> getStandardListByGeneralAndUserId(Integer userId);
     boolean isTeamLeader(Integer idTopic, Integer idStudent);
-    Topic getTopicById(int idTopic);
     StudentTopicSem getStudentTopicSem(Integer idTopic, Integer idStudent);
     List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID);
     Topic getTopicOfCurrentSem();
     Topic getTopicById(Integer idTopic);
     Integer countTopicByProfId();
+    List<Topic> getAllTopicAppliedByStudent();
+    List<Topic> getListTopicForProf(Integer semesterNo);
+    List<Review> getListReviewByIdTopic(int idTopic);
 
 
 }

@@ -19,6 +19,7 @@ import {MeetingService} from '../meeting/meeting.service';
 export class MainPageComponent implements OnInit {
   displayedColumnsTopic = ['title', 'studentCount', 'action'];
   displayedColumnsUser = ['stdName', 'teamlead'];
+
   listRecentTask: Observable<Task[]>;
   listRecentTopic: Observable<Topic[]>;
   listStudentTopic: Observable<StudentDoTask[]>;

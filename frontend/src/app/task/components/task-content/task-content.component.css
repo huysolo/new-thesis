@@ -59,6 +59,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
   width: 7px;
 }
 
-
+.float{
+	position:fixed;
+	bottom:58px;
+  right: 17px;
+  z-index: 99;
+}
 
 

@@ -27,9 +27,9 @@ export class TaskService {
     return this.httpClient.get<any>(loginUrl + '?topicID=' + topicID);
   }
 
-  getPage(topicID: number, pageNumber: number) {
+  getPage(topicID: number, pageNumber: Number, title) {
     const loginUrl = `http://localhost:8080/getlisttask`;
-    return this.httpClient.get<any>(loginUrl + '?topicID=' + topicID + '&page=' + pageNumber + '');
+    return this.httpClient.get<any>(loginUrl + '?topicID=' + topicID + '&page=' + pageNumber + '&title=' + title);
   }
 
   getAllStudentDoTopic() {
@@ -52,7 +52,7 @@ export class TaskService {
     return this.httpClient.get<any>(loginUrl);
   }
 
-  getSemCount(){
+  getSemCount() {
     const Url = `http://localhost:8080/semcount`;
     return this.httpClient.get<any>(Url);
   }
@@ -62,7 +62,7 @@ export class TaskService {
     return this.httpClient.get<any>(loginUrl + '?semid=' + semid);
   }
 
-  getTopicFromStd(){
+  getTopicFromStd() {
     const loginUrl = `http://localhost:8080/stdgetlisttopic`;
     return this.httpClient.get<any>(loginUrl);
   }
