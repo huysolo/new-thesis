@@ -136,6 +136,21 @@ public class MeetingServiceImpl implements MeetingService {
         return list;
     }
 
+    @Override
+    public MeetingInfo getMeetingFromMeetingID(int meetingID) {
+        Meeting meeting = meetingRepo.getMeetingFromMeetingID(meetingID);
+        MeetingInfo temp = new MeetingInfo();
+        temp.setTopicID(meeting.getIdTopicSem());
+        temp.setMeetingID(meeting.getIdMeeting());
+        temp.setStatus(meeting.getStatus());
+        temp.setTitle(meeting.getTitle());
+        temp.setContent(meeting.getContent());
+        temp.setReason(meeting.getReason());
+        temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
+        temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
+        return temp;
+    }
+
     List<MeetingTimeLocation> mappingFromScheduleToTimeLocation(int meetingid) {
         List<MeetingTimeLocation> listTimeLocation = new ArrayList<>();
         List<MeetingSchelule> listSchedule = meetingScheduleRepo.getListMeetingScheduleFromMeetingID(meetingid);
@@ -396,18 +411,18 @@ public class MeetingServiceImpl implements MeetingService {
         }
         return listStudent;
     }
-    
+
     @Override
-    public JoinPerMeeting getJPMFromMeetingIDStdID(int stdID, int meetingID){
-        try{
+    public JoinPerMeeting getJPMFromMeetingIDStdID(int stdID, int meetingID) {
+        try {
             return joinMeetingRepo.getJPMFromMeetingIDStdID(meetingID, stdID);
-        } catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
-    
+
     @Override
-    public JoinPerMeeting editMeetingDiary(JoinPerMeeting jpm){
+    public JoinPerMeeting editMeetingDiary(JoinPerMeeting jpm) {
         joinMeetingRepo.save(jpm);
         return jpm;
     }

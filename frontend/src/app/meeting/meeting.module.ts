@@ -25,6 +25,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MeetingDetailPageComponent } from './component/meeting-detail-page/meeting-detail-page.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MeetingDetailComponent,
     MeetingContentComponent,
     MeetingListComponent,
-    FilterPipe
+    FilterPipe,
+    MeetingDetailPageComponent
   ],
   providers: [MeetingService]
 })

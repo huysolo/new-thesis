@@ -6,6 +6,7 @@ import { MeetingCreateComponent } from './component/meeting-create/meeting-creat
 import { MeetingDetailComponent } from './component/meeting-detail/meeting-detail.component';
 import { MeetingContentComponent } from './component/meeting-content/meeting-content.component';
 import { MeetingListComponent } from './component/meeting-list/meeting-list.component';
+import { MeetingDetailPageComponent } from './component/meeting-detail-page/meeting-detail-page.component';
 
 const meetingRoutes: Routes = [
   {
@@ -32,6 +33,10 @@ const meetingRoutes: Routes = [
         component: MeetingContentComponent
       }
     ]
+  }, {
+    path: 'meeting-detail/:id',
+    component: MeetingDetailPageComponent,
+    pathMatch: 'full'
   }
 ];
 

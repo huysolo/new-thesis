@@ -9,6 +9,7 @@ import { MaterialModule } from './material.module';
 import { CommonService } from './common.service';
 import { AuthGuardUserService } from './auth-guard-user.service';
 import {TaskService} from '../task/task.service';
+import {MeetingService} from '../meeting/meeting.service';
 
 import { AuthTopicGuardService } from '../topic/auth-topic-guard.service';
 
@@ -38,7 +39,8 @@ import { SemesterService } from './semester.service';
     TaskService,
     SemesterService,
     StandardService,
-    AuthTopicGuardService
+    AuthTopicGuardService,
+    MeetingService
   ],
   exports: [
     MaterialModule

@@ -53,91 +53,159 @@
 </div>
 <br>
 <br>
+
 <div class="row">
-  <div class="col-md-8 col-sm-12">
-    <mat-card class="recent-task-list">
-      <h3 class="box-title">
-        <strong class="w3-text-blue">RECENT TASKS </strong>
-      </h3>
-      <div class="task-center" *ngFor="let task of listRecentTask | async">
-        <div class="task-comment">
-          <h5>{{task.title}}</h5>
-          <span class="time">{{task.updateTime | date : 'fullDate'}}</span>
-          <div class="task-content">{{task.description}}</div>
+  <div class="col-md-6">
+    <div class="example-container mat-elevation-z8">
+      <div class="example-header">
+        <div class="row">
+          <h5 class="col-md-6">
+              <span><mat-icon>build</mat-icon></span>
+            Task
+          </h5>
+          <mat-form-field class="col-md-6">
+            <input matInput placeholder="Filter">
+          </mat-form-field>
         </div>
-        <div class="text-right">
-          <button class="btn btn-default btn-small" (click)="navigateToTaskDetail(task.idTask)">Detail</button>
-        </div>
-        <mat-divider></mat-divider>
       </div>
-    </mat-card>
+      <mat-table #table [dataSource]="listRecentTask | async">
+        <ng-container matColumnDef="title" class="col-md-7">
+          <mat-header-cell *matHeaderCellDef class="mat-column-task-title text-center"> Task Title </mat-header-cell>
+          <mat-cell *matCellDef="let task" (click)="navigateToTaskDetail(task.idTask)" matTooltip="Detail" class="mat-column-task-title mat-column-task-title-hover">
+            {{task.title}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pass" class="col-md-1">
+          <mat-header-cell *matHeaderCellDef class="text-center mat-column-task-review"></mat-header-cell>
+          <mat-cell *matCellDef="let task" class="text-center mat-column-task-review">
+            <span>
+              <mat-icon *ngIf="task.pass == 0">replay</mat-icon>
+              <mat-icon *ngIf="task.pass == 1" style="color:#f55549">event_busy</mat-icon>
+              <mat-icon *ngIf="task.pass == 2" style="color:#49f5a5">event_available</mat-icon>
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="deadline" class="col-md-1">
+          <mat-header-cell *matHeaderCellDef class="mat-column-task-deadline text-center"> Deadline </mat-header-cell>
+          <mat-cell *matCellDef="let task" class="mat-column-task-deadline text-center"> {{task.deadline | date}} </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumnTask"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnTask;"></mat-row>
+      </mat-table>
+    </div>
   </div>
-  <div class="col-md-4 col-sm-12">
-    <mat-card>
-      <h3 class="box-title">
-        <strong class="w3-text-green">MEETINGS </strong>
-      </h3>
-    </mat-card>
+
+  <div class="col-md-6">
+    <div class="example-container mat-elevation-z8 ">
+      <div class="example-header">
+        <div class="row">
+          <h5 class="col-md-6">
+              <span><mat-icon>people</mat-icon></span>
+            Meeting
+          </h5>
+          <mat-form-field class="col-md-6">
+            <input matInput placeholder="Filter">
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-table #table [dataSource]="listRecentMeeting">
+
+        <ng-container matColumnDef="title" class="col-md-7">
+          <mat-header-cell *matHeaderCellDef class="mat-column-meeting-title text-center"> Meeting Title </mat-header-cell>
+          <mat-cell *matCellDef="let meeting" (click)="navigateToMeetingDetail(meeting.meetingID)" class="mat-column-meeting-title">
+            {{meeting.title}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="status" class="col-md-1">
+          <mat-header-cell *matHeaderCellDef class="mat-column-meeting-status text-center"></mat-header-cell>
+          <mat-cell *matCellDef="let meeting" class="mat-column-meeting-status text-center">
+            <span>
+              <mat-icon *ngIf="meeting.status == 0">replay</mat-icon>
+              <mat-icon *ngIf="meeting.status == 1" style="color:#49f5a5">event_available</mat-icon>
+              <mat-icon *ngIf="meeting.status == 2" style="color:#f55549">event_busy</mat-icon>
+
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="bookedSchedule" class="col-md-1">
+          <mat-header-cell *matHeaderCellDef class="mat-column-meeting-schedule text-center"> Time-Location </mat-header-cell>
+          <mat-cell *matCellDef="let meeting" class="text-center mat-column-meeting-schedule">
+            <div *ngIf="meeting.bookedSchedule != null">{{meeting.bookedSchedule.meetingTime | date}} - {{meeting.bookedSchedule.location}}</div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumnMeeting"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnMeeting;"></mat-row>
+      </mat-table>
+    </div>
   </div>
 </div>
 <br>
 <br>
-<mat-card>
 
-  <div class="row">
-
-    <div class="col-md-7 col-sm-12">
-      <mat-toolbar class="w3-text-green">RECENT TOPIC</mat-toolbar>
-      <div class="container-table">
-        <mat-table #table [dataSource]="listRecentTopic | async">
-          <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-            <mat-cell *matCellDef="let topic"> {{topic.idTop}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="title">
-            <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-            <mat-cell *matCellDef="let topic"> {{topic.title}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="publishDate">
-            <mat-header-cell *matHeaderCellDef> Publish Date </mat-header-cell>
-            <mat-cell *matCellDef="let topic"> {{topic.publishDate | date : 'fullDate'}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="studentCount">
-            <mat-header-cell *matHeaderCellDef> Student </mat-header-cell>
-            <mat-cell *matCellDef="let topic"> {{topic.studentCount}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="action">
-            <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
-            <mat-cell *matCellDef="let topic">
-              <button class="btn btn-success" (click)="getStudentTopic(topic)">Detail</button>
-            </mat-cell>
-          </ng-container>
-
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-      </div>
-    </div>
-    <div class="col-md-5 col-sm-12">
-      <mat-toolbar>USER LIST OF TOPIC </mat-toolbar>
-      <div class="container-table">
-        <mat-table #table [dataSource]="listStudentTopic | async">
-          <ng-container matColumnDef="studentId">
-            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-            <mat-cell *matCellDef="let student"> {{student.studentId}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="stdName">
-            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-            <mat-cell *matCellDef="let student"> {{student.stdName}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="teamlead">
-            <mat-header-cell *matHeaderCellDef> Team Leader </mat-header-cell>
-            <mat-cell *matCellDef="let student"> {{student.teamlead}} </mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="displayedColumnsUser"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumnsUser;"></mat-row>
-        </mat-table>
-      </div>
+<div class="row">
+  <div class="example-header">
+    <div class="row">
+      <h5 class="col-md-6">
+        <i class="fa fa-pencil-square-o"></i>
+        Topic Manager
+      </h5>
+      <mat-form-field class="col-md-6 disable">
+        <input matInput placeholder="Filter">
+      </mat-form-field>
     </div>
   </div>
-</mat-card>
+  <div class="col-md-8 col-sm-12 ">
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="listRecentTopic | async">
+        <ng-container matColumnDef="title">
+          <mat-header-cell *matHeaderCellDef class="mat-column-topic-title text-center"> Title </mat-header-cell>
+          <mat-cell *matCellDef="let topic" class="mat-column-topic-title"> {{topic.title}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="studentCount">
+          <mat-header-cell *matHeaderCellDef class="mat-column-topic-stdnumber text-center"> Student </mat-header-cell>
+          <mat-cell *matCellDef="let topic" class="mat-column-topic-stdnumber text-center"> {{topic.studentCount}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <mat-header-cell *matHeaderCellDef class="mat-column-topic-action text-center"></mat-header-cell>
+          <mat-cell *matCellDef="let topic" class="mat-column-topic-action text-center">
+            <button class="btn btn-primary" (click)="getStudentTopic(topic)">
+              <span>
+                <mat-icon>fast_forward</mat-icon>
+              </span>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumnsTopic"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsTopic;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+
+  <div class="col-md-4 col-sm-12">
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="listStudentTopic | async">
+        <ng-container matColumnDef="stdName">
+          <mat-header-cell *matHeaderCellDef class="mat-column-std-name text-center">Student Name </mat-header-cell>
+          <mat-cell *matCellDef="let student" class="mat-column-std-name text-center"> {{student.stdName}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="teamlead">
+          <mat-header-cell *matHeaderCellDef class="mat-column-std-isTeamlead text-center"> Team Leader </mat-header-cell>
+          <mat-cell *matCellDef="let student" class="mat-column-std-isTeamlead text-center">
+            <span>
+              <mat-icon *ngIf="student.teamlead" style="color:#49f5a5">check</mat-icon>
+              <mat-icon *ngIf="!student.teamlead" style="color:#f55549">close</mat-icon>
+            </span>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumnsUser"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsUser;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+</div>
+<br>
+<br>

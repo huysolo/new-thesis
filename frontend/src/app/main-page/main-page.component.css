@@ -68,3 +68,64 @@
 
 }
 
+
+.mat-column-task-title{
+    flex: 0 0 60%;
+}
+.mat-column-meeting-title{
+    flex: 0 0 55%;
+}
+.mat-column-task-title-hover :hover{
+    font-weight: bold;
+}
+.mat-column-task-deadline{
+    flex: 0 0 30%;
+}
+.mat-column-meeting-schedule{
+    flex: 0 0 35%;
+}
+.mat-column-task-review{
+    flex: 0 0 10%;
+}
+.mat-column-meeting-status {
+    flex: 0 0 10%;
+}
+
+
+.mat-cell{
+    font-size: 85%;
+}
+.mat-row, .mat-header-row{
+    padding-left: 15px;
+    padding-right: 5px;
+}
+.example-header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  .example-container{
+      padding-left: 0px;
+  }
+
+  .mat-column-topic-title{
+    flex: 0 0 70%;
+  }
+  .mat-column-topic-stdnumber{
+    flex: 0 0 15%;
+  }
+  .mat-column-topic-action{
+    flex: 0 0 15%;
+  }
+  .mat-column-std-name{
+      flex: 0 0 75%;
+  }
+  .mat-column-std-isTeamlead{
+    flex: 0 0 25%;
+}
+
+

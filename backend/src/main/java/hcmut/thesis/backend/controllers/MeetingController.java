@@ -98,6 +98,16 @@ public class MeetingController {
         }
         return null;
     }
+    
+    @RequestMapping(value = "/getmeetingfrommeetingid", method = RequestMethod.GET)
+    @ResponseBody
+    public MeetingInfo getMeetingFromMeetingID(@RequestParam("meetingid") Integer meetingID) {
+        try {
+            return meetingService.getMeetingFromMeetingID(meetingID);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @RequestMapping(value = "/getlistrecentmeetingfromtopicid", method = RequestMethod.GET)
     @ResponseBody

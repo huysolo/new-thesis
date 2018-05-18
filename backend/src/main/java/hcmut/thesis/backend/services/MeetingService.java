@@ -28,5 +28,5 @@ public interface MeetingService {
     List<MeetingInfo> stdGetListHistoryMeeting(int topicID);
     JoinPerMeeting getJPMFromMeetingIDStdID(int stdID, int meetingID);
     JoinPerMeeting editMeetingDiary(JoinPerMeeting jpm);
-    
+    MeetingInfo getMeetingFromMeetingID(int meetingID);
 }
