@@ -33,8 +33,11 @@ export class StandardService {
     return this.http.delete<Number>(this.standardListUrl, {params: params});
   }
 
-  getReview(topicId: Number) {
-    const params = new HttpParams().append('id', topicId.toString());
+  getReview(topicId: Number, profId = null) {
+    let params = new HttpParams().append('id', topicId.toString());
+    if (profId != null) {
+      params = params.append('profId', profId);
+    }
     return this.http.get<TopicSemStandard[]>(this.reviewUrl, {params: params});
   }
 

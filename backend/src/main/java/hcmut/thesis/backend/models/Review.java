@@ -10,9 +10,14 @@ import java.util.Objects;
 public class Review {
     private int idProf;
     private int idTopic;
-    private Float score;
+    private Double score;
     private int submitted;
     private int idReview;
+    private Integer idCouncil;
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
 
     @Basic
     @Column(name = "id_prof")
@@ -36,12 +41,8 @@ public class Review {
 
     @Basic
     @Column(name = "score")
-    public Float getScore() {
+    public Double getScore() {
         return score;
-    }
-
-    public void setScore(Float score) {
-        this.score = score;
     }
 
     @Basic
@@ -80,5 +81,15 @@ public class Review {
     public int hashCode() {
 
         return Objects.hash(idProf, idTopic, score, submitted, idReview);
+    }
+
+    @Basic
+    @Column(name = "id_council")
+    public Integer getIdCouncil() {
+        return idCouncil;
+    }
+
+    public void setIdCouncil(Integer idCouncil) {
+        this.idCouncil = idCouncil;
     }
 }

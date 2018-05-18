@@ -1,0 +1,44 @@
+<br>
+<div class="row">
+  <div [ngClass]="topicRvStandardDetail == null ? 'col-md-12' : 'col-md-5'">
+    <div class="mat-elevation-z1" >
+      <div class="white-box">
+        <h3 class="box-title">
+          Professors Reviews Of Topic Id: {{1}}
+        </h3>
+        <mat-table #table [dataSource]="listReviewSrc | review : 'prof'">
+          <ng-container matColumnDef="idTopic">
+            <mat-header-cell *matHeaderCellDef> Id Topic </mat-header-cell>
+            <mat-cell *matCellDef="let review"> {{review.idTopic}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="idProf">
+            <mat-header-cell *matHeaderCellDef> Proffessor Name </mat-header-cell>
+            <mat-cell *matCellDef="let review"> {{review.idProf | prof}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="score">
+            <mat-header-cell *matHeaderCellDef> Student Number </mat-header-cell>
+            <mat-cell *matCellDef="let review"> {{review.submitted == 1 ? review.score : 'No Review'}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+            <mat-cell *matCellDef="let review">
+              <ng-container *ngIf="review.submitted == 1 ">
+                <button type="button" class="btn btn-secondary" (click)="detail(review.idProf )">Detail</button>
+              </ng-container>
+            </mat-cell>
+          </ng-container>
+  
+  
+          <mat-header-row *matHeaderRowDef="listColReviewFull "></mat-header-row>
+          <mat-row *matRowDef="let row; columns: listColReviewFull"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="topicRvStandardDetail" class="col-md-7">
+    <app-score-table [topicRvStandardDetail]="topicRvStandardDetail" (close)="topicRvStandardDetail = null"></app-score-table>
+  </div>
+</div>
+

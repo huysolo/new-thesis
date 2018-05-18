@@ -8,6 +8,8 @@ import { AuthTopicGuardService } from './auth-topic-guard.service';
 import { CreateTopicComponent } from './components/create-topic/create-topic.component';
 import { ReviewTopicComponent } from './pages/review-topic/review-topic.component';
 import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic-page.component';
+import { ResultTopicComponent } from './pages/result-topic/result-topic.component';
+import { DetailResultComponent } from './pages/detail-result/detail-result.component';
 
 const topicRoutes: Routes = [
   {
@@ -30,6 +32,13 @@ const topicRoutes: Routes = [
         component: ReviewTopicComponent
       }
     ]
+  }, {
+    path: 'result',
+    component: ResultTopicComponent,
+    children: [{
+      path: ':id',
+      component: DetailResultComponent
+    }]
   }
 ];
 @NgModule({

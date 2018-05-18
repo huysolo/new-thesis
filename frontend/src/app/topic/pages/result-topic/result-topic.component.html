@@ -1,3 +1,28 @@
-<div class="mat-elevation-z4">
-  
+<div class="mat-elevation-z1">
+    <div class="white-box">
+        <div class="box-title">
+           Topic List
+        </div>
+        <!-- <mat-toolbar>
+            <i class="material-icons">
+                table_chart
+            </i> 
+        </mat-toolbar> -->
+        <div class="filter-header">
+            <mat-form-field  *ngIf="authSv.isProfessor()">
+                <mat-select placeholder="Semester No" (valueChange)="changeSem($event)">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let sem of semSv.getListSemster()" [value]="sem.semesterNo">{{sem.semesterNo}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
+        <app-topic-table [dataSource]="listTopicSrc" [displayFull]="true" (emitTopic)="this.route.navigate(['/topic/result/', $event.idTop]);"> </app-topic-table>
+    
+        <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+        </mat-paginator>
+    </div>
 </div>
+<router-outlet></router-outlet>

@@ -4,4 +4,5 @@ export class Review {
     score: number;
     submitted: number;
     idReview: number;
+    idCouncil: Number;
 }

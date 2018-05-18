@@ -36,11 +36,7 @@ public class TopicController {
             @RequestParam(value = "spec", required = false) Integer specialize
 
     ){
-        if (userSession.isUser()) {
-            return topicService.getListTopicBySemester(userSession.getCurrentUserFaculty(), semno, profId, available, specialize);
-        } else {
-            return null;
-        }
+        return topicService.getListTopicBySemester(semno, profId, available, specialize);
     }
 
     @RequestMapping(value = "listDraft", method = RequestMethod.GET)
@@ -130,11 +126,12 @@ public class TopicController {
     }
 
     @GetMapping(value = "appliedTopic")
-    Topic getAppliedTopic(@RequestParam(value = "semno", required = false) Integer semno){
-        if(!userSession.isStudent()){
-            return null;
+    ResponseEntity<?> getAppliedTopic(@RequestParam(value = "semno", required = false) Integer semno){
+        try {
+            return ResponseEntity.ok(topicService.getAppliedTopic(semno,  userSession.getStudent().getIdStudent()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
-        return topicService.getAppliedTopic(semno,  userSession.getStudent().getIdStudent());
     }
     @PostMapping(value = "reject")
     @ResponseBody
@@ -206,11 +203,18 @@ public class TopicController {
     }
 
     @GetMapping("review")
-    List<TopicSemStandard> getReviewedTopicStandard(@RequestParam(value = "id") Integer topicId) {
-        if (userSession.isProf()) {
-            return topicService.getListReviewedTopicStandard(topicId, userSession.getProf().getIdProfessor());
+     ResponseEntity<?> getReviewedTopicStandard(
+            @RequestParam(value = "id") Integer topicId,
+            @RequestParam(value = "profId", required = false) Integer profId
+    ) {
+        try {
+            if (profId == null) {
+                profId = userSession.getProf().getIdProfessor();
+            }
+            return ResponseEntity.ok(topicService.getListReviewedTopicStandard(topicId, profId));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
-        return null;
 
     }
 
@@ -248,6 +252,33 @@ public class TopicController {
     public ResponseEntity<?> getTopicById(@RequestParam("id") Integer idTopic){
         try {
             return ResponseEntity.ok(topicService.getTopicById(idTopic));
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("appliedList")
+    public ResponseEntity<?> getAllTopicAppliedByStudent(){
+        try {
+            return ResponseEntity.ok(topicService.getAllTopicAppliedByStudent());
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("listProfTopic")
+    public ResponseEntity<?> getListTopicForProf(@RequestParam(value = "semNo", required = false) Integer semNo){
+        try {
+            return ResponseEntity.ok(topicService.getListTopicForProf(semNo));
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("reviews")
+    public ResponseEntity<?> getListReview(@RequestParam(value = "id") int id){
+        try {
+            return ResponseEntity.ok(topicService.getListReviewByIdTopic(id));
         } catch (NullPointerException e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }

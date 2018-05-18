@@ -15,6 +15,11 @@ import {MatTableModule} from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic-page.component';
 import { ResultTopicComponent } from './pages/result-topic/result-topic.component';
+import { ScoreTableComponent } from './components/score-table/score-table.component';
+import { TopicTableComponent } from './components/topic-table/topic-table.component';
+import { ProfPipe } from '../shared/prof.pipe';
+import { ReviewPipe } from './review.pipe';
+import { DetailResultComponent } from './pages/detail-result/detail-result.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,6 +40,11 @@ import { ResultTopicComponent } from './pages/result-topic/result-topic.componen
     ReviewTopicComponent,
     ReviewTopicPageComponent,
     ResultTopicComponent,
+    ScoreTableComponent,
+    TopicTableComponent,
+    ProfPipe,
+    ReviewPipe,
+    DetailResultComponent
   ],
   entryComponents: [
     TopidDetailComponent,
