@@ -14,6 +14,7 @@ import { ReviewTopicComponent } from './pages/review-topic/review-topic.componen
 import {MatTableModule} from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic-page.component';
+import { ResultTopicComponent } from './pages/result-topic/result-topic.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -33,6 +34,7 @@ import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic
     TopidDetailComponent,
     ReviewTopicComponent,
     ReviewTopicPageComponent,
+    ResultTopicComponent,
   ],
   entryComponents: [
     TopidDetailComponent,

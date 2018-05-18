@@ -237,7 +237,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> findAllByIdTopicSemAndApprove(Integer idTopic, Integer approve) {
-        return taskRepo.findAllByIdTopicSemAndApprove(idTopic, approve, 1);
+        return taskRepo.findAllByIdTopicSemAndApprove(idTopic, 1);
     }
 
     @Override

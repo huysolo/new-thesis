@@ -17,16 +17,8 @@ import { TaskListService } from '../../task-list.service';
 export class TaskListComponent implements OnInit {
   listTask: Array<Task>;
 
-  searchText: String = '';
-  public page: number;
-
-  disconnection: any;
   listTopic: Array<any>;
   listSem: Array<any>;
-
-  topicId: any;
-  isCreateTask: Boolean;
-  listAllStd: Array<StudentDoTask>;
 
   constructor(public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute,
     public dialog: MatDialog, private topicSv: TopicService,
@@ -36,8 +28,6 @@ export class TaskListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.page = 0;
-    this.listTask = null;
     if (this.authService.isProfessor()) {
       this.getSem();
     } else {
@@ -62,13 +52,6 @@ export class TaskListComponent implements OnInit {
     );
   }
 
-  isActive(i) {
-    if (i == this.page) {
-      return 'active';
-    } else {
-      return null;
-    }
-  }
 
   stdGetListTopic() {
     this.taskService.getTopicFromStd().subscribe(
@@ -78,31 +61,5 @@ export class TaskListComponent implements OnInit {
     );
   }
 
-  createTask() {
-    this.isCreateTask = true;
-  }
-
-  switchIsCreate(event: Boolean) {
-    this.isCreateTask = event;
-  }
-
-  addNewTask(event: any){
-    this.listTask.push(event);
-    this.isCreateTask = false;
-  }
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(TaskCreateComponent, {
-      width: '400px',
-      data: {students: this.listAllStd}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.idTask != null) {
-        result.taskID = result.idTask;
-        this.listTask.unshift(result);
-      }
-    });
-  }
 
 }

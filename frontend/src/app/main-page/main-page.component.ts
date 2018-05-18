@@ -15,7 +15,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./main-page.component.css']
 })
 export class MainPageComponent implements OnInit {
-  displayedColumns = ['id', 'title', 'publishDate', 'studentCount', 'action'];
+  displayedColumns = ['id', 'title', 'studentCount', 'action'];
   displayedColumnsUser = ['studentId', 'stdName', 'teamlead'];
   listRecentTask: Observable<Task[]>;
   listRecentTopic: Observable<Topic[]>;

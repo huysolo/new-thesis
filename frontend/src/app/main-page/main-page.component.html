@@ -98,10 +98,6 @@
             <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
             <mat-cell *matCellDef="let topic"> {{topic.title}} </mat-cell>
           </ng-container>
-          <ng-container matColumnDef="publishDate">
-            <mat-header-cell *matHeaderCellDef> Publish Date </mat-header-cell>
-            <mat-cell *matCellDef="let topic"> {{topic.publishDate | date : 'fullDate'}} </mat-cell>
-          </ng-container>
           <ng-container matColumnDef="studentCount">
             <mat-header-cell *matHeaderCellDef> Student </mat-header-cell>
             <mat-cell *matCellDef="let topic"> {{topic.studentCount}} </mat-cell>
@@ -119,7 +115,7 @@
       </div>
     </div>
     <div class="col-md-5 col-sm-12">
-      <mat-toolbar>USER LIST OF TOPIC </mat-toolbar>
+      <mat-toolbar>Student joined topic </mat-toolbar>
       <div class="container-table">
         <mat-table #table [dataSource]="listStudentTopic | async">
           <ng-container matColumnDef="studentId">

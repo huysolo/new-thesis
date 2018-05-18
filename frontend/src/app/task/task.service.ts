@@ -62,7 +62,7 @@ export class TaskService {
     return this.httpClient.get<any>(loginUrl + '?semid=' + semid);
   }
 
-  getTopicFromStd(){
+  getTopicFromStd() {
     const loginUrl = `http://localhost:8080/stdgetlisttopic`;
     return this.httpClient.get<any>(loginUrl);
   }

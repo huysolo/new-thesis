@@ -17,5 +17,4 @@ import java.util.List;
 public interface ITaskDAO {
     Task createTask(TaskInfo taskInfo, int topicid);
     void createStudentTask(int taskID, List<Integer> std);
-    List<StudentDoTask> getStudentDoTask (int topicID);
 }

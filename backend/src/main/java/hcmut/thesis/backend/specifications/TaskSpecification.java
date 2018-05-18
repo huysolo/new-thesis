@@ -42,7 +42,7 @@ public class TaskSpecification implements Specification<Task>   {
 
     public static Specification<Task> hasId(Integer topic) {
         return (Specification<Task>) (root, criteriaQuery, criteriaBuilder) -> {
-            criteriaQuery.orderBy(criteriaBuilder.asc(root.get("updateTime")));
+            criteriaQuery.orderBy(criteriaBuilder.desc(root.get("updateTime")));
             return criteriaBuilder.equal(root.get("idTopicSem"), topic);
         };
     }
