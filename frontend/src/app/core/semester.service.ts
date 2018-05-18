@@ -32,12 +32,21 @@ export class SemesterService {
     return this.currentSemester;
   }
 
-  canApply(d: Semester) {
-    return this.checkTime(d.applyOpenDate, d.applyCloseDate);
+  canApply(semNo) {
+    // if (semNo != this.currentSemester.semesterNo) {
+    //   return false;
+    // }
+    return this.currentSemester != null &&
+    semNo == this.currentSemester.semesterNo && this.checkTime(this.currentSemester.applyOpenDate, this.currentSemester.applyCloseDate);
   }
 
-  canUse(d: Semester) {
-    return this.checkTime(d, d.applyCloseDate);
+  canUse(semNo) {
+
+    // if (semNo != this.currentSemester.semesterNo) {
+    //   return false;
+    // }
+    return this.currentSemester != null &&
+    semNo == this.currentSemester.semesterNo && this.checkTime(this.currentSemester.startDate, this.currentSemester.endDate);
   }
 
   isOpen(d: Semester) {

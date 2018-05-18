@@ -244,5 +244,14 @@ public class TopicController {
         }
     }
 
+    @GetMapping("")
+    public ResponseEntity<?> getTopicById(@RequestParam("id") Integer idTopic){
+        try {
+            return ResponseEntity.ok(topicService.getTopicById(idTopic));
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
 
 }

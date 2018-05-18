@@ -19,7 +19,9 @@ import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.repositories.*;
 import hcmut.thesis.backend.services.TaskService;
 import hcmut.thesis.backend.services.TopicService;
+import hcmut.thesis.backend.specifications.TaskSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,42 +77,6 @@ public class TaskServiceImpl implements TaskService {
     UserSession userSession;
         
 
-    @Override
-    public List<TaskInfo> getListTaskFromIDTopic(int topicID) {
-        List<TaskInfo> listTask = new ArrayList<>();
-        List<Task> t = taskRepo.getTaskFromIDTopic(topicID);
-
-//        for(int i = 0; i< t.size(); i++){
-//            TaskInfo temp = new TaskInfo();
-//            temp.setTaskID(t.get(i).getIdTask());
-//            temp.setTitle(t.get(i).getTitle());
-//            temp.setDescription(t.get(i).getDescription());
-//            temp.setDeadline(t.get(i).getDeadline());
-//            temp.setSubmit(t.get(i).getSubmit());
-//            temp.setPass(t.get(i).getPass());
-//            temp.setCurrentVerion(t.get(i).getCurrentVersion());
-//            listTask.add(temp);
-//        }
-        return listTask;
-    }
-
-    @Override
-    public List<TaskInfo> getListTaskFromProf(int topicID) {
-        List<TaskInfo> listTask = new ArrayList<>();
-        List<Task> t = taskRepo.getTaskSubmitFromProf(topicID);
-
-        for (Task aT : t) {
-            TaskInfo temp = new TaskInfo();
-            temp.setTitle(aT.getTitle());
-            temp.setTaskID(aT.getIdTask());
-            temp.setDescription(aT.getDescription());
-            temp.setDeadline(aT.getDeadline());
-            temp.setSubmit(aT.getSubmit());
-            temp.setPass(aT.getPass());
-            listTask.add(temp);
-        }
-        return listTask;
-    }
 
     @Override
     public Task updateTaskSubmit(int taskID, int submit) {
@@ -129,10 +95,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PageInfo getPage(int pageNumber, int topicID, Boolean isStd) {
+    public PageInfo getPage(int pageNumber, int topicID, Boolean isStd, String titleFilter) {
         PageInfo page = new PageInfo();
         List<Task> listTask = new ArrayList<>();
-        List<Task> t = (isStd) ? taskRepo.getTaskFromIDTopic(topicID) : taskRepo.getTaskSubmitFromProf(topicID);
+        Specification<Task> taskSpecification = TaskSpecification.hasId(topicID).and(TaskSpecification.likeTitle(titleFilter));
+        List<Task> t = (isStd) ? taskRepo.findAll(taskSpecification)
+                : taskRepo.findAll(taskSpecification.and(TaskSpecification.isSubmitted()));
         for (int i = 8 * pageNumber; i < min(8 * (pageNumber + 1), t.size()); i++) {
             listTask.add(t.get(i));
         }
@@ -188,11 +156,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<File> getFileNameOfFile(int taskId) {
-        return fileRepo.findAllByIdTask(taskId);
-    }
-
-    @Override
     public Boolean saveFileToTask(File file) {
         System.out.println(file.getIdTask());
         Optional<Task> task = taskRepo.findById(file.getIdTask());
@@ -220,14 +183,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Integer getCurrentVersionOfTaskId(Integer taskId) {
         return getTaskByTaskId(taskId).getCurrentVersion();
-    }
-
-    @Override
-    public Integer addNewVersion(Integer taskId) {
-        Task task = getTaskByTaskId(taskId);
-        task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
-        taskRepo.save(task);
-        return task.getCurrentVersion();
     }
 
     @Override

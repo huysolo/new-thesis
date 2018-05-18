@@ -144,4 +144,8 @@ export class TopicService {
     return this.http.get<Number>(this.topicCountUrl);
   }
 
+  getTopicById(id) {
+    return this.http.get<Topic>(this.topicUrl + '?id=' + id);
+  }
+
 }

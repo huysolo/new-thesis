@@ -45,12 +45,10 @@ const taskRoutes: Routes = [
   {
     path: '',
     component: TaskListComponent,
-    children: [
-      {
-        path: ':typ',
-        component: TaskContentComponent
-      }
-    ]
+    children: [{
+      path: ':id',
+      component: TaskContentComponent
+    }]
   }
 ];
 

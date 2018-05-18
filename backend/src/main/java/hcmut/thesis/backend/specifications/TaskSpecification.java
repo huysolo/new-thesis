@@ -1,7 +1,7 @@
-package hcmut.thesis.backend.modelview;
+package hcmut.thesis.backend.specifications;
 
 import hcmut.thesis.backend.models.Task;
-import org.hibernate.criterion.Order;
+import hcmut.thesis.backend.modelview.SearchCriteria;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -23,16 +23,16 @@ public class TaskSpecification implements Specification<Task>   {
 
         if (criteria.getOperation().equalsIgnoreCase(">")) {
             return builder.greaterThanOrEqualTo(
-                    root.<String> get(criteria.getKey()), criteria.getValue().toString());
+                    root.get(criteria.getKey()), criteria.getValue().toString());
         }
         else if (criteria.getOperation().equalsIgnoreCase("<")) {
             return builder.lessThanOrEqualTo(
-                    root.<String> get(criteria.getKey()), criteria.getValue().toString());
+                    root.get(criteria.getKey()), criteria.getValue().toString());
         }
         else if (criteria.getOperation().equalsIgnoreCase(":")) {
             if (root.get(criteria.getKey()).getJavaType() == String.class) {
                 return builder.like(
-                        root.<String>get(criteria.getKey()), "%" + criteria.getValue() + "%");
+                        root.get(criteria.getKey()), "%" + criteria.getValue() + "%");
             } else {
                 return builder.equal(root.get(criteria.getKey()), criteria.getValue());
             }
@@ -42,7 +42,7 @@ public class TaskSpecification implements Specification<Task>   {
 
     public static Specification<Task> hasId(Integer topic) {
         return (Specification<Task>) (root, criteriaQuery, criteriaBuilder) -> {
-            criteriaQuery.orderBy(criteriaBuilder.desc(root.get("updateTime")));
+            criteriaQuery.orderBy(criteriaBuilder.asc(root.get("updateTime")));
             return criteriaBuilder.equal(root.get("idTopicSem"), topic);
         };
     }
@@ -51,7 +51,7 @@ public class TaskSpecification implements Specification<Task>   {
         return (Specification <Task>) (rt, crt, crtB) -> (crtB.like(rt.get("title"), "%" + title + "%"));
     }
 
-    public static Specification<Task> isSubmited() {
+    public static Specification<Task> isSubmitted() {
         return (Specification<Task>) (rt, crt, crtB) -> (crtB.equal(rt.get("submit"), 1));
     }
 

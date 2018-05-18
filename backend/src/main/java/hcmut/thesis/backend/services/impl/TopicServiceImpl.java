@@ -351,11 +351,6 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Topic getTopicById(int idTopic) {
-        return topicRepo.findById(idTopic).orElseThrow(() -> new NullPointerException("Topic Not Found"));
-    }
-
-    @Override
     public StudentTopicSem getStudentTopicSem(Integer idTopic, Integer idStudent) {
         return studentTopicSemRepo.getStdTopicSemFromTopicID(idTopic, idStudent).orElseThrow(() -> new NullPointerException("Student Not Belong To Topic"));
     }

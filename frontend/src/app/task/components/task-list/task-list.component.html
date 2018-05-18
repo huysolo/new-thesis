@@ -1,6 +1,28 @@
-<div>
-  <router-outlet></router-outlet>
+<div class="w3-padding">
+  <div class="mat-elevation-z4">
+    <div class="filter-header">
+      <ng-container *ngIf="this.authService.isProfessor()">
+        <mat-form-field>
+          <mat-select placeholder="Semester No"  [(value)]="taskListSv.topic.semesterNo" >
+            <mat-option *ngFor="let sem of listSem" [value]="sem" (click)="getTopicFromSemID(sem)">
+              {{sem}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span class="fa fa-chevron-right"></span>
+      </ng-container>
+      <mat-form-field>
+        <mat-select placeholder="Topic" [(value)]="taskListSv.topic.idTop">
+          <mat-option *ngFor="let topic of listTopic" [value]="topic.idTop" [routerLink]="[topic.idTop]" (click) = "taskListSv.topic = topic">{{topic.title}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="pull-right">
+        <mat-form-field>
+  
+          <input matInput [(ngModel)]="taskListSv.titleFilter" placeholder="Enter Task title...." (input)="taskListSv.getPage(0)">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
 </div>
-
-
-
+<router-outlet></router-outlet>

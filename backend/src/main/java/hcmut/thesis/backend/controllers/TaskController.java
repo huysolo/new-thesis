@@ -109,6 +109,7 @@ public class TaskController {
     @RequestMapping(value = "/getlisttask", method = RequestMethod.GET)
     @ResponseBody
     public PageInfo getListTask(@RequestParam("topicID") Integer topicID,
+            @RequestParam("title") String title,
             @RequestParam("page") Integer pageNumber) {
         if (topicID == -1) {
             Integer currSem = commonService.getCurrentSem();
@@ -118,9 +119,9 @@ public class TaskController {
             topicID = topicService.getAppliedTopic(currSem,userSession.getStudent().getIdStudent()).getIdTop();
         }
         if (userSession.isStudent()) {
-            return taskService.getPage(pageNumber,topicID, true);
+            return taskService.getPage(pageNumber,topicID, true, title);
         } else {
-            return taskService.getPage(pageNumber,topicID, false);
+            return taskService.getPage(pageNumber,topicID, false, title);
         }
     }
 
@@ -242,7 +243,6 @@ public class TaskController {
     public ResponseEntity<List<String>> getListFiles(Model model,
         @RequestParam("id") Integer taskId, @RequestParam(value = "ver", required = false) Integer version,
                                                      @RequestParam(value = "idUser", required = false) Integer idUser) {
-        System.out.println(idUser);
         List<String> fileNames = taskService.getFileByTaskId(taskId, version, idUser)
                 .stream().map(f -> MvcUriComponentsBuilder
                         .fromMethodName(TaskController.class, "getFile", f.getName(), f.getIdTask(), f.getVersion(), f.getIdUser()).build().toString())

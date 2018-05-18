@@ -1,54 +1,26 @@
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
-  <div class="w3-row">
-
-    <div class="w3-col m12">
-
-      <div class="w3-row-padding">
-        <div class="w3-col m12">
-          <div class="w3-card w3-round w3-white">
-            <div class="w3-container w3-padding">
-
-              <div *ngIf="(this.authService.isProfessor() == true && ishistory == true)" class="btn-group">
-                <select class="custom-select" (change)="getTopicFromSemID($event.target.value)">
-                  <option selected>Choose Semester</option>
-                  <option *ngFor="let sem of listSem" [value]="sem">
-                    {{sem}}
-                  </option>
-                </select>
-                <p class="w3-padding">
-                  <span class="fa fa-chevron-right"></span>
-                </p>
-                <select class="custom-select" (change)="getPage($event.target.value, 0)">
-                  <option selected [value]="0">Choose Topic</option>
-                  <option *ngFor="let topic of listTopic" [value]="topic.idTop">{{topic.title}}</option>
-                </select>
-              </div>
-
-              <div *ngIf="(this.authService.isProfessor() == true && isrecent == true) || (this.authService.isStudent() == true && ishistory == true)"
-                class="btn-group">
-                <select class="custom-select" (change)="getPage($event.target.value, 0)">
-                  <option selected [value]="0">Choose Topic</option>
-                  <option *ngFor="let topic of listTopic" [value]="topic.idTop">{{topic.title}}</option>
-                </select>
-              </div>
-
-              <button mat-raised-button (click)="openDialog()" type="button" *ngIf="this.authService.isTeamLead() && isrecent == true" (click)="createTask()" class="w3-button w3-white w3-border">
-                <i class="fa fa-pencil"></i>Create Task</button>
-
-              <input [(ngModel)]="searchText" style="width: 160px" class="w3-input w3-right" type="text" placeholder="Enter Task title....">
-            </div>
-          </div>
-        </div>
+<!-- <br>
+<div class="w3-row-padding">
+  <div class="w3-col m12">
+    <div class="w3-card w3-round w3-white">
+      <div class="w3-container w3-padding">
+        <ng-container >
+          <button mat-raised-button (click)="openDialog()" type="button" *ngIf="this.authService.isTeamLead()" class="w3-button w3-white w3-border">
+            <i class="fa fa-pencil"></i>Create Task</button>
+        </ng-container>
       </div>
-
-      <div *ngFor="let task of listTask | filter : searchText">
-        <app-task-detail [task]="task"></app-task-detail>
-      </div>
-      <br>
-      <app-task-pagination *ngIf="listTask?.length > 0" (setPage)="setPage($event)" [page]="page" [pageCount]="pagecount" ></app-task-pagination>
-
     </div>
-
   </div>
-
+</div> -->
+<div class="float" *ngIf="taskListSv.topic != null && this.authService.isTeamLead() && semSv.canUse(taskListSv.topic.semesterNo)">
+    <button type="button" class="btn btn-primary bmd-btn-fab" (click)="openDialog()">
+        <i class="material-icons">create</i>
+      </button>
 </div>
+
+<div *ngFor="let task of taskListSv.taskList | async">
+  <app-task-detail [task]="task"></app-task-detail>
+</div>
+<div class="w3-padding-16">
+  <app-task-pagination *ngIf="taskListSv.pageCount" (setPage)="taskListSv.getPage($event)" [page]="taskListSv.selectedPage" [pageCount]="taskListSv.pageCount" ></app-task-pagination>
+</div>
+

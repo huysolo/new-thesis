@@ -33,7 +33,6 @@ public interface TopicService {
     List<Standard> getGeneralStandardOfCurrentSemester(Integer semesterNo);
     List<Standard> getStandardListByGeneralAndUserId(Integer userId);
     boolean isTeamLeader(Integer idTopic, Integer idStudent);
-    Topic getTopicById(int idTopic);
     StudentTopicSem getStudentTopicSem(Integer idTopic, Integer idStudent);
     List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID);
     Topic getTopicOfCurrentSem();
