@@ -7,37 +7,7 @@ import { AuthGuardUserService } from '../core/auth-guard-user.service';
 import {LayoutComponent} from '../layout/layout.component';
 
 const appRoutes: Routes = [
-  {
-    path: 'topic',
-    loadChildren: 'app/topic/topic.module#TopicModule',
-    canActivate: [AuthGuardUserService]
-  },
-  {
-    path: 'user',
-    loadChildren: 'app/user/user.module#UserModule'
-  },
-  {
-    path: 'task',
-    loadChildren: 'app/task/task.module#TaskModule'
-  },
-  {
-    path: 'meeting',
-    loadChildren: 'app/meeting/meeting.module#MeetingModule'
-  },
-  {
-    path: 'standard',
-    loadChildren: 'app/standard/standard.module#StandardModule'
-  },
-  {
-    path: 'layout',
-    component: LayoutComponent
-  }
-  ,
-  {
-    path: '',
-    component: MainPageComponent,
-    canActivate: [AuthGuardUserService]
-  }
+  { path: '', loadChildren: '../layout/layout.module#LayoutModule'},
 ];
 
 @NgModule({
