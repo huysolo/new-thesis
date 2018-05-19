@@ -1,5 +1,5 @@
 <a class="float" *ngIf="topicSv.requestType !== 'history' && authoSv.isProfessor()">
-  <button type="button" class="btn btn-primary bmd-btn-fab" name="new" id="new" data-toggle="modal" (click)="newTopic()" data-target="#createTopic">
+  <button type="button" class="btn btn-primary bmd-btn-fab" appTopicFormButton (success)="getTopicFromModal($event)" [draft]="topicSv.requestType === 'draft'" value = "asdasda">
     <i class="material-icons">add</i>
   </button>
 </a>
@@ -8,7 +8,6 @@
   <app-topic-content [topic]="topicSv.appliedTopic"></app-topic-content>
   <br>
 </div>
-
 <div>
   <div class="row">
     <div class="col-8">

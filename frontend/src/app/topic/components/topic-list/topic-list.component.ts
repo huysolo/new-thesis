@@ -12,8 +12,9 @@ import { TopicMission } from '../../../models/TopicMission';
 import { TopicRequirement } from '../../../models/TopicRequirement';
 import { HttpParams } from '@angular/common/http';
 import { Specialize } from '../../../models/Specialize';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { SemesterService } from '../../../core/semester.service';
+import { CreateFormModalComponent } from '../create-form-modal/create-form-modal.component';
 
 declare var $: any;
 @Component({
@@ -114,11 +115,7 @@ export class TopicListComponent implements OnInit {
 
 
   onEdit(event) {
-    this.modalLabel = 'Edit';
-    this.topicSv.getTopicDetail(event).subscribe(data => {
-      this.topicDetail = data;
-      $('#createTopic').modal('show');
-    });
+    this.getWithRarams();
   }
 
   onDelete(event) {
@@ -157,4 +154,10 @@ export class TopicListComponent implements OnInit {
       duration: 2000,
     });
   }
+
+  getTopicFromModal(topic: Topic) {
+    this.getWithRarams();
+  }
+
+
 }

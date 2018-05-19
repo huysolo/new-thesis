@@ -1,10 +1,28 @@
 <br>
+<mat-accordion *ngIf="topic != null">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Topic
+      </mat-panel-title>
+      <mat-panel-description>
+        <div class="title">
+          {{topic.topic.title}}
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>I'm visible because I am open</p>
+
+  </mat-expansion-panel>
+</mat-accordion>
+
+<br>
 <div class="row">
   <div [ngClass]="topicRvStandardDetail == null ? 'col-md-12' : 'col-md-5'">
     <div class="mat-elevation-z1" >
       <div class="white-box">
         <h3 class="box-title">
-          Professors Reviews Of Topic Id: {{1}}
+          Professors Reviews Of Topic Id: {{route.snapshot.params['id']}}
         </h3>
         <mat-table #table [dataSource]="listReviewSrc | review : 'prof'">
           <ng-container matColumnDef="idTopic">
@@ -15,6 +33,44 @@
           <ng-container matColumnDef="idProf">
             <mat-header-cell *matHeaderCellDef> Proffessor Name </mat-header-cell>
             <mat-cell *matCellDef="let review"> {{review.idProf | prof}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="score">
+            <mat-header-cell *matHeaderCellDef>Score </mat-header-cell>
+            <mat-cell *matCellDef="let review"> {{review.submitted == 1 ? review.score : 'No Review'}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+            <mat-cell *matCellDef="let review">
+              <ng-container *ngIf="review.submitted == 1 ">
+                <button type="button" class="btn btn-secondary" (click)="detail(review.idProf )">Detail</button>
+              </ng-container>
+              <ng-container *ngIf="review.submitted == 0 && review.idProf == authSv.getProfID() ">
+                <button type="button" class="btn btn-primary" (click)="topic.topic.idTop == review.idTopic ? router.navigate(['topic/review/guide']) : router.navigate(['topic/review/guide'])">Go to Review</button>
+              </ng-container>
+            </mat-cell>
+          </ng-container>
+  
+  
+          <mat-header-row *matHeaderRowDef="listColReviewFull "></mat-header-row>
+          <mat-row *matRowDef="let row; columns: listColReviewFull"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+    <div class="mat-elevation-z1">
+      <div class="white-box">
+        <h3 class="box-title">
+          Council Reviews Of Topic Id: {{route.snapshot.params['id']}}
+        </h3>
+        <mat-table #table [dataSource]="listReviewSrc | review : 'council'">
+          <ng-container matColumnDef="idTopic">
+            <mat-header-cell *matHeaderCellDef> Id Topic </mat-header-cell>
+            <mat-cell *matCellDef="let review"> {{review.idTopic}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="idProf">
+            <mat-header-cell *matHeaderCellDef> Id Council </mat-header-cell>
+            <mat-cell *matCellDef="let review"> {{review.idCouncil}} </mat-cell>
           </ng-container>
   
           <ng-container matColumnDef="score">

@@ -16,8 +16,8 @@
           <ng-container *ngIf="topicSv.requestType === 'draft'" >
 
             <a class="dropdown-item" (click)="publish()">Publish</a>
-            <a  class="dropdown-item" (click)="edit()">Edit</a>
-            <a class="dropdown-item" (click)="delete()">Delete</a>
+            <a  class="dropdown-item" appTopicFormButton [draft]="topicSv.requestType === 'draft'" [idTop]="topic.idTop" (success)="editTopic.emit($event)">Edit</a>
+            <a app class="dropdown-item" (click)="delete()">Delete</a>
           </ng-container>
         </div>
       </div>

@@ -95,10 +95,14 @@ export class ManageStandardComponent implements OnInit,  AfterViewInit {
 
   }
 
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string, general = false) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.standardSrc.filter = filterValue;
+    if (general) {
+      this.standardGeneral.filter = filterValue;
+    } else {
+      this.standardSrc.filter = filterValue;
+    }
   }
 
 

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 public class Review {
-    private int idProf;
+    private Integer idProf;
     private int idTopic;
     private Double score;
     private int submitted;
@@ -21,11 +21,11 @@ public class Review {
 
     @Basic
     @Column(name = "id_prof")
-    public int getIdProf() {
+    public Integer getIdProf() {
         return idProf;
     }
 
-    public void setIdProf(int idProf) {
+    public void setIdProf(Integer idProf) {
         this.idProf = idProf;
     }
 

@@ -55,7 +55,7 @@ public class CommonServiceImpl implements CommonService {
                 if (user.get().getIdFalcuty().equals(idFaculty)){
                     ProfInfo profInfo = new ProfInfo();
                     profInfo.setProfessor(userDAO.findProfByUserId(user.get().getIdUser()));
-                    profInfo.setName(getFullName(user.get().getFirstName(), user.get().getLastName()));
+                    profInfo.setName(getFullName(user.get()));
                     result.add(profInfo);
                 }
             }

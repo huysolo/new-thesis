@@ -1,79 +1,44 @@
-<form #createTopicForm="ngForm" action="" method="post" (ngSubmit)="submitTopic(createTopic)">
-
-  <div class="form-group">
-    <label for="title-topic">
-      <h5>Title <span style="color: red">*</span></h5>
-    </label>
-    <input type="text" name="title-topic" id="title-topic" class="form-control" placeholder="Insert your title here" [(ngModel)]="createTopic.topic.title"
+<form #createTopicForm="ngForm" action="" method="post" (ngSubmit)="submitTopic(createTopic)" class="mat-form">
+  <mat-form-field class="mat-full-width">
+    <input matInput type="text" name="title-topic" id="title-topic" placeholder="Title" [(ngModel)]="createTopic.topic.title"
       required #title="ngModel">
-    <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
-      Title is required
-    </div>
+  </mat-form-field>
+  <mat-form-field class="mat-full-width">
+    <input matInput type="number" [(ngModel)]="createTopic.topic.stNumLimit" name="stLim" id="stLim" required #stLim="ngModel" placeholder="Student Limit">
+  </mat-form-field>
+  <mat-form-field class="mat-full-width">
+    <mat-select placeholder="Specialize" required [(ngModel)]="createTopic.topic.idSpecialize" #spec="ngModel" name="spec">
+      <mat-option *ngFor="let spec of specLst | async" [value]="spec.idSpecialize">
+        {{spec.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="mat-full-width">
+    <textarea name="sumary" matInput matTextareaAutosize matAutosizeMinRows="2" #sumary="ngModel" matAutosizeMaxRows="10" placeholder="Summary"
+      [(ngModel)]="createTopic.topic.sumary"></textarea>
+  </mat-form-field>
+  <label>Requirements</label>
+  <mat-form-field class="mat-full-width" *ngFor="let req of createTopic.topicRequirement; let i = index">
+    <textarea matInput type="text" [(ngModel)]="req.detail" name="require{{i}}" required #require="ngModel" placeholder="Requirement {{i}}"
+      matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="10"></textarea>
+    <button *ngIf="createTopic.topicRequirement.length > 1" mat-button matSuffix mat-icon-button aria-label="Remove" (click)="removeReq(i)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <div class="text-right">
+    <button name="btnAddReq" id="btnAddReq" mat-raised-button type="button" (click)="addReq()">Add</button>
   </div>
-  <div class="form-group">
-    <label for="stLim">
-      <h5> Student Limit <span style="color: red">*</span></h5>
-    </label>
-    <input type="number" [(ngModel)]="createTopic.topic.stNumLimit" class="form-control" name="stLim" id="stLim" aria-describedby="helpStLim"
-      placeholder="Insert limit" required #stLim="ngModel">
-      <div [hidden]="stLim.valid || stLim.pristine" class="alert alert-danger">
-          Limit of student is not valid
-        </div>
-    <small id="helpStLim" class="form-text text-muted">Limit of student allowed to apply to the topic</small>
+  <label>References And Keywords</label>
+  <mat-form-field class="mat-full-width" *ngFor="let miss of createTopic.topicMission; let i = index">
+    <input matInput type="text" [(ngModel)]="miss.detail" required #mission="ngModel" name="mission{{i}}" placeholder="Reference And Keyword {{i}}">
+    <button mat-button matSuffix mat-icon-button aria-label="Remove" (click)="removeMission(i)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <div class="text-right">
+    <button type="button" mat-raised-button (click)="addMission()">Add</button>
   </div>
-  <div class="form-group">
-    <label for="summary-topic">
-      <h5>Specialize <span style="color: red">*</span></h5>
-    </label>
-    <select class="form-control"  [(ngModel)]="createTopic.topic.idSpecialize" name="spec"  required #spec="ngModel">
-        <option *ngFor="let spec of specLst | async" [ngValue]="spec.idSpecialize">
-          {{spec.name}}
-        </option>
-    </select>
-    <div [hidden]="spec.valid || spec.pristine" class="alert alert-danger">
-        Specialize is required
-      </div>
-  </div>
-  <div class="form-group">
-      <label for="specialize-topic">
-        <h5>Sumary</h5>
-      </label>
-      <textarea name="specialize-topic" id="specialize-topic" cols="10" rows="5" class="form-control" placeholder="Insert your specialize here"
-        [(ngModel)]="createTopic.topic.sumary" ></textarea>
-    </div>
-  <div class="form-group">
-    <label for="">
-      <h5>Requirements <span style="color: red">*</span></h5>
-    </label>
-    <ng-container *ngFor="let req of createTopic.topicRequirement; let i = index">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" [(ngModel)]="req.detail" name="require{{i}}" required #require="ngModel">
-        <div class="input-group-append">
-          <i class="material-icons btn-icon" *ngIf="createTopic.topicRequirement.length > 1" (click)="removeReq(i)">remove</i>
-        </div>
-      </div>
-      <div [hidden]="require.valid || require.pristine" class="alert alert-danger">
-          Requirement is required
-        </div>
-    </ng-container>
-    <input name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button" value="Add" (click)="addReq()">
-  </div>
-  <br>
-  <div class="form-group">
-    <label for="">
-      <h5>Missions <span style="color: red">*</span></h5>
-    </label>
-    <ng-container *ngFor="let miss of createTopic.topicMission; let i = index">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" [(ngModel)]="miss.detail" required #mission="ngModel" name="mission{{i}}">
-        <div class="input-group-append">
-          <i class="material-icons btn-icon" *ngIf="createTopic.topicMission.length > 1" (click)="removeMission(i)">remove</i>
-        </div>
-      </div>
-      <div [hidden]="mission.valid || mission.pristine" class="alert alert-danger">
-          Misson is required
-        </div>
-    </ng-container>
-    <input name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button" value="Add" (click)="addMission()">
-  </div>
+
 </form>
+
+<button type="submit" class="btn btn-success" (click)="submitTopic()" [disabled]="!createTopicForm.form.valid" data-dismiss="modal">{{draft ? 'Save As Draft' : 'Submit'}} </button>

@@ -14,7 +14,7 @@ import { TopidDetailComponent } from '../topid-detail/topid-detail.component';
 export class TopicContentComponent implements OnInit {
   @Input() topic: Topic;
   @Input() semno;
-  @Output('editTopic') editTopic = new EventEmitter<Number>();
+  @Output('editTopic') editTopic = new EventEmitter<Topic>();
   @Output('delTopic') delTopic = new EventEmitter<Number>();
   @Output('applyTopic') applyTopic = new EventEmitter<Topic>();
   @Output() removeTopic = new EventEmitter<Number>();
@@ -61,7 +61,7 @@ export class TopicContentComponent implements OnInit {
   }
 
   edit() {
-    this.editTopic.emit(this.topic.idTop);
+    this.editTopic.emit(this.topic);
   }
 
   delete() {

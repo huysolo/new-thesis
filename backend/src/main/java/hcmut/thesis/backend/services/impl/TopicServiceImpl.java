@@ -87,6 +87,7 @@ public class TopicServiceImpl implements TopicService {
     public Topic setTopicDetail(TopicDetail topicDetail, Boolean publish) {
 
         Topic topic = topicDetail.getTopic();
+        topic.setIdProf(userSession.getProf().getIdProfessor());
         topic.setStudentCount(0);
 
         if (publish){
@@ -261,10 +262,9 @@ public class TopicServiceImpl implements TopicService {
         double numerator = 0;
         float denominator = 0;
         if (review.isPresent() && review.get().getSubmitted() == 0){
-            Optional<Topic> topic = topicRepo.findById(review.get().getIdTopic());
-            if (!topic.isPresent() ||
-                    (topic.get().getReviewDate() != null &&
-                            topic.get().getReviewDate().after(new Timestamp(System.currentTimeMillis())))
+            Topic topic = getTopicById(review.get().getIdTopic());
+            if (topic.getReviewDate() != null &&
+                            topic.getReviewDate().after(new Timestamp(System.currentTimeMillis()))
                     ){
                 throw new NullPointerException("Cannot review topic before review date");
             }

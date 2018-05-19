@@ -1,24 +1,25 @@
 <h1 matDialogTitle>{{topicDetail.topic.title}}</h1>
 
 <mat-dialog-content>
-  <strong>Summary:</strong>
+  
+  <label>Summary:</label>
   <p>
     {{topicDetail.topic.sumary}}
   </p>
   <p>
-    <strong>Limit Of Student:</strong> {{topicDetail.topic.stNumLimit}}
+    <label>Limit Of Student:</label> {{topicDetail.topic.stNumLimit}}
   </p>
   <p>
-    <strong>Semester No:</strong> {{topicDetail.topic.semesterNo}}
+    <label>Semester No:</label> {{topicDetail.topic.semesterNo}}
   </p>
-    <strong>Topic Requirements:</strong>
+    <label>Topic Requirements:</label>
     <mat-list *ngFor="let topicReq of topicDetail.topicRequirement">
         <mat-list-item> {{topicReq.detail}} </mat-list-item>
     </mat-list>
 
-    <strong>
+    <label>
       Topic Missions:
-    </strong>
+    </label>
     <mat-list *ngFor="let topicReq of topicDetail.topicMission">
         <mat-list-item> {{topicReq.detail}} </mat-list-item>
     </mat-list>

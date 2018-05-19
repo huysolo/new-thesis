@@ -10,8 +10,13 @@ import { ReviewTopicComponent } from './pages/review-topic/review-topic.componen
 import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic-page.component';
 import { ResultTopicComponent } from './pages/result-topic/result-topic.component';
 import { DetailResultComponent } from './pages/detail-result/detail-result.component';
+import { TopicFormComponent } from './components/topic-form/topic-form.component';
 
 const topicRoutes: Routes = [
+  {
+    path: 'f',
+    component: TopicFormComponent
+  },
   {
     path: 'list',
     component: ManageTopicComponent,
