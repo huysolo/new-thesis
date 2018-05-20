@@ -8,7 +8,7 @@
               <mat-icon>build</mat-icon>
             </span>
             Task
-            <span class="badge badge-pill badge-info badge-title">{{(listRecentTask | async)?.length}}</span>
+            <span class="badge badge-pill badge-info badge-title title">{{(listRecentTask | async)?.length}}</span>
           </h4>
           <mat-form-field class="col-md-6">
             <input matInput placeholder="Filter">
@@ -187,6 +187,6 @@
 </div>
 <br>
 <br>
-<div class="modal" id="createMeeting" tabindex="-1" role="dialog" aria-labelledby="topicTitleId">
+<!-- <div class="modal" id="createMeeting" tabindex="-1" role="dialog" aria-labelledby="topicTitleId">
     <app-meeting-create (addNewMeeting)="addNewMeeting($event)"></app-meeting-create>
-  </div>
+  </div> -->
