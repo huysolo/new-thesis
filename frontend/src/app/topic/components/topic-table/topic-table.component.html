@@ -13,11 +13,11 @@
   </ng-container>
 
   <ng-container matColumnDef="stNumLimit">
-    <mat-header-cell *matHeaderCellDef> Student Number </mat-header-cell>
-    <mat-cell *matCellDef="let topic"> {{topic.stNumLimit}} </mat-cell>
+    <mat-header-cell *matHeaderCellDef> Student </mat-header-cell>
+    <mat-cell *matCellDef="let topic"> {{topic.studentCount}} </mat-cell>
   </ng-container>
   <ng-container matColumnDef="sem">
-      <mat-header-cell *matHeaderCellDef> Semester No </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Semester </mat-header-cell>
       <mat-cell *matCellDef="let topic"> {{topic.semesterNo}} </mat-cell>
     </ng-container>
   <ng-container matColumnDef="publishDate">

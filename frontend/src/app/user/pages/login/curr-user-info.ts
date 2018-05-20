@@ -1,7 +1,7 @@
 export class CurrUserInfo {
-    username : string;
+    username: string;
     token: string;
-    isStudent : Boolean;
+    isStudent: Boolean;
     firstname: string;
     lastname: string;
     email: string;

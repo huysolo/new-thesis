@@ -22,9 +22,9 @@
     {{specName | async}}
   </p>
 
-  <mat-list>
-      <label>STUDENT JOINED</label>
-    <mat-list-item *ngFor="let student of students | async">
+  <mat-list *ngIf="students != null ">
+    <label>STUDENT GROUP</label>
+    <mat-list-item *ngFor="let student of students">
       <mat-icon mat-list-icon>account_circle</mat-icon>
       <h6 mat-line>{{student.stdName}}</h6>
       <p mat-line> {{student.studentId}} </p>

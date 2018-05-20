@@ -23,8 +23,8 @@ export class TopicTableComponent implements OnInit {
   @Output() emitTopic = new EventEmitter<Topic>();
   @Output() publish = new EventEmitter<Topic>();
 
-  displayedColumns = ['idTop', 'title', 'stNumLimit', 'action'];
-  displayedColumnsFull = ['idTop', 'title', 'stNumLimit', 'publishDate', 'sem', 'action'];
+  displayedColumns = ['idTop', 'stNumLimit', 'title', 'action'];
+  displayedColumnsFull = ['idTop', 'stNumLimit', 'publishDate', 'sem', 'title', 'action'];
 
   constructor(public topicSv: TopicService) { }
 

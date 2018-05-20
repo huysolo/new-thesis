@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { Specialize } from '../../../models/Specialize';
 import { CommonService } from '../../../core/common.service';
 import { Validators, FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'app-topic-form',
   templateUrl: './topic-form.component.html',
@@ -18,7 +19,10 @@ import { Validators, FormControl } from '@angular/forms';
 })
 export class TopicFormComponent implements OnInit {
 
-  constructor(public authoSv: AuthService, public topicSv: TopicService, private commonSv: CommonService) { }
+  constructor(public authoSv: AuthService,
+    public topicSv: TopicService, private commonSv: CommonService,
+    private snackbar: MatSnackBar
+  ) { }
   @Input() createTopic: TopicDetail = new TopicDetail();
   @Input() draft = false;
   specLst: Observable<Specialize[]>;
@@ -37,8 +41,13 @@ export class TopicFormComponent implements OnInit {
     this.createTopic.draft = this.draft;
     this.topicSv.createTopic(this.createTopic).subscribe(data => {
         this.created.emit(data);
+        this.snackbar.open(this.createTopic.topic.idTop ? 'Update Topic Success' : 'Create Topic Success', 'Close', {
+          duration: 2000,
+        });
     }, (err) => {
-      console.log(err);
+      this.snackbar.open(err, 'Close', {
+        duration: 4000,
+      });
     }, );
   }
 

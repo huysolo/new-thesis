@@ -30,7 +30,7 @@ export class ManageStandardComponent implements OnInit,  AfterViewInit {
   standardGeneral: MatTableDataSource<Standard>;
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('paginatorGeneral') paginatorGeneral: MatPaginator;
-  
+
   displayedColumns = ['idStandard', 'stName', 'coefficient', 'action'];
   displayedColumnsGeneral = ['idStandard', 'stName', 'coefficient', 'semester'];
   ngOnInit() {
@@ -74,7 +74,7 @@ export class ManageStandardComponent implements OnInit,  AfterViewInit {
     this.standardSv.postStandard(this.standdardSelected).subscribe(data => {
       this.standardSv.getCurrentSemStandard().subscribe(dt => {
         this.standardSrc = new MatTableDataSource(dt  );
-        this.standardSrc.paginator = this.paginator;  
+        this.standardSrc.paginator = this.paginator;
       });
       this.reset();
     });
@@ -96,8 +96,8 @@ export class ManageStandardComponent implements OnInit,  AfterViewInit {
   }
 
   applyFilter(filterValue: string, general = false) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
     if (general) {
       this.standardGeneral.filter = filterValue;
     } else {

@@ -15,19 +15,31 @@
     <p>{{topic.topic.title}}</p>
     <label>Description</label>
     <p>{{topic.topic.sumary}}</p>
-    <label>Student Limits</label>
-    <p>{{topic.topic.stNumLimit}}</p>
-    <label>Semester No</label>
-    <p>{{topic.topic.semesterNo}}</p>
-    <label>Proffessor</label>
-    <p>{{topic.topic.idProf | prof}}</p>
+    <div class="row">
+      <div class="col-4">
+        <label>Student Limits</label>
+        <p>{{topic.topic.stNumLimit}}</p>
+      </div>  
+      <div class="col-4">
+        <label>Semester No</label>
+        <p>{{topic.topic.semesterNo}}</p>
+      </div>
+      <div class="col-4">
+        <label>Proffessor</label>
+        <p>{{topic.topic.idProf | prof}}</p>
+      </div>
+    </div>
     <mat-list>
       <label>Student Group </label>
-      <mat-list-item *ngFor="let student of students | async">
-        <mat-icon mat-list-icon>account_circle</mat-icon>
-        <h6 mat-line>{{student.stdName}}</h6>
-        <p mat-line> {{student.studentId}} </p>
-      </mat-list-item>
+      <div class="row">
+        <div class="col-3" *ngFor="let student of students | async">
+          <mat-list-item >
+            <mat-icon mat-list-icon>account_circle</mat-icon>
+            <h6 mat-line>{{student.stdName}}</h6>
+            <p mat-line> {{student.studentId}} </p>
+          </mat-list-item>
+        </div>
+      </div>
     </mat-list>
 
   </mat-expansion-panel>

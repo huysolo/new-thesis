@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background: #343a40;">
   <a class="navbar-brand" [routerLink]="['']">Thesis Management</a>
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
     aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,23 +8,16 @@
     <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
       <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
         <a class="nav-link" [routerLink]="['']">
-          <i class="fa fa-fw fa-dashboard"></i>
+            <i class="fas fa-tachometer-alt"></i>
           <span class="nav-link-text">Dashboard</span>
         </a>
       </li>
       <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
         <a class="nav-link" [routerLink]="['/user/manager']">
-          <i class="fa fa-fw fa-area-chart"></i>
+          <i class="fas fa-user-circle"></i>
           <span class="nav-link-text">Account</span>
         </a>
       </li>
-      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
-        <a class="nav-link" [routerLink]="['/task/chatgroup']">
-          <i class="fa fa-fw fa-comments-o"></i>
-          <span class="nav-link-text">Chat Group</span>
-        </a>
-      </li>
-
       <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#ListTopic">
           <i class="fa fa-fw fa-table"></i>
@@ -42,20 +35,20 @@
 
       <li class="nav-item">
         <a [routerLink]="['/task']" class="nav-link">
-          <i class="fa fa-fw fa-wrench"></i>
+          <i class="fa fa-tasks" aria-hidden="true"></i>
           <span class="nav-link-text">Task</span>
         </a>
       </li>
       <li class="nav-item">
         <a [routerLink]="['/standard/list']" class="nav-link">
-          <i class="fa fa-fw fa-wrench"></i>
+          <i class="fas fa-list-ol"></i>
           <span class="nav-link-text">Standard</span>
         </a>
       </li>
 
       <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-          <i class="fa fa-fw fa-wrench"></i>
+          <i class="fab fa-stack-overflow"></i>
           <span class="nav-link-text">Topic</span>
         </a>
         <ul class="sidenav-second-level collapse" id="collapseComponents">
@@ -162,16 +155,18 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="modal" data-target="#exampleModal" (click)="logout()">
-          <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+            <i class="fas fa-sign-out-alt"></i>Logout</a>
       </li>
     </ul>
   </div>
 </nav>
 <div class="content-wrapper">
+  <mat-toolbar>Profile</mat-toolbar>
+  <br>
   <div class="container-fluid">
-    <div class="breadcrumb-top">
-      <mc-breadcrumbs></mc-breadcrumbs>
-    </div>
+    <!-- <div class="breadcrumb-top">
+      <mc-breadcrumbs class="bg-white"></mc-breadcrumbs>
+    </div> -->
     <router-outlet></router-outlet>
   </div>
 </div>

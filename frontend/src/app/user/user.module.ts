@@ -11,6 +11,7 @@ import { AddheaderService } from './pages/login/addheader.service';
 import {LoginService} from './pages/login/login.service';
 import { AuthService } from '../core/auth.service';
 import {CheckloginGuard} from './pages/login/checklogin.guard.service';
+import { MatFormFieldModule, MatSelectModule, MatInputModule } from '@angular/material';
 
 
 @NgModule({
@@ -20,7 +21,10 @@ import {CheckloginGuard} from './pages/login/checklogin.guard.service';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    HttpClientModule
+    HttpClientModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

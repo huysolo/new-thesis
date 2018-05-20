@@ -5,11 +5,19 @@ import { AuthService } from '../../../core/auth.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import { ManageUser } from '../../../models/ManageUser';
 
 @Injectable()
 export class LoginService {
 
   constructor(private httpClient: HttpClient, private router: Router) { }
+
+  loadProfile() {
+    return this.httpClient.get<ManageUser>('http://localhost:8080/user/profile');
+  }
+  postProfile(user: ManageUser) {
+    return this.httpClient.post<any>('http://localhost:8080/user/profile', user);
+  }
 
   login(form) {
     const loginUrl = `http://localhost:8080/login`;
