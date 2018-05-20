@@ -15,4 +15,8 @@ public class TopicSpecification {
     public static Specification<Topic> isNotDraft() {
         return (Specification<Topic>)  (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isNotNull(root.get("semesterNo"));
     }
+
+    public static Specification<Topic> isDraft() {
+        return (Specification<Topic>)  (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isNull(root.get("semesterNo"));
+    }
 }

@@ -10,7 +10,7 @@ export class ProfService {
   profList: ProfInfo[];
 
   init() {
-    this.commonSv.getListProf().subscribe(data => {
+    this.commonSv.getAllProf().subscribe(data => {
       this.profList = data;
     });
   }

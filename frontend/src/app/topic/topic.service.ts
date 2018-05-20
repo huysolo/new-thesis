@@ -170,4 +170,8 @@ export class TopicService {
     return this.http.get<Review[]>(this.reviewsUrl + '?id=' + id);
   }
 
+  getListDraft() {
+    return this.http.get<Topic[]>(this.topicListDraftUrl);
+  }
+
 }

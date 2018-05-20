@@ -15,8 +15,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ResultTopicComponent implements OnInit {
   listTopicSrc: MatTableDataSource<Topic>;
+  listDraftSrc: MatTableDataSource<Topic>;
   listReview: Review[];
   @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginatorDraft') paginatorDraft: MatPaginator;
+
   constructor(public route: Router,
     public topicSv: TopicService, public authSv: AuthService, private zone: NgZone, public semSv: SemesterService) { }
 
@@ -31,6 +34,10 @@ export class ResultTopicComponent implements OnInit {
         this.topicSv.getListTopicForProf().subscribe(data => {
           this.listTopicSrc =  new MatTableDataSource(data);
           this.listTopicSrc.paginator = this.paginator;
+        });
+        this.topicSv.getListDraft().subscribe(data => {
+          this.listDraftSrc = new MatTableDataSource(data);
+          this.listDraftSrc.paginator = this.paginatorDraft;
         });
       }
     });
@@ -58,6 +65,10 @@ export class ResultTopicComponent implements OnInit {
         listTopic = this.listTopicSrc.data;
         listTopic.unshift(topic);
         this.listTopicSrc.data =  listTopic;
+      } else {
+        listTopic = this.listDraftSrc.data;
+        listTopic.unshift(topic);
+        this.listDraftSrc.data =  listTopic;
       }
     }
 

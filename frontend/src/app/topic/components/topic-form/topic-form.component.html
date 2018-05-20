@@ -3,8 +3,8 @@
     <input matInput type="text" name="title-topic" id="title-topic" placeholder="Title" [(ngModel)]="createTopic.topic.title"
       required #title="ngModel">
   </mat-form-field>
-  <mat-form-field class="mat-full-width">
-    <input matInput type="number" [(ngModel)]="createTopic.topic.stNumLimit" name="stLim" id="stLim" required #stLim="ngModel" placeholder="Student Limit">
+  <mat-form-field class="mat-full-width" hintLabel="Max 9 students">
+    <input matInput type="number" [formControl]="numberForm" [(ngModel)]="createTopic.topic.stNumLimit" #stLim name="stLim" id="stLim" placeholder="Student Limit">
   </mat-form-field>
   <mat-form-field class="mat-full-width">
     <mat-select placeholder="Specialize" required [(ngModel)]="createTopic.topic.idSpecialize" #spec="ngModel" name="spec">
@@ -41,4 +41,4 @@
 
 </form>
 
-<button type="submit" class="btn btn-success" (click)="submitTopic()" [disabled]="!createTopicForm.form.valid" data-dismiss="modal">{{draft ? 'Save As Draft' : 'Submit'}} </button>
+<button type="submit" mat-button [class]="'btn btn-success'" (click)="submitTopic()" [disabled]="!createTopicForm.form.valid" data-dismiss="modal">{{draft ? 'Save As Draft' : 'Submit'}} </button>

@@ -1,29 +1,13 @@
-<!-- <mat-drawer-container class="example-container" autosize>
-        <mat-drawer #drawer class="example-sidenav" mode="side">
-          <p>Auto-resizing sidenav</p>
-          <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
-          <button (click)="showFiller = !showFiller" mat-raised-button>
-            Toggle extra text
-          </button>
-        </mat-drawer>
-      
-        <div class="example-sidenav-content">
-          <button type="button" mat-button (click)="drawer.toggle()">
-            Toggle sidenav
-          </button>
-        </div>
-      
-      </mat-drawer-container> -->
 <div class="mat-elevation-z1">
     <div class="white-box">
         <div class="box-title">
-           Published Topics
-           <div class="pull-right">
-               <button matInput mat-raised-button appTopicFormButton (success)="addTopic($event)">Add</button>
-           </div>
+            Published Topics
+            <div class="pull-right">
+                <button matInput mat-raised-button appTopicFormButton (success)="addTopic($event)">Add</button>
+            </div>
         </div>
         <div class="filter-header">
-            <mat-form-field  *ngIf="authSv.isProfessor()">
+            <mat-form-field *ngIf="authSv.isProfessor()">
                 <mat-select placeholder="Semester No" (valueChange)="changeSem($event)">
                     <mat-option>None</mat-option>
                     <mat-option *ngFor="let sem of semSv.getListSemster()" [value]="sem.semesterNo">{{sem.semesterNo}}</mat-option>
@@ -33,10 +17,37 @@
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
             </mat-form-field>
         </div>
-        <app-topic-table [dataSource]="listTopicSrc" [displayFull]="true" (emitTopic)="this.route.navigate(['/topic/result/', $event.idTop]);"> </app-topic-table>
-    
+        <app-topic-table [dataSource]="listTopicSrc" [displayFull]="true" (emitTopic)="this.route.navigate(['/topic/result/', $event.idTop]);">
+        </app-topic-table>
+
         <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
         </mat-paginator>
     </div>
 </div>
-<router-outlet></router-outlet>
+<div class="mat-elevation-z1" *ngIf="authSv.isProfessor()">
+    <div class="white-box">
+        <div class="box-title">
+            Unpublished Topics
+            <div class="pull-right">
+                <button matInput mat-raised-button appTopicFormButton [draft]="true" (success)="addTopic($event, true)">Add</button>
+            </div>
+        </div>
+        <div class="filter-header">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
+        <app-topic-table 
+        [showPublish]="true" 
+        [showDelete]="true" 
+        [showEdit]="true"
+        [dataSource]="listDraftSrc" 
+        (publish)="addTopic($event)"
+        [displayFull]="false" 
+        (emitTopic)="this.route.navigate(['/topic/result/', $event.idTop]);">
+        </app-topic-table>
+
+        <mat-paginator #paginatorDraft [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+        </mat-paginator>
+    </div>
+</div>

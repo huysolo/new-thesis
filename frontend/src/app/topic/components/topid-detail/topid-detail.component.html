@@ -1,30 +1,53 @@
-<h1 matDialogTitle>{{topicDetail.topic.title}}</h1>
+<h2 matDialogTitle>Topic Detail</h2>
 
 <mat-dialog-content>
-  
-  <label>Summary:</label>
+  <label>TITLE</label>
+  <p>{{topicDetail.topic.title}}</p>
+  <label>SUMMARY</label>
   <p>
     {{topicDetail.topic.sumary}}
   </p>
+  <label>STUDENT LIMIT</label>
   <p>
-    <label>Limit Of Student:</label> {{topicDetail.topic.stNumLimit}}
+    {{topicDetail.topic.stNumLimit}}
   </p>
+  <ng-container *ngIf="topicDetail.topic.semesterNo != null">
+    <label>SEMESTER NO</label>
+    <p>
+      {{topicDetail.topic.semesterNo}}
+    </p>
+  </ng-container>
+  <label>SPECIFICATION</label>
   <p>
-    <label>Semester No:</label> {{topicDetail.topic.semesterNo}}
+    {{specName | async}}
   </p>
-    <label>Topic Requirements:</label>
-    <mat-list *ngFor="let topicReq of topicDetail.topicRequirement">
-        <mat-list-item> {{topicReq.detail}} </mat-list-item>
-    </mat-list>
 
-    <label>
-      Topic Missions:
-    </label>
-    <mat-list *ngFor="let topicReq of topicDetail.topicMission">
-        <mat-list-item> {{topicReq.detail}} </mat-list-item>
+  <mat-list>
+      <label>STUDENT JOINED</label>
+    <mat-list-item *ngFor="let student of students | async">
+      <mat-icon mat-list-icon>account_circle</mat-icon>
+      <h6 mat-line>{{student.stdName}}</h6>
+      <p mat-line> {{student.studentId}} </p>
+    </mat-list-item>
+  </mat-list>
+  <label>TOPIC REQUIREMENTS</label>
+  <p>
+    <mat-list *ngFor="let topicReq of topicDetail.topicRequirement">
+      <mat-list-item> {{topicReq.detail}} </mat-list-item>
     </mat-list>
+  </p>
+
+  <label>
+    TOPIC REFERENCES
+  </label>
+  <p>
+    <mat-list *ngFor="let topicReq of topicDetail.topicMission">
+      <mat-list-item> {{topicReq.detail}} </mat-list-item>
+    </mat-list>
+  </p>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button matDialogClose>Close dialog</button>
+  <button class="btn btn-secondary" matDialogClose>Close</button>
+  <button class="btn btn-primary" matDialogClose [routerLink]="['/topic/detail', topicDetail.topic.idTop]">More Info</button>
 </mat-dialog-actions>

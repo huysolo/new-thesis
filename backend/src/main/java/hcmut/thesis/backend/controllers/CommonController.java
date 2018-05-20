@@ -34,8 +34,12 @@ public class CommonController {
 
     @RequestMapping(value = "listProf", method = RequestMethod.GET)
     List<ProfInfo> getListProf(){
-        return commonService.getListProf();
+        return commonService.getListProfOfCurrentFaculty();
+    }
 
+    @RequestMapping(value = "allProf", method = RequestMethod.GET)
+    List<ProfInfo> getAllProf(){
+        return commonService.getListProf();
     }
 
     @RequestMapping(value = "currentSem", method = RequestMethod.GET)
