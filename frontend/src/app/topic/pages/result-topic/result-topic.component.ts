@@ -51,5 +51,17 @@ export class ResultTopicComponent implements OnInit {
     });
   }
 
+  addTopic(topic, draft = false) {
+    if (topic !== undefined) {
+      let listTopic = new Array<Topic>();
+      if (!draft) {
+        listTopic = this.listTopicSrc.data;
+        listTopic.unshift(topic);
+        this.listTopicSrc.data =  listTopic;
+      }
+    }
+
+  }
+
 
 }

@@ -10,11 +10,13 @@ import { ReviewTopicComponent } from './pages/review-topic/review-topic.componen
 import { ReviewTopicPageComponent } from './pages/review-topic-page/review-topic-page.component';
 import { ResultTopicComponent } from './pages/result-topic/result-topic.component';
 import { DetailResultComponent } from './pages/detail-result/detail-result.component';
+import { TopicFormComponent } from './components/topic-form/topic-form.component';
 
 const topicRoutes: Routes = [
   {
     path: 'list',
     component: ManageTopicComponent,
+    data: {breadcrumbs: 'Manage' },
     children: [
       {
         path: ':typ',
@@ -23,21 +25,24 @@ const topicRoutes: Routes = [
     ]
   }, {
     path: 'create',
-    component: CreateTopicComponent
+    component: CreateTopicComponent,
+    data: {breadcrumbs: 'Create' },
   }, {
     path: 'review',
     component: ReviewTopicPageComponent,
+    data: {breadcrumbs: 'Review' },
     children: [{
         path: ':typ',
-        component: ReviewTopicComponent
+        component: ReviewTopicComponent,
       }
     ]
   }, {
     path: 'result',
     component: ResultTopicComponent,
+    data: {breadcrumbs: 'Overview' },
     children: [{
       path: ':id',
-      component: DetailResultComponent
+      component: DetailResultComponent,
     }]
   }
 ];

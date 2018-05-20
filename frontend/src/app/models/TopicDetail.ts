@@ -10,7 +10,7 @@ export class TopicDetail {
   constructor() {
     this.topic = new Topic();
     this.topicMission = [];
-    this.topicRequirement = [];
+    this.topicRequirement = [new TopicRequirement()];
     this.draft = false;
   }
 

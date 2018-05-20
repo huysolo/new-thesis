@@ -16,7 +16,6 @@ import {MeetingModule} from './meeting/meeting.module';
     AppComponent,
     LayoutComponent,
     MainPageComponent
-    
   ],
   imports: [
     CoreModule,

@@ -22,3 +22,22 @@ html{position:relative;min-height:100%}body{overflow-x:hidden}body.sticky-footer
   max-height: 500px;
   overflow: auto;
 }
+label {
+  font-weight: 500;
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.mat-form {
+
+  width: 100%;
+}
+
+.mat-full-width {
+  width: 100%;
+}

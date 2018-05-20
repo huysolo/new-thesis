@@ -20,6 +20,11 @@ import { TopicTableComponent } from './components/topic-table/topic-table.compon
 import { ProfPipe } from '../shared/prof.pipe';
 import { ReviewPipe } from './review.pipe';
 import { DetailResultComponent } from './pages/detail-result/detail-result.component';
+import { TopicFormComponent } from './components/topic-form/topic-form.component';
+import { MatSelectModule } from '@angular/material';
+import { CreateFormModalComponent } from './components/create-form-modal/create-form-modal.component';
+import { TopicFormButtonComponent } from './components/topic-form-button/topic-form-button.component';
+import { TopicFormButtonDirective } from './directives/topic-form-button.directive';
 @NgModule({
   imports: [
     CommonModule,
@@ -29,7 +34,8 @@ import { DetailResultComponent } from './pages/detail-result/detail-result.compo
     Ng2SearchPipeModule,
     NgxPaginationModule,
     MatTableModule,
-    CdkTableModule
+    CdkTableModule,
+    MatSelectModule
   ],
   declarations: [
     TopicContentComponent,
@@ -44,10 +50,15 @@ import { DetailResultComponent } from './pages/detail-result/detail-result.compo
     TopicTableComponent,
     ProfPipe,
     ReviewPipe,
-    DetailResultComponent
+    DetailResultComponent,
+    TopicFormComponent,
+    CreateFormModalComponent,
+    TopicFormButtonComponent,
+    TopicFormButtonDirective
   ],
   entryComponents: [
     TopidDetailComponent,
+    CreateFormModalComponent
   ]
 })
 export class TopicModule { }
