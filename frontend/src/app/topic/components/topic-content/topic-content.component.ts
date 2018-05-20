@@ -19,7 +19,7 @@ export class TopicContentComponent implements OnInit {
   @Output('applyTopic') applyTopic = new EventEmitter<Topic>();
   @Output() removeTopic = new EventEmitter<Number>();
 
-  constructor(public dialog: MatDialog, public topicSv: TopicService, public authoSv: AuthService) { }
+  constructor(public topicSv: TopicService, public authoSv: AuthService) { }
 
   ngOnInit() {
   }
@@ -40,17 +40,6 @@ export class TopicContentComponent implements OnInit {
           return topicLst;
         });
       }
-    });
-  }
-
-  getTopicId(): void {
-    this.topicSv.getTopicDetail(this.topic.idTop).subscribe(rs => {
-      const dialogRef = this.dialog.open(TopidDetailComponent, {
-        width: '500px',
-        data: {
-          topicDetail: rs
-        }
-      });
     });
   }
 

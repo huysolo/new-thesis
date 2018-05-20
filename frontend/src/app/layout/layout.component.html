@@ -41,11 +41,11 @@
       </li>
 
       <li class="nav-item">
-          <a [routerLink]="['/task']" class="nav-link">
-            <i class="fa fa-fw fa-wrench"></i>
-            <span class="nav-link-text">Task</span>
-          </a>
-        </li>
+        <a [routerLink]="['/task']" class="nav-link">
+          <i class="fa fa-fw fa-wrench"></i>
+          <span class="nav-link-text">Task</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a [routerLink]="['/standard/list']" class="nav-link">
           <i class="fa fa-fw fa-wrench"></i>
@@ -60,6 +60,9 @@
         </a>
         <ul class="sidenav-second-level collapse" id="collapseComponents">
           <li>
+              <a [routerLink]="['/topic/result']">Overview</a>
+          </li>
+          <li>
             <a [routerLink]="['/topic/list', 'recent']">Recent</a>
           </li>
           <li>
@@ -67,15 +70,13 @@
           </li>
           <ng-container *ngIf="authService.isProfessor()">
             <li>
-              <a [routerLink]="['/topic/list', 'draft']">Draft</a>
-            </li>
-            <li>
               <a [routerLink]="['/topic/review', 'guide']">Review</a>
             </li>
             <li>
               <a [routerLink]="['/topic/create']">Create</a>
             </li>
           </ng-container>
+
         </ul>
       </li>
     </ul>
@@ -169,15 +170,17 @@
 <div class="content-wrapper">
   <div class="container-fluid">
     <div class="breadcrumb-top">
-      <mc-breadcrumbs ></mc-breadcrumbs>
+      <mc-breadcrumbs></mc-breadcrumbs>
     </div>
     <router-outlet></router-outlet>
   </div>
 </div>
+<br>
+<br>
 <footer class="sticky-footer">
   <div class="container">
     <div class="text-center">
-      <small>Copyright © Your Website 2018</small>
+      <small>Copyright © Thesis Managment 2018</small>
     </div>
   </div>
 </footer>

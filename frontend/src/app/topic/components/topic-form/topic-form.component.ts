@@ -10,6 +10,7 @@ import { TopicService } from '../../topic.service';
 import { Observable } from 'rxjs/Observable';
 import { Specialize } from '../../../models/Specialize';
 import { CommonService } from '../../../core/common.service';
+import { Validators, FormControl } from '@angular/forms';
 @Component({
   selector: 'app-topic-form',
   templateUrl: './topic-form.component.html',
@@ -22,6 +23,11 @@ export class TopicFormComponent implements OnInit {
   @Input() draft = false;
   specLst: Observable<Specialize[]>;
   @Output('created') created = new EventEmitter<Topic>();
+
+  numberForm = new FormControl('', [
+    Validators.required,
+    Validators.pattern('^((\\+91-?)|0)?[0-9]{1}$')
+  ]);
   ngOnInit() {
     this.specLst = this.commonSv.getListSpec();
   }

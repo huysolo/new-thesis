@@ -161,7 +161,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> getDraftTopics(Integer profId) {
-        return topicRepo.findAllUnPublish(profId);
+        return topicRepo.findAll(TopicSpecification.isDraft());
     }
 
     @Override

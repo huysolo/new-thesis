@@ -39,12 +39,13 @@ const topicRoutes: Routes = [
   }, {
     path: 'result',
     component: ResultTopicComponent,
-    data: {breadcrumbs: 'Overview' },
-    children: [{
-      path: ':id',
+    data: {breadcrumbs: 'Overview' }
+  },
+    {
+      path: 'detail/:id',
       component: DetailResultComponent,
-    }]
-  }
+      data: {breadcrumbs: 'Detail' }
+    }
 ];
 @NgModule({
   imports: [

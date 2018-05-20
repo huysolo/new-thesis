@@ -14,6 +14,7 @@ export class CommonService {
   private urlListSemester = 'http://localhost:8080/listSemester';
   private urlAllSem = 'http://localhost:8080/allSemNo';
   private profListlUrl = 'http://localhost:8080/listProf';
+  private allProflUrl = 'http://localhost:8080/listProf';
   private specfListlUrl = 'http://localhost:8080/listSpec';
 
 
@@ -32,10 +33,21 @@ export class CommonService {
     return this.http.get<ProfInfo[]>(this.profListlUrl);
   }
 
+  public getAllProf(): Observable<ProfInfo[]> {
+    return this.http.get<ProfInfo[]>(this.allProflUrl);
+  }
   /**
    * getListSpec
    */
   public getListSpec(): Observable<Specialize[]> {
     return this.http.get<Specialize[]>(this.specfListlUrl);
+  }
+
+  public getSpecNameById(id) {
+    return new Observable<String>(obs => {
+      this.getListSpec().subscribe(data => {
+        obs.next(data.find(spec => spec.idSpecialize === id).name);
+      });
+    });
   }
 }

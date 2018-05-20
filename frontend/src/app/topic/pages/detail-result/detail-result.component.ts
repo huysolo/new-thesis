@@ -8,6 +8,8 @@ import { TopicSemStandard } from '../../../models/TopicSemStandard';
 import { AuthService } from '../../../core/auth.service';
 import { Topic } from '../../../models/Topic';
 import { TopicDetail } from '../../../models/TopicDetail';
+import { StudentDoTask } from '../../../task/components/student-do-task';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-detail-result',
@@ -18,12 +20,12 @@ export class DetailResultComponent implements OnInit {
   listReviewSrc: MatTableDataSource<Review>;
   topicRvStandardDetail: TopicSemStandard[];
   listColReviewFull = [
-    'idTopic',
     'idProf',
     'score',
     'action'
   ];
   topic: TopicDetail;
+  students: Observable<StudentDoTask[]>;
   constructor(public authSv: AuthService, public router: Router,
     public topicSv: TopicService, public route: ActivatedRoute, public standardSv: StandardService) { }
 
@@ -32,6 +34,7 @@ export class DetailResultComponent implements OnInit {
       this.topicSv.getTopicDetail(params['id']).subscribe(data => {
         this.topic = data;
       });
+      this.students = this.topicSv.getAllStudentDoTopic(params['id']);
       this.topicRvStandardDetail = null;
       this.topicSv.getReviewsByIdTopic(params['id']).subscribe(data => {
         this.listReviewSrc = new MatTableDataSource(data);

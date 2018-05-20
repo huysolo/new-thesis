@@ -86,12 +86,12 @@
               </tr>
             </tbody>
           </table>
-          <div>
+          <div class="text-center">
     
+            <button *ngIf="reviewTp != null" type="button" name="" id="" class="btn btn-primary" (click)="submitReview()"
+              [disabled]="!submitReviewForm.form.valid">Submit</button>
+            <button type="button" name="cancelRv" id="cancelRv" class="btn btn-secondary " (click)="standardListReview = null">Cancel</button>
           </div>
-          <button *ngIf="reviewTp != null" type="button" name="" id="" class="btn btn-primary btn-lg btn-block active" (click)="submitReview()"
-            [disabled]="!submitReviewForm.form.valid">Submit</button>
-          <button type="button" name="cancelRv" id="cancelRv" class="btn btn-secondary btn-lg btn-block" (click)="standardListReview = null">Cancel</button>
         </form>
       </div>
 

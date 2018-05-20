@@ -10,6 +10,7 @@ import java.util.List;
 public interface CommonService {
     List<Semester> getListSemester();
     List<Integer> getAllSemester();
+    List<ProfInfo> getListProfOfCurrentFaculty();
     List<ProfInfo> getListProf();
     String getFullName(String fName, java.lang.String lName);
     String getFullName(User user);
