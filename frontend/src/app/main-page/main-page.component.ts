@@ -6,9 +6,11 @@ import { Task } from '../models/Task';
 import { Topic } from '../models/Topic';
 import { TopicService } from '../topic/topic.service';
 import { StudentDoTask } from '../task/components/student-do-task';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { Meeting } from '../meeting/meeting';
-import {MeetingService} from '../meeting/meeting.service';
+import { MeetingService } from '../meeting/meeting.service';
+import { MatTableDataSource } from '@angular/material';
+import {MeetingCreateComponent} from '../meeting/component/meeting-create/meeting-create.component';
 
 
 @Component({
@@ -28,9 +30,10 @@ export class MainPageComponent implements OnInit {
   countTask: Observable<Number>;
   topic: Topic;
 
+
   displayedColumnTask = ['title', 'deadline', 'pass'];
   displayedColumnMeeting = ['title', 'bookedSchedule', 'status'];
-  
+
 
   constructor(public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     this.listRecentTask = taskSv.getListTaskByApprove(0);
@@ -58,29 +61,49 @@ export class MainPageComponent implements OnInit {
     this.route.navigate(['/meeting/meeting-detail', id]);
   }
 
-  profGetRecentMeeting(){
+  profGetRecentMeeting() {
     this.meetingService.profGetRecenMeeting().subscribe(
       res => {
         this.listRecentMeeting = this.getBookedSchedule(res);
         console.log(this.listRecentMeeting);
+        if (this.listRecentMeeting) {
+        } else {
+          console.log('null');
+        }
+
       }
     );
   }
 
-  getBookedSchedule(listMeeting: Array<any>){
-    if(listMeeting.length > 0){
-      for(let i = 0; i < listMeeting.length; i++ ){
-          for(let j = 0; j<listMeeting[i].timeLocation.length; j++){
-            if(listMeeting[i].timeLocation[j].status){
-              listMeeting[i].bookedSchedule = listMeeting[i].timeLocation[j];
-            } else{
-              listMeeting[i].bookedSchedule = null;
-            }
-          }   
+  getBookedSchedule(listMeeting: Array<any>) {
+    if (listMeeting.length > 0) {
+      for (let i = 0; i < listMeeting.length; i++) {
+        for (let j = 0; j < listMeeting[i].timeLocation.length; j++) {
+          if (listMeeting[i].timeLocation[j].status) {
+            listMeeting[i].bookedSchedule = listMeeting[i].timeLocation[j];
+          }
+        }
       }
     }
     return listMeeting;
   }
+
+  isMeetingToday(meetingTime: any){
+    var thisTime = new Date();
+    var thisTimeInt = thisTime.getTime();
+    var thisTimeDay = Math.floor(thisTimeInt/(1000 * 60 * 60 * 24)) + 1; 
+    var meetingDay = Math.floor(meetingTime/(1000 * 60 * 60 * 24));
+    if(thisTimeDay == meetingDay){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  addNewMeeting(event: Meeting){
+    this.listRecentMeeting.push(event);
+  }
+
 
 }
 

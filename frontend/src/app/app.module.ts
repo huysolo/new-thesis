@@ -9,12 +9,14 @@ import {AuthService} from './core/auth.service';
 import {UserModule} from './user/user.module';
 import { MainPageComponent } from './main-page/main-page.component';
 import { CoreModule } from './core/core.module';
+import {MeetingModule} from './meeting/meeting.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
-    MainPageComponent,
+    MainPageComponent
+    
   ],
   imports: [
     CoreModule,
@@ -22,6 +24,7 @@ import { CoreModule } from './core/core.module';
     RouterModule,
     AppRoutingModule,
     UserModule,
+    MeetingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

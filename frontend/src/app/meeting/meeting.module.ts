@@ -49,14 +49,15 @@ import { MeetingDetailPageComponent } from './component/meeting-detail-page/meet
     MatSnackBarModule
   ],
   declarations: [
-    MeetingCreateComponent,
     MeetingDetailComponent,
     MeetingContentComponent,
     MeetingListComponent,
     FilterPipe,
-    MeetingDetailPageComponent
+    MeetingDetailPageComponent,
+    MeetingCreateComponent
   ],
-  providers: [MeetingService]
+  providers: [MeetingService],
+  exports: [MeetingCreateComponent]
 })
 export class MeetingModule { }
 

@@ -131,5 +131,9 @@
 .title-header{
     padding-top: 20px;
 }
+.badge-title {
+    position: absolute;
+    bottom: 20px;
+}
 
 
