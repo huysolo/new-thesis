@@ -7,7 +7,9 @@
 
   <ng-container matColumnDef="title">
     <mat-header-cell *matHeaderCellDef> Tilte </mat-header-cell>
-    <mat-cell *matCellDef="let topic"> {{topic.title}} </mat-cell>
+    <mat-cell *matCellDef="let topic"> <div class="title">
+        {{topic.title}}
+    </div>  </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="stNumLimit">
