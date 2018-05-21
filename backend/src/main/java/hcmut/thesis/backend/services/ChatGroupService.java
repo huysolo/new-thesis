@@ -16,4 +16,5 @@ public interface ChatGroupService {
     List<ChatGroupInfo> getchatGroupFromStdID(int stdID);
     Integer countMessageBytopicID(int topicIDID);
     Integer countMessageByStd(int stdID);
+    ChatGroupInfo receiveMessage(String message, Integer stdID, Integer userID, String userName);
 }

@@ -10,6 +10,9 @@ import hcmut.thesis.backend.repositories.ChatGroupRepo;
 import hcmut.thesis.backend.repositories.StudentTopicSemRepo;
 import hcmut.thesis.backend.repositories.TaskCommentRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
+import hcmut.thesis.backend.services.ChatGroupService;
+import hcmut.thesis.backend.services.CommonService;
+import hcmut.thesis.backend.services.TaskService;
 import java.sql.Timestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -40,28 +43,29 @@ public class WebSocketController {
     
     @Autowired
     private TaskCommentRepo taskCommentRepo;
+    
+    @Autowired
+    private ChatGroupService chatGroupService;
+    
+    @Autowired
+    private TaskService taskService;
 
 
      @RequestMapping(value = "/notify", method = RequestMethod.GET)
-    public String getNotification(@RequestParam("message") String message) {
-        ChatGroupInfo msg = new ChatGroupInfo();
-        int topicID = stdTopicSemRepo.getTopicIDFromStudentID(userSession.getStudent().getIdStudent());
-        msg.setContent(message);
-        msg.setTime(new Timestamp(System.currentTimeMillis()));
-        msg.setUsername(userRepo.getUserFromID(userSession.getUserID()).getUserName());
-        msg.setGender(userRepo.getUserFromID(userSession.getUserID()).getGender());
-        msg.setTopicID(topicID);
+    public void getReceiveMessage(@RequestParam("message") String message) {
+        Integer stdID = userSession.getStudent().getIdStudent();
+        Integer userID = userSession.getUserID();
+        String userName = userSession.getUser().getUserName();
+        ChatGroupInfo msg = chatGroupService.receiveMessage(message, stdID, userID, userName);
         
-        ChatGroup cg = new ChatGroup();
-        cg.setContent(message);
-        cg.setIdTopicSem(topicID);
-        cg.setIdUser(userSession.getUserID());
-        cg.setTime(new Timestamp(System.currentTimeMillis()));
-        chatGroupRepo.save(cg);
+        try{
+            Integer topicID = msg.getTopicID();
+            msg.setTopicID(0);
+            template.convertAndSend("/topic/notification"+ topicID , msg);
+        } catch(Exception e){
         
-        template.convertAndSend("/topic/notification"+topicID, msg);
+        }
 
-        return null;
     }
     
     @RequestMapping(value="/taskcomment", method = RequestMethod.GET)
@@ -82,8 +86,6 @@ public class WebSocketController {
         temp.setIdUser(userSession.getUserID());
         temp.setTime(new Timestamp(System.currentTimeMillis()));
         taskCommentRepo.save(temp);
-        System.out.println(temp.getIdTask());
-        System.out.println(temp.getIdUser());
         
         template.convertAndSend("/topic/comment" +taskid ,cmt);
 

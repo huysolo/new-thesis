@@ -18,6 +18,7 @@ import org.springframework.data.repository.query.Param;
 public interface ChatGroupRepo extends JpaRepository<ChatGroup, Integer> {
     @Query("SELECT cg FROM ChatGroup cg WHERE cg.idTopicSem = :topicID")
     List<ChatGroup> getAllMesageFromtopicID(@Param("topicID") Integer topicID);
+
     
     @Query("SELECT COUNT(cg) FROM ChatGroup cg WHERE cg.idTopicSem = :topicID")
     Integer countMessageByTopicID(@Param("topicID") Integer topicID);
