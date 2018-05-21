@@ -13,6 +13,7 @@
           Email
         </label>
         <p>{{user.user.email}}</p>
+
       </div>
     </div>
   </div>
@@ -33,7 +34,12 @@
         <label>
           Full Name
         </label>
+
         <p>{{user.user.firstName + ' ' + user.user.lastName}}</p>
+        <label>
+            Faculty
+          </label>
+          <p>{{user.facultyName}}</p>
         <ng-container *ngIf="user.professor">
           <label>
             Professor Id
@@ -49,11 +55,11 @@
           <p>{{user.professor.skills}}</p>
         </ng-container>
         <ng-container *ngIf="user.student">
-            <label>
-              Student Id
-            </label>
-            <p>{{user.student.idStudent}}</p>
-          </ng-container>
+          <label>
+            Student Id
+          </label>
+          <p>{{user.student.idStudent}}</p>
+        </ng-container>
       </div>
     </div>
   </div>

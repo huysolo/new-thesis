@@ -32,8 +32,8 @@
     <mat-list>
       <label>Student Group </label>
       <div class="row">
-        <div class="col-3" *ngFor="let student of students | async">
-          <mat-list-item >
+        <div class="col-3" *ngFor="let student of students | async" [routerLink]="['/user/view/', student.userId]">
+          <mat-list-item [ngClass]="{'text-success': student.teamlead == 1}" [ngClass]="{'w3-primary': student.userId == authSv.getUserId()}">
             <mat-icon mat-list-icon>account_circle</mat-icon>
             <h6 mat-line>{{student.stdName}}</h6>
             <p mat-line> {{student.studentId}} </p>

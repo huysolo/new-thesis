@@ -56,8 +56,7 @@ public class WebSocketController {
         Integer stdID = userSession.getStudent().getIdStudent();
         Integer userID = userSession.getUserID();
         String userName = userSession.getUser().getUserName();
-        ChatGroupInfo msg = chatGroupService.receiveMessage(message, stdID, userID, userName);
-        
+        ChatGroupInfo msg = chatGroupService.receiveMessage(message, stdID, userID, userName);       
         try{
             Integer topicID = msg.getTopicID();
             msg.setTopicID(0);
