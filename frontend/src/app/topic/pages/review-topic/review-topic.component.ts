@@ -11,6 +11,7 @@ import { Standard } from '../../../models/Standard';
 import { StandardScore } from '../../../models/StandardScore';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { DataSource } from '@angular/cdk/table';
+import { LayoutService } from '../../../layout/layout.service';
 
 
 @Component({
@@ -27,15 +28,15 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
   standardListReview: Standard[];
   dataSource: MatTableDataSource<Topic>;
   dataSourceRe: MatTableDataSource<Topic>;
-  displayedColumns = ['idTop', 'title', 'stNumLimit', 'action'];
-  displayedColumnsFull = ['idTop', 'title', 'stNumLimit', 'publishDate', 'action'];
+  displayedColumns = ['idTop', 'stNumLimit', 'title', 'action'];
+  displayedColumnsFull = ['idTop', 'stNumLimit', 'publishDate', 'title', 'action'];
   selectedSem;
   typ: String;
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
   @ViewChild('paginatorRe') paginatorRe: MatPaginator;
   @ViewChild('sortRe') sortRe: MatSort;
-  constructor(private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute, private layoutSv: LayoutService,
     public topicSv: TopicService, public comSv: CommonService, public standardSv: StandardService) { }
 
 
@@ -44,6 +45,7 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
   }
   ngOnInit() {
     this.route.params.subscribe(params => {
+      this.layoutSv.labelName = params['typ'] === 'guide' ? 'Supervise' : 'Critique';
       this.topicRvStandardDetail = null;
       this.typ = params['typ'];
       this.topicSv.getListTopicReview(null, 0, this.typ === 'guide').subscribe(lst => {

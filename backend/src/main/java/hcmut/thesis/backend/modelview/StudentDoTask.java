@@ -12,8 +12,24 @@ import java.sql.Timestamp;
  * @author MinBui
  */
 public class StudentDoTask {
+    public StudentDoTask(Integer studentId, String stdName, Integer userId, int teamlead) {
+        this.studentId = studentId;
+        this.stdName = stdName;
+        this.userId = userId;
+        this.teamlead = teamlead;
+    }
+
     private Integer studentId;
     private String stdName;
+    private Integer userId;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public int getTeamlead() {
         return teamlead;

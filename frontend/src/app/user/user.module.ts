@@ -12,6 +12,8 @@ import {LoginService} from './pages/login/login.service';
 import { AuthService } from '../core/auth.service';
 import {CheckloginGuard} from './pages/login/checklogin.guard.service';
 import { MatFormFieldModule, MatSelectModule, MatInputModule } from '@angular/material';
+import { ViewProfileComponent } from './components/view-profile/view-profile.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 
 @NgModule({
@@ -36,7 +38,9 @@ import { MatFormFieldModule, MatSelectModule, MatInputModule } from '@angular/ma
     LoginComponent,
     ManageAccountComponent,
     LoginComponent,
-    ManageAccountComponent
+    ManageAccountComponent,
+    ViewProfileComponent,
+    ProfileComponent
 
   ]
 })

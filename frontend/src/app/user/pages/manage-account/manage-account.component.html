@@ -1,6 +1,24 @@
 <div class="row">
-	<div class="col-4">
-
+	<div class="col-4" *ngIf="manageUser != null">
+		<div class="mat-elevation-z1">
+			<div class="white-box">
+				<div class="box-title">
+					View Profile
+				</div>
+				<label>
+					User Name
+				</label>
+				<p>{{manageUser.user.userName}}</p>
+				<label>
+					Email
+				</label>
+				<p>{{manageUser.user.email}}</p>
+				<label>
+					System Role
+				</label>
+				<p>{{manageUser.user.role == 1 ? 'Admin' : (manageUser.professor ? 'Professor' : 'Student')}}</p>
+			</div>
+		</div>
 	</div>
 	<div class="col-8">
 		<div class="mat-elevation-z1">
@@ -16,13 +34,13 @@
 							<div *ngIf="isEditUsername == false" class="alert">Username already exit!!!</div>
 						</mat-form-field>
 						<mat-form-field class="mat-full-width">
-							<input matInput type="password" placeholder="Password"  [(ngModel)]="manageUser.user.password" name="pass">
+							<input matInput type="password" placeholder="Password" [(ngModel)]="manageUser.user.password" name="pass">
 						</mat-form-field>
 						<mat-form-field class="mat-full-width">
-							<input matInput type="text" placeholder="FirstName"  [(ngModel)]="manageUser.user.firstName" name="fname">
+							<input matInput type="text" placeholder="FirstName" [(ngModel)]="manageUser.user.firstName" name="fname">
 						</mat-form-field>
 						<mat-form-field class="mat-full-width">
-							<input matInput type="text" placeholder="LastName"  [(ngModel)]="manageUser.user.lastName" name="lname">
+							<input matInput type="text" placeholder="LastName" [(ngModel)]="manageUser.user.lastName" name="lname">
 						</mat-form-field>
 						<mat-form-field class="mat-full-width">
 							<input matInput type="text" placeholder="Email" [formControl]="emailFormControl" name="email" [(ngModel)]="manageUser.user.email">
@@ -40,10 +58,10 @@
 						</mat-form-field>
 						<ng-container *ngIf="manageUser.professor != null">
 							<mat-form-field class="mat-full-width">
-								<input matInput type="text" placeholder="Degree" [(ngModel)] = "manageUser.professor.degree" name="degree">
+								<input matInput type="text" placeholder="Degree" [(ngModel)]="manageUser.professor.degree" name="degree">
 							</mat-form-field>
 							<mat-form-field class="mat-full-width">
-								<input matInput type="text" placeholder="Skills" [(ngModel)] = "manageUser.professor.skills" name="skills">
+								<input matInput type="text" placeholder="Skills" [(ngModel)]="manageUser.professor.skills" name="skills">
 							</mat-form-field>
 						</ng-container>
 					</form>

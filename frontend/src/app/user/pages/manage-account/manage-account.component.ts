@@ -6,6 +6,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { LoginService } from '../login/login.service';
 import { ManageUser } from '../../../models/ManageUser';
 import { MatSnackBar } from '@angular/material';
+import { LayoutService } from '../../../layout/layout.service';
 
 
 @Component({
@@ -27,18 +28,9 @@ export class ManageAccountComponent implements OnInit {
     Validators.email,
   ]);
   constructor(public authService: AuthService, private fb: FormBuilder, public loginService: LoginService,
-    public snackBar: MatSnackBar) {
-    // this.profileForm = this.fb.group({
-    //   username: [this.authService.getUsername(), Validators.required],
-    //   password: [this.authService.getPassword(), Validators.required],
-    //   firstname: [this.authService.getFirstname(), Validators.required],
-    //   lastname: [this.authService.getLastname(), Validators.required],
-    //   email: [this.authService.getEmail(), Validators.required],
-    //   gender: [this.authService.getGender(), Validators.required],
-    //   skills: [this.authService.getSkills(), Validators.required],
-    //   degree: [this.authService.getDegree(), Validators.required],
-    //   profID: [this.authService.getProfID(), Validators.required]
-    // });
+    public snackBar: MatSnackBar, public layouSv: LayoutService) {
+      layouSv.labelName = 'Manage Account';
+
 
   }
 

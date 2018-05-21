@@ -1,0 +1,61 @@
+<div class="row" *ngIf="user != null">
+  <div class="col-4">
+    <div class="mat-elevation-z1">
+      <div class="white-box">
+        <div class="box-title">
+          View Profile
+        </div>
+        <label>
+          User Name
+        </label>
+        <p>{{user.user.userName}}</p>
+        <label>
+          Email
+        </label>
+        <p>{{user.user.email}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="mat-elevation-z1">
+      <div class="white-box">
+        <div class="box-title">
+          Detail
+        </div>
+        <label>
+          Gender
+        </label>
+        <p>{{user.user.gender == 0 ? 'Male' : 'Female'}}</p>
+        <label>
+          System Role
+        </label>
+        <p>{{user.user.role == 1 ? 'Admin' : (user.professor ? 'Professor' : 'Student')}}</p>
+        <label>
+          Full Name
+        </label>
+        <p>{{user.user.firstName + ' ' + user.user.lastName}}</p>
+        <ng-container *ngIf="user.professor">
+          <label>
+            Professor Id
+          </label>
+          <p>{{user.professor.idProfessor}}</p>
+          <label>
+            Degrees
+          </label>
+          <p>{{user.professor.degree}}</p>
+          <label>
+            Skill
+          </label>
+          <p>{{user.professor.skills}}</p>
+        </ng-container>
+        <ng-container *ngIf="user.student">
+            <label>
+              Student Id
+            </label>
+            <p>{{user.student.idStudent}}</p>
+          </ng-container>
+      </div>
+    </div>
+  </div>
+
+</div>

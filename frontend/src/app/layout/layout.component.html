@@ -8,7 +8,7 @@
     <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
       <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
         <a class="nav-link" [routerLink]="['']">
-            <i class="fas fa-tachometer-alt"></i>
+          <i class="fas fa-tachometer-alt"></i>
           <span class="nav-link-text">Dashboard</span>
         </a>
       </li>
@@ -53,13 +53,11 @@
         </a>
         <ul class="sidenav-second-level collapse" id="collapseComponents">
           <li>
-              <a [routerLink]="['/topic/result']">Overview</a>
+            <a [routerLink]="['/topic/result']">Overview</a>
           </li>
-          <li>
-            <a [routerLink]="['/topic/list', 'recent']">Recent</a>
-          </li>
-          <li>
-            <a [routerLink]="['/topic/list', 'history']">History</a>
+
+          <li *ngIf="authService.isStudent()">
+            <a [routerLink]="['/topic/list', 'recent']">Apply</a>
           </li>
           <ng-container *ngIf="authService.isProfessor()">
             <li>
@@ -155,18 +153,25 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="modal" data-target="#exampleModal" (click)="logout()">
-            <i class="fas fa-sign-out-alt"></i>Logout</a>
+          <i class="fas fa-sign-out-alt"></i>Logout</a>
       </li>
     </ul>
   </div>
 </nav>
 <div class="content-wrapper">
-  <mat-toolbar>Profile</mat-toolbar>
-  <br>
+
+  <mat-toolbar>
+    <div style="width: 100%">
+      <div class="pull-left">
+        {{layoutSv.labelName}}
+      </div>
+      <div class="pull-right">
+        <mc-breadcrumbs></mc-breadcrumbs>
+      </div>
+    </div>
+  </mat-toolbar>
   <div class="container-fluid">
-    <!-- <div class="breadcrumb-top">
-      <mc-breadcrumbs class="bg-white"></mc-breadcrumbs>
-    </div> -->
+    <br>
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -24,7 +24,7 @@
 
   <mat-list *ngIf="students != null ">
     <label>STUDENT GROUP</label>
-    <mat-list-item *ngFor="let student of students">
+    <mat-list-item *ngFor="let student of students" [routerLink]="['/user/view', student.userId]">
       <mat-icon mat-list-icon>account_circle</mat-icon>
       <h6 mat-line>{{student.stdName}}</h6>
       <p mat-line> {{student.studentId}} </p>

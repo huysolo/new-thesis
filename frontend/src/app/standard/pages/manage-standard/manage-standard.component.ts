@@ -12,16 +12,20 @@ import { TopicReview } from '../../../models/TopicReview';
 import { TopicSemStandard } from '../../../models/TopicSemStandard';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { SemesterService } from '../../../core/semester.service';
+import { LayoutService } from '../../../layout/layout.service';
 
 @Component({
   selector: 'app-manage-standard',
   templateUrl: './manage-standard.component.html',
   styleUrls: ['./manage-standard.component.css']
 })
-export class ManageStandardComponent implements OnInit,  AfterViewInit {
+export class ManageStandardComponent implements OnInit, AfterViewInit {
 
-  constructor(public standardSv: StandardService, public topicSv: TopicService, public authoSv: AuthService, 
-    public semesterSv: SemesterService) { }
+  constructor(public standardSv: StandardService, private layoutSv: LayoutService,
+    public topicSv: TopicService, public authoSv: AuthService,
+    public semesterSv: SemesterService) {
+      layoutSv.labelName = 'Standard';
+    }
   standardList: Observable<Standard[]>;
   standardListReview: Standard[];
   standardCreate: Standard;
@@ -44,7 +48,7 @@ export class ManageStandardComponent implements OnInit,  AfterViewInit {
     });
     this.standardSv.getListGeneralStandard(null).subscribe(data => {
       this.standardGeneral = new MatTableDataSource(data);
-            this.standardGeneral.paginator = this.paginatorGeneral;
+      this.standardGeneral.paginator = this.paginatorGeneral;
 
     })
 
@@ -73,7 +77,7 @@ export class ManageStandardComponent implements OnInit,  AfterViewInit {
   submitEdit() {
     this.standardSv.postStandard(this.standdardSelected).subscribe(data => {
       this.standardSv.getCurrentSemStandard().subscribe(dt => {
-        this.standardSrc = new MatTableDataSource(dt  );
+        this.standardSrc = new MatTableDataSource(dt);
         this.standardSrc.paginator = this.paginator;
       });
       this.reset();
@@ -89,7 +93,7 @@ export class ManageStandardComponent implements OnInit,  AfterViewInit {
   changeSemester(semNo) {
     this.standardSv.getListGeneralStandard(semNo).subscribe(data => {
       this.standardGeneral = new MatTableDataSource(data);
-            this.standardGeneral.paginator = this.paginatorGeneral;
+      this.standardGeneral.paginator = this.paginatorGeneral;
 
     });
 

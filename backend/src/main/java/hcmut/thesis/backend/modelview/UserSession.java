@@ -92,7 +92,24 @@ public class UserSession {
         return manageUser;
     }
 
-    public void  updapteProfile(ManageUser manageUser) {
+    public ManageUser loadProfile(int userID) {
+        ManageUser manageUser = new ManageUser();
+        User user = userRepo.findById(userID).orElseThrow(() -> new NullPointerException("User Not Found`"));
+        user.setPassword(null);
+        manageUser.setUser(user);
+        try {
+            manageUser.setProfessor(userDAO.findProfByUserId(userID));
+        } catch (NullPointerException e) {
+            try {
+                manageUser.setStudent(userDAO.findStudentByUserId(userID));
+            } catch (Exception e2) {
+                throw new NullPointerException(e.getMessage() + e2.getMessage());
+            }
+        }
+        return manageUser;
+    }
+
+    public void updateProfile(ManageUser manageUser) {
         User user = manageUser.getUser();
         user.setIdUser(getUserID());
         userRepo.save(user);

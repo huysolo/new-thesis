@@ -5,6 +5,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { ManageAccountComponent } from './pages/manage-account/manage-account.component';
 import {CheckloginGuard} from './pages/login/checklogin.guard.service';
 import { AuthGuardUserService } from '../core/auth-guard-user.service';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 const userRotes: Routes = [
   {
@@ -15,6 +16,9 @@ const userRotes: Routes = [
     path: 'manager',
     component: ManageAccountComponent,
     canActivate: [AuthGuardUserService]
+  }, {
+    path: 'view/:id',
+    component: ProfileComponent
   }
 ];
 

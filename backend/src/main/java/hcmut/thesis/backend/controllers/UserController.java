@@ -15,8 +15,11 @@ public class UserController {
     UserSession userSession;
 
     @GetMapping("profile")
-    ResponseEntity<?> loadProfile() {
+    ResponseEntity<?> loadProfile(@RequestParam(value = "id", required = false) Integer id) {
         try {
+            if (id != null) {
+                return ResponseEntity.ok(userSession.loadProfile(id));
+            }
             return ResponseEntity.ok(userSession.loadProfile());
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
@@ -26,7 +29,7 @@ public class UserController {
     @PostMapping("profile")
     ResponseEntity<?> updateProfile(@RequestBody ManageUser manageUser) {
         try {
-            userSession.updapteProfile(manageUser);
+            userSession.updateProfile(manageUser);
             return ResponseEntity.ok("");
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());

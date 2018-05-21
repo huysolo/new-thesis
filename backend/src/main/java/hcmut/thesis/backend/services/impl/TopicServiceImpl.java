@@ -362,8 +362,11 @@ public class TopicServiceImpl implements TopicService {
         List<StudentDoTask> listStd = new ArrayList<>();
         studentTopicSemRepo.getAllStudentByIdTopicSem(topicID).forEach(studentTopicSem -> {
             try {
-                String fullName = commonService.getFullName(userSession.getUserByIdStudent(studentTopicSem.getIdStudent()));
-                StudentDoTask studentDoTask = new StudentDoTask(studentTopicSem.getIdStudent(), fullName, studentTopicSem.getTeamLead());
+                User user = userSession.getUserByIdStudent(studentTopicSem.getIdStudent());
+
+                String fullName = commonService.getFullName(user);
+
+                StudentDoTask studentDoTask = new StudentDoTask(studentTopicSem.getIdStudent(), fullName, user.getIdUser(), studentTopicSem.getTeamLead());
                 listStd.add(studentDoTask);
             } catch (NullPointerException e) {
                 e.printStackTrace();

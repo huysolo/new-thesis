@@ -8,6 +8,7 @@ import { MainPageComponent } from '../main-page/main-page.component';
 import { CoreModule } from '../core/core.module';
 import { MaterialModule } from '../core/material.module';
 import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
+import { LayoutService } from './layout.service';
 
 
 @NgModule({
@@ -22,6 +23,9 @@ import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
     LayoutComponent,
     SidebarComponent,
      MainPageComponent
+  ],
+  providers: [
+    LayoutService
   ]
 })
 export class LayoutModule { }

@@ -11,6 +11,7 @@ import { Meeting } from '../meeting/meeting';
 import { MeetingService } from '../meeting/meeting.service';
 import { MatTableDataSource } from '@angular/material';
 import {MeetingCreateComponent} from '../meeting/component/meeting-create/meeting-create.component';
+import { LayoutService } from '../layout/layout.service';
 
 
 @Component({
@@ -35,11 +36,14 @@ export class MainPageComponent implements OnInit {
   displayedColumnMeeting = ['title', 'bookedSchedule', 'status'];
 
 
-  constructor(public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
+  constructor(
+    public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService,
+    public route: Router, private meetingService: MeetingService, layoutSv: LayoutService) {
     this.listRecentTask = taskSv.getListTaskByApprove(0);
     this.listRecentTopic = topicSv.getListRecentTopic();
     this.countTopic = topicSv.countTopic();
     this.countTask = taskSv.countTask();
+    layoutSv.labelName = 'Dashboard';
   }
 
   ngOnInit() {

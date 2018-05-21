@@ -5,6 +5,7 @@ import { TopicService } from '../topic/topic.service';
 import {TaskService} from '../task/task.service';
 import { SemesterService } from '../core/semester.service';
 import { ProfService } from '../core/prof.service';
+import { LayoutService } from './layout.service';
 
 @Component({
   selector: 'app-layout',
@@ -16,6 +17,7 @@ export class LayoutComponent implements OnInit {
   constructor(
     public taskService: TaskService,
     public authService: AuthService,
+    public layoutSv: LayoutService,
     private router: Router,
     private topicSv: TopicService,
     private semSv: SemesterService,
