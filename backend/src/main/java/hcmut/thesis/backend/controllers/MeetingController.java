@@ -30,8 +30,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javafx.scene.input.KeyCode.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -216,6 +218,26 @@ public class MeetingController {
     @ResponseBody
     public Topic getTopicTitleFromID(@RequestParam("topicID") Integer topicID) {
         return topicRepo.getTopicFromTopicID(topicID);
+    }
+    
+    @GetMapping("countmeetingbystd")
+    public  ResponseEntity<?> countMeetingByStd() {
+        int stdID = userSession.getStudent().getIdStudent();
+        try{
+            return ResponseEntity.ok(meetingService.countMeetingByStd(stdID));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+    
+    @GetMapping("countmeetingbyprof")
+    public  ResponseEntity<?> countMeetingByProf() {
+        int profID = userSession.getProf().getIdProfessor();
+        try{
+            return ResponseEntity.ok(meetingService.countMeetingByProf(profID));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)

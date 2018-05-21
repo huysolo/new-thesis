@@ -154,6 +154,22 @@ public class TaskServiceImpl implements TaskService {
             return null;
         }       
     }
+    @Override
+    public List<Task> getMyRecentTask(int topicID, int stdID){
+        List<Task> listTask = new ArrayList<>();
+        List<Task> tempList = taskRepo.getTaskFromIDTopic(topicID);
+        for(Task task: tempList){
+            try{
+                StudentTask temp = getStudentTaskByIdTaskAndIdStudent(task.getIdTask(), stdID);
+                if(temp != null){
+                    listTask.add(task);
+                }
+            } catch(Exception e){
+            
+            }
+        }
+        return listTask;
+    }
 
     @Override
     public Boolean saveFileToTask(File file) {
@@ -251,9 +267,19 @@ public class TaskServiceImpl implements TaskService {
     public Integer countTaskByProf() {
         int count = 0;
         for (Topic t : topicService.getListOpenTopic()) {
-            count = count + taskRepo.countTaskFromIDTopic(t.getIdTop());
+            count = count + taskRepo.countSubmitTaskFromIDTopic(t.getIdTop());
         }
         return count;
+    }
+    
+    @Override
+    public Integer countTaskByStudent(int stdID){
+        int topicID = this.getCurrTopicFromStdID(stdID).getIdTop();
+        try {
+            return taskRepo.countTaskFromIDTopic(topicID);
+        } catch (Exception e){
+            return 0;
+        }
     }
 
 

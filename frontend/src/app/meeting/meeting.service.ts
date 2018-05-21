@@ -87,4 +87,14 @@ export class MeetingService {
     return this.httpClient.get<any>(loginUrl + '?topicID=' + topicID);
   }
 
+  countMeetingByStd() {
+    const loginUrl = `http://localhost:8080/meeting/countmeetingbystd`;
+    return this.httpClient.get<number>(loginUrl);
+  }
+
+  countMeetingByProf() {
+    const loginUrl = `http://localhost:8080/meeting/countmeetingbyprof`;
+    return this.httpClient.get<number>(loginUrl);
+  }
+
 }

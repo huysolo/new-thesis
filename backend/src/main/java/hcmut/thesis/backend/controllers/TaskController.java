@@ -175,7 +175,8 @@ public class TaskController {
     @RequestMapping(value = "/getallmessage")
     @ResponseBody
     public List<ChatGroupInfo> getAllMessage(){
-        return chatGroupService.getchatGroupFromUderID(userSession.getUserID());
+        int stdID = userSession.getStudent().getIdStudent();
+        return chatGroupService.getchatGroupFromStdID(stdID);
     }
     
     @RequestMapping(value = "/gettaskcomment")
@@ -291,6 +292,38 @@ public class TaskController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+    
+    @GetMapping("counttaskbystd")
+    public  ResponseEntity<?> countTaskByStd() {
+        int stdID = userSession.getStudent().getIdStudent();
+        try{
+            return ResponseEntity.ok(taskService.countTaskByStudent(stdID));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+    
+    
+    
+    @GetMapping("countmessagebystd")
+    public  ResponseEntity<?> countMessageByStd() {
+        int stdID = userSession.getStudent().getIdStudent();
+        try{
+            return ResponseEntity.ok(chatGroupService.countMessageByStd(stdID));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+    
+    @GetMapping("stdgettopicid")
+    public  ResponseEntity<?> stdGetTopicID() {
+        try {
+            int stdID = userSession.getStudent().getIdStudent();
+            return ResponseEntity.ok(taskService.getCurrTopicFromStdID(stdID).getIdTop());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 
     @GetMapping("task")
     public ResponseEntity<?> getTaskByTaskId(@RequestParam("id") Integer taskId) {
@@ -299,6 +332,14 @@ public class TaskController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }
+    }
+    
+    @RequestMapping(value = "/getmytasks", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Task> getMyTasks() {
+        int stdID = userSession.getStudent().getIdStudent();
+        int CurrTopic = taskService.getCurrTopicFromStdID(stdID).getIdTop();
+        return taskService.getMyRecentTask(CurrTopic, stdID);
     }
 
 

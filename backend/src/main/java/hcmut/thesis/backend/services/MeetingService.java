@@ -29,4 +29,7 @@ public interface MeetingService {
     JoinPerMeeting getJPMFromMeetingIDStdID(int stdID, int meetingID);
     JoinPerMeeting editMeetingDiary(JoinPerMeeting jpm);
     MeetingInfo getMeetingFromMeetingID(int meetingID);
+    Integer countTaskByTopicID(Integer topicID);
+    Integer countMeetingByStd(Integer stdID);
+    Integer countMeetingByProf(Integer profID);
 }

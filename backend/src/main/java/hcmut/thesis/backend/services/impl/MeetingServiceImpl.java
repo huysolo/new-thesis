@@ -25,6 +25,7 @@ import hcmut.thesis.backend.repositories.UserRepo;
 import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.IUserDAO;
 import hcmut.thesis.backend.services.MeetingService;
+import hcmut.thesis.backend.services.TaskService;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,6 +67,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     CommonService commonService;
+    
+    @Autowired
+    TaskService taskService;
 
     @Autowired
     TopicRepo topicRepo;
@@ -425,5 +429,34 @@ public class MeetingServiceImpl implements MeetingService {
     public JoinPerMeeting editMeetingDiary(JoinPerMeeting jpm) {
         joinMeetingRepo.save(jpm);
         return jpm;
+    }
+    @Override
+    public Integer countTaskByTopicID(Integer topicID){
+        try{
+            return meetingRepo.countTaskByTopicID(topicID);
+        } catch(Exception e) {
+            return 0;
+        }
+    }
+    
+    @Override
+    public Integer countMeetingByStd(Integer stdID){
+        int topicID = taskService.getCurrTopicFromStdID(stdID).getIdTop();
+        return this.countTaskByTopicID(topicID);
+    }
+    
+    @Override
+    public Integer countMeetingByProf(Integer profID){
+        Integer meetingCount = 0;
+        try {
+            int currSem = commonService.getCurrentSem();
+            List<Topic> listTopic = topicRepo.findListTopicFromSemID(profID, currSem);
+            for(Topic topic: listTopic){
+                meetingCount = meetingCount + this.countTaskByTopicID(topic.getIdTop());
+            }
+            return meetingCount;
+        } catch (Exception e){
+            return 0;
+        }
     }
 }

@@ -1,3 +1,105 @@
+<!-- <div class="row">
+  <div class="col-md-4">
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h2>
+                <button type="button" class="btn bmd-btn-fab">
+                    <i class="material-icons">grade</i>
+                </button>
+            </h2>          
+          </div>
+          <div class="col-md-6">
+              23
+              <h6 class="card-title">Tasks</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Primary card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Primary card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="inner-block">
+  <div class="market-updates">
+    <div class="row">
+      <div (click)="navigateToTaskPage()" class="col-md-4 market-update-gd">
+        <div class="market-update-block clr-block-1">
+          <div class="row">
+            <div class="col-md-7 market-update-left">
+              <h3>{{countTask | async}}</h3>
+              <h4>Tasks</h4>
+            </div>
+            <div class="col-md-5 market-update-right">
+              <i class="fa fa-wrench"> </i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div (click)="navigateToMeetingPage()" class="col-md-4 market-update-gd">
+        <div class="market-update-block clr-block-2">
+          <div class="row">
+            <div class="col-md-7 market-update-left">
+
+              <h3>{{countMeeting | async}}</h3>
+              <h4>Meetings</h4>
+
+            </div>
+            <div class="col-md-5 market-update-right">
+              <i class="fa fa-users"> </i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="this.authoSv.isProfessor()" (click)="navigateToTopicPage()" class="col-md-4 market-update-gd">
+        <div class="market-update-block clr-block-3">
+          <div class="row">
+            <div class="col-md-7 market-update-left">
+              <h3>{{(listRecentTopic | async)?.length}}</h3>
+              <h4>Topics</h4>
+            </div>
+            <div class="col-md-5 market-update-right">
+              <i class="fa fa-envelope-o"> </i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="this.authoSv.isStudent()" (click)="navigateToChatGroupPage()" class="col-md-4 market-update-gd">
+        <div class="market-update-block clr-block-3">
+          <div class="row">
+            <div class="col-md-7 market-update-left">
+              <h3>{{countMessage | async}}</h3>
+              <h4>Messages</h4>
+            </div>
+            <div class="col-md-5 market-update-right">
+              <i class="fa fa-envelope-o"> </i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"> </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>
+
+
 <div class="row">
   <div class="col-md-6">
     <div class="example-container mat-elevation-z8">
@@ -8,7 +110,7 @@
               <mat-icon>build</mat-icon>
             </span>
             Task
-            <span class="badge badge-pill badge-info badge-title title">{{(listRecentTask | async)?.length}}</span>
+            <span class="badge badge-pill badge-info badge-title">{{(listRecentTask | async)?.length}}</span>
           </h4>
           <mat-form-field class="col-md-6">
             <input matInput placeholder="Filter">
@@ -18,8 +120,11 @@
       <mat-table #table [dataSource]="listRecentTask | async">
         <ng-container matColumnDef="title" class="col-md-7">
           <mat-header-cell *matHeaderCellDef class="mat-column-task-title text-center"> Task Title </mat-header-cell>
-          <mat-cell *matCellDef="let task" (click)="navigateToTaskDetail(task.idTask)" matTooltip="Detail" class="mat-column-task-title mat-column-task-title-hover">
-            {{task.title}} </mat-cell>
+          <mat-cell *matCellDef="let task" (click)="navigateToTaskDetail(task.idTask)" class="mat-column-task-title">
+           <div type="text" class="mat-column-task-title-hover">
+            {{task.title}} 
+           </div> 
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="pass" class="col-md-1">
@@ -55,9 +160,9 @@
             <span class="badge badge-pill badge-info badge-title">{{listRecentMeeting?.length}}</span>
           </h4>
           <div class="col-md-6 text-right">
-              <button type="button" class="btn btn-primary bmd-btn-fab bmd-btn-fab-sm" name="new" id="new" data-toggle="modal" data-target="#createMeeting">
-                  <i class="material-icons">add</i>
-                </button>
+            <button type="button" class="btn btn-primary bmd-btn-fab bmd-btn-fab-sm" name="new" id="new" data-toggle="modal" data-target="#createMeeting">
+              <i class="material-icons">add</i>
+            </button>
           </div>
         </div>
       </div>
@@ -76,11 +181,11 @@
               <mat-icon *ngIf="meeting.status == 0">replay</mat-icon>
               <mat-icon *ngIf="meeting.status == 1 && meeting.bookedSchedule != null && 
               !isMeetingToday(meeting.bookedSchedule.meetingTime)" style="color:#49f5a5">event_available</mat-icon>
-              
+
               <mat-icon *ngIf="meeting.status == 2" style="color:#f55549">event_busy</mat-icon>
 
-              <mat-icon  *ngIf="meeting.status == 1 && meeting.bookedSchedule != null && 
-              isMeetingToday(meeting.bookedSchedule.meetingTime)" style="color:#001dff">add_alert</mat-icon>
+              <mat-icon *ngIf="meeting.status == 1 && meeting.bookedSchedule != null && 
+              isMeetingToday(meeting.bookedSchedule.meetingTime)" style="color:#ffca00">add_alert</mat-icon>
 
             </span>
           </mat-cell>
@@ -88,7 +193,7 @@
 
         <ng-container matColumnDef="bookedSchedule" class="col-md-1">
           <mat-header-cell *matHeaderCellDef class="mat-column-meeting-schedule text-center"> Time-Location </mat-header-cell>
-          <mat-cell *matCellDef="let meeting" class="text-center mat-column-meeting-schedule">  
+          <mat-cell *matCellDef="let meeting" class="text-center mat-column-meeting-schedule">
             <div *ngIf="meeting.bookedSchedule != null">
               {{meeting.bookedSchedule.meetingTime | date}}
               <br> {{meeting.bookedSchedule.location}}
@@ -105,7 +210,7 @@
 <br>
 <br>
 
-<div class="row">
+<div *ngIf="authoSv.isProfessor()" class="row">
   <div class="col-md-8 col-sm-12 ">
     <div class="example-container mat-elevation-z8">
       <div class="example-header">
@@ -125,7 +230,7 @@
       <mat-table #table [dataSource]="listRecentTopic | async">
         <ng-container matColumnDef="title">
           <mat-header-cell *matHeaderCellDef class="mat-column-topic-title text-center"> Title </mat-header-cell>
-          <mat-cell *matCellDef="let topic" class="mat-column-topic-title"> {{topic.title}} </mat-cell>
+          <mat-cell *matCellDef="let topic" class="mat-column-topic-title" (click)="navigateToTopicDetail(topic.idTop)"> {{topic.title}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="studentCount">
           <mat-header-cell *matHeaderCellDef class="mat-column-topic-stdnumber text-center"> Student </mat-header-cell>
@@ -151,20 +256,20 @@
 
   <div class="col-md-4 col-sm-12">
     <div class="example-container mat-elevation-z8">
-        <div class="example-header">
-            <div class="row">
-              <h6 class="col-md-12 title-header">
-                <span>
-                  <mat-icon>person</mat-icon>
-                </span>
-                Students
-                <span class="badge badge-pill badge-info badge-title">{{(listStudentTopic | async)?.length}}</span>
-              </h6>
-              <!-- <mat-form-field class="col-md-6 disable">
+      <div class="example-header">
+        <div class="row">
+          <h6 class="col-md-12 title-header">
+            <span>
+              <mat-icon>person</mat-icon>
+            </span>
+            Students
+            <span class="badge badge-pill badge-info badge-title">{{(listStudentTopic | async)?.length}}</span>
+          </h6>
+          <!-- <mat-form-field class="col-md-6 disable">
                 <input matInput placeholder="Filter">
               </mat-form-field> -->
-            </div>
-          </div>
+        </div>
+      </div>
       <mat-table #table [dataSource]="listStudentTopic | async">
         <ng-container matColumnDef="stdName">
           <mat-header-cell *matHeaderCellDef class="mat-column-std-name text-center">Student Name </mat-header-cell>

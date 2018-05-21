@@ -21,6 +21,7 @@ public interface TaskService {
     List<TaskComment> getTaskComment(int taskID);
     List<Topic> getListTopicFromStdID(int stdid);
     Topic getCurrTopicFromStdID(int stdid);
+    List<Task> getMyRecentTask(int topicID, int stdID);
     Boolean saveFileToTask(File file);
     List<File> getFileByTaskId(Integer taskId, Integer version, Integer idUser);
     Integer getCurrentVersionOfTaskId(Integer taskId);
@@ -33,4 +34,5 @@ public interface TaskService {
     List<Task> findAllByIdTopicSemAndApprove(Integer idTopic, Integer approve);
     List<Task> getListTaskOfRecentTopicByApprove(Integer approve);
     Integer countTaskByProf();
+    Integer countTaskByStudent(int stdID);
 }

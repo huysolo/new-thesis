@@ -30,6 +30,9 @@ public interface TaskRepo extends JpaRepository<Task, Integer>, JpaSpecification
     Task getTaskFromTaskID(@Param("taskID") Integer taskID);
 
     @Query("SELECT count (st) FROM Task st WHERE st.idTopicSem = :idTopic and st.submit = 1")
+    Integer countSubmitTaskFromIDTopic(@Param("idTopic") Integer idTopic);
+    
+    @Query("SELECT count (st) FROM Task st WHERE st.idTopicSem = :idTopic")
     Integer countTaskFromIDTopic(@Param("idTopic") Integer idTopic);
 
     @Query("SELECT st FROM Task st WHERE  st.idTopicSem = :idTopic AND  (st.pass = 1 or st.pass = 0) AND st.submit = :submit order by st.updateTime desc ")

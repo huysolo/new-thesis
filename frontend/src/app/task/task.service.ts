@@ -111,7 +111,23 @@ export class TaskService {
     return this.httpClient.get<number>('http://localhost:8080/taskcount');
   }
 
+  countTaskByStd() {
+    return this.httpClient.get<number>('http://localhost:8080/counttaskbystd');
+  }
+
+  countMessgeByStd() {
+    return this.httpClient.get<number>('http://localhost:8080/countmessagebystd');
+  }
+
+  stdGetTopicID() {
+    return this.httpClient.get<number>('http://localhost:8080/stdgettopicid');
+  }
+
   getTaskById(id) {
     return this.httpClient.get<Task>('http://localhost:8080/task?id=' + id);
+  }
+
+  getMyTasks(){
+    return this.httpClient.get<Task[]>('http://localhost:8080/getmytasks');
   }
 }

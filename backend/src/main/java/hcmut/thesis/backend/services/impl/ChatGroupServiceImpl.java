@@ -13,6 +13,8 @@ import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.StudentTopicSemRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
 import hcmut.thesis.backend.services.ChatGroupService;
+import hcmut.thesis.backend.services.CommonService;
+import hcmut.thesis.backend.services.TaskService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +38,18 @@ public class ChatGroupServiceImpl implements ChatGroupService{
     @Autowired
     UserRepo userRepo;
     
+    @Autowired
+    TaskService taskService;
+    
+    @Autowired
+    CommonService commonService;
+    
     @Override
-    public List<ChatGroupInfo> getchatGroupFromUderID(int userID){
+    public List<ChatGroupInfo> getchatGroupFromStdID(int stdID){
         List<ChatGroupInfo> listChat = new ArrayList<>();
-        List<ChatGroup> t = chatGroupRepo.getAllMesageFromtopicID(stdTopicSemRepo.getTopicIDFromStudentID(stdRepo.getStdIDFromUserID(userID)));
+        try {
+            int topicID = taskService.getCurrTopicFromStdID(stdID).getIdTop();
+            List<ChatGroup> t = chatGroupRepo.getAllMesageFromtopicID(topicID);
         for(int i = 0; i< t.size(); i++){
             ChatGroupInfo temp = new ChatGroupInfo();
             User user = userRepo.getUserFromID(t.get(i).getIdUser());
@@ -51,5 +61,23 @@ public class ChatGroupServiceImpl implements ChatGroupService{
             listChat.add(temp);
         }
         return listChat;
+        } catch(Exception e){
+            return null;
+        } 
+    }
+    
+    @Override
+    public Integer countMessageBytopicID(int topicIDID){
+        try {
+           return chatGroupRepo.countMessageByTopicID(topicIDID);
+        } catch (Exception e){
+            return 0;
+        }
+    }
+    
+    @Override
+    public Integer countMessageByStd(int stdID){
+        int topicID = taskService.getCurrTopicFromStdID(stdID).getIdTop();
+        return this.countMessageBytopicID(topicID);
     }
 }

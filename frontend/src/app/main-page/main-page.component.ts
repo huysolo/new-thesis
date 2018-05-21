@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { Meeting } from '../meeting/meeting';
 import { MeetingService } from '../meeting/meeting.service';
 import { MatTableDataSource } from '@angular/material';
-import {MeetingCreateComponent} from '../meeting/component/meeting-create/meeting-create.component';
+import { MeetingCreateComponent } from '../meeting/component/meeting-create/meeting-create.component';
 
 
 @Component({
@@ -28,6 +28,9 @@ export class MainPageComponent implements OnInit {
   listRecentMeeting: Array<any>;
   countTopic: Observable<Number>;
   countTask: Observable<Number>;
+  countMeeting: Observable<number>;
+  countMessage: Observable<number>;
+  stdTopicID: number;
   topic: Topic;
 
 
@@ -36,14 +39,24 @@ export class MainPageComponent implements OnInit {
 
 
   constructor(public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
-    this.listRecentTask = taskSv.getListTaskByApprove(0);
-    this.listRecentTopic = topicSv.getListRecentTopic();
-    this.countTopic = topicSv.countTopic();
-    this.countTask = taskSv.countTask();
+    if (this.authoSv.isStudent()) {
+      this.listRecentTask = taskSv.getMyTasks();
+      this.stdGetRecentMeeting();
+      this.countTask = this.taskSv.countTaskByStd();
+      this.countMeeting = this.meetingService.countMeetingByStd();
+      this.countMessage = this.taskSv.countMessgeByStd();
+      this.stdGetTopicID();
+    } else {
+      this.listRecentTask = taskSv.getListTaskByApprove(0);
+      this.listRecentTopic = topicSv.getListRecentTopic();
+      this.countTask = taskSv.countTask();
+      this.countMeeting = meetingService.countMeetingByProf();
+      this.profGetRecentMeeting();
+    }
+
   }
 
   ngOnInit() {
-    this.profGetRecentMeeting();
   }
 
 
@@ -52,6 +65,25 @@ export class MainPageComponent implements OnInit {
     this.listStudentTopic = this.topicSv.getAllStudentDoTopic(topic.idTop);
   }
 
+  navigateToMeetingPage() {
+    this.route.navigate(['/meeting/recent']);
+  }
+
+  navigateToTaskPage() {
+    if(this.authoSv.isStudent()){
+      this.route.navigate(['/task', this.stdTopicID]);
+    } else {
+      this.route.navigate(['/task']);
+    }
+  }
+
+  navigateToTopicPage() {
+    this.route.navigate(['/topic/result']);
+  }
+
+  navigateToChatGroupPage() {
+    this.route.navigate(['/task/chatgroup']);
+  }
 
   navigateToTaskDetail(id) {
     this.route.navigate(['/task/task-detail', id]);
@@ -59,6 +91,10 @@ export class MainPageComponent implements OnInit {
 
   navigateToMeetingDetail(id) {
     this.route.navigate(['/meeting/meeting-detail', id]);
+  }
+
+  navigateToTopicDetail(id) {
+    this.route.navigate(['/topic/detail', id]);
   }
 
   profGetRecentMeeting() {
@@ -74,6 +110,29 @@ export class MainPageComponent implements OnInit {
       }
     );
   }
+  stdGetRecentMeeting() {
+    this.meetingService.stdGetListRecentMeeting().subscribe(
+      res => {
+        this.listRecentMeeting = this.getBookedSchedule(res);
+        console.log(this.listRecentMeeting);
+        if (this.listRecentMeeting) {
+        } else {
+          console.log('null');
+        }
+
+      }
+    );
+  }
+
+  stdGetTopicID(){
+    this.taskSv.stdGetTopicID().subscribe(
+      res => {
+        if(res){
+          this.stdTopicID = res;
+        }
+      
+    });
+  }
 
   getBookedSchedule(listMeeting: Array<any>) {
     if (listMeeting.length > 0) {
@@ -88,19 +147,19 @@ export class MainPageComponent implements OnInit {
     return listMeeting;
   }
 
-  isMeetingToday(meetingTime: any){
+  isMeetingToday(meetingTime: any) {
     var thisTime = new Date();
     var thisTimeInt = thisTime.getTime();
-    var thisTimeDay = Math.floor(thisTimeInt/(1000 * 60 * 60 * 24)) + 1; 
-    var meetingDay = Math.floor(meetingTime/(1000 * 60 * 60 * 24));
-    if(thisTimeDay == meetingDay){
+    var thisTimeDay = Math.floor(thisTimeInt / (1000 * 60 * 60 * 24));
+    var meetingDay = Math.floor(meetingTime / (1000 * 60 * 60 * 24));
+    if (thisTimeDay == meetingDay) {
       return true;
     } else {
       return false;
     }
   }
 
-  addNewMeeting(event: Meeting){
+  addNewMeeting(event: Meeting) {
     this.listRecentMeeting.push(event);
   }
 

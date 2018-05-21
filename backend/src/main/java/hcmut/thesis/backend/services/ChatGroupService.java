@@ -13,5 +13,7 @@ import java.util.List;
  * @author MinBui
  */
 public interface ChatGroupService {
-    List<ChatGroupInfo> getchatGroupFromUderID(int userID);
+    List<ChatGroupInfo> getchatGroupFromStdID(int stdID);
+    Integer countMessageBytopicID(int topicIDID);
+    Integer countMessageByStd(int stdID);
 }
