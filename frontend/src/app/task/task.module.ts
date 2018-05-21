@@ -21,7 +21,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule,
   MatButtonModule, MatButtonToggleModule, MatCheckboxModule,
-  MatDatepickerModule, MatListModule, MatSelectModule, MatCardModule} from '@angular/material';
+  MatDatepickerModule, MatListModule, MatSelectModule, MatCardModule, MatProgressSpinnerModule} from '@angular/material';
 import { TaskDetailPageComponent } from './pages/task-detail-page/task-detail-page.component';
 import { TaskListService } from './task-list.service';
 @NgModule({
@@ -40,7 +40,8 @@ import { TaskListService } from './task-list.service';
     MatDatepickerModule,
     MatListModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatProgressSpinnerModule
   ],
   declarations: [
     TaskContentComponent,

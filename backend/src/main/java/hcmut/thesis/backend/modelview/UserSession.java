@@ -72,7 +72,53 @@ public class UserSession {
         Integer userId = findIdUserFromStudentId(idStudent);
         return userRepo.findById(userId).orElseThrow(() -> new NullPointerException("User Not Found Of Student"));
     }
+
+    public User getUser() {
+        return userRepo.findById(userID).orElseThrow(() -> new NullPointerException("User Not Found"));
+    }
      public String getUserNameByIdStudent(Integer idStudent) {
         return getUserByIdStudent(idStudent).getUserName();
      }
+
+    public ManageUser loadProfile() {
+        ManageUser manageUser = new ManageUser();
+        User user = getUser();
+        manageUser.setUser(user);
+        if (isProf()) {
+            manageUser.setProfessor(getProf());
+        } else if (isUser()) {
+            manageUser.setStudent(getStudent());
+        }
+        return manageUser;
+    }
+
+    public ManageUser loadProfile(int userID) {
+        ManageUser manageUser = new ManageUser();
+        User user = userRepo.findById(userID).orElseThrow(() -> new NullPointerException("User Not Found`"));
+        user.setPassword(null);
+        manageUser.setUser(user);
+        try {
+            manageUser.setProfessor(userDAO.findProfByUserId(userID));
+        } catch (NullPointerException e) {
+            try {
+                manageUser.setStudent(userDAO.findStudentByUserId(userID));
+            } catch (Exception e2) {
+                throw new NullPointerException(e.getMessage() + e2.getMessage());
+            }
+        }
+        return manageUser;
+    }
+
+    public void updateProfile(ManageUser manageUser) {
+        User user = manageUser.getUser();
+        user.setIdUser(getUserID());
+        userRepo.save(user);
+        if (manageUser.getProfessor() != null) {
+            Professor professor = manageUser.getProfessor();
+            professor.setIdUser(getUserID());
+            professor.setIdProfessor(getProf().getIdProfessor());
+            professorRepo.save(professor);
+        }
+    }
+
 }

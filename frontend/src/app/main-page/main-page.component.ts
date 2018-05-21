@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
 import { Meeting } from '../meeting/meeting';
 import { MeetingService } from '../meeting/meeting.service';
 import { MatTableDataSource } from '@angular/material';
-import { MeetingCreateComponent } from '../meeting/component/meeting-create/meeting-create.component';
+
+import {MeetingCreateComponent} from '../meeting/component/meeting-create/meeting-create.component';
+import { LayoutService } from '../layout/layout.service';
 
 
 @Component({
@@ -38,7 +40,8 @@ export class MainPageComponent implements OnInit {
   displayedColumnMeeting = ['title', 'bookedSchedule', 'status'];
 
 
-  constructor(public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
+  constructor(public layoutSv: LayoutService, public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
+    layoutSv.labelName = 'Dashboard';
     if (this.authoSv.isStudent()) {
       this.listRecentTask = taskSv.getMyTasks();
       this.stdGetRecentMeeting();
@@ -53,7 +56,6 @@ export class MainPageComponent implements OnInit {
       this.countMeeting = meetingService.countMeetingByProf();
       this.profGetRecentMeeting();
     }
-
   }
 
   ngOnInit() {
@@ -162,8 +164,6 @@ export class MainPageComponent implements OnInit {
   addNewMeeting(event: Meeting) {
     this.listRecentMeeting.push(event);
   }
-
-
 }
 
 

@@ -10,6 +10,7 @@ import { Topic } from '../../../models/Topic';
 import { TopicDetail } from '../../../models/TopicDetail';
 import { StudentDoTask } from '../../../task/components/student-do-task';
 import { Observable } from 'rxjs/Observable';
+import { LayoutService } from '../../../layout/layout.service';
 
 @Component({
   selector: 'app-detail-result',
@@ -26,11 +27,13 @@ export class DetailResultComponent implements OnInit {
   ];
   topic: TopicDetail;
   students: Observable<StudentDoTask[]>;
-  constructor(public authSv: AuthService, public router: Router,
+  constructor(public authSv: AuthService, public router: Router, private layoutSv: LayoutService,
     public topicSv: TopicService, public route: ActivatedRoute, public standardSv: StandardService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
+      this.layoutSv.labelName = 'Detail topic: ' + params['id'];
+
       this.topicSv.getTopicDetail(params['id']).subscribe(data => {
         this.topic = data;
       });

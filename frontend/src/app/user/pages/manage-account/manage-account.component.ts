@@ -4,6 +4,9 @@ import { CurrUserInfo } from '../login/curr-user-info';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { LoginService } from '../login/login.service';
+import { ManageUser } from '../../../models/ManageUser';
+import { MatSnackBar } from '@angular/material';
+import { LayoutService } from '../../../layout/layout.service';
 
 
 @Component({
@@ -19,22 +22,22 @@ export class ManageAccountComponent implements OnInit {
   isLoading: Boolean;
   isSuccess: Boolean;
   isFail: Boolean;
-  constructor(public authService: AuthService, private fb: FormBuilder, public loginService: LoginService) {
-    this.profileForm = this.fb.group({
-      username: [this.authService.getUsername(), Validators.required],
-      password: [this.authService.getPassword(), Validators.required],
-      firstname: [this.authService.getFirstname(), Validators.required],
-      lastname: [this.authService.getLastname(), Validators.required],
-      email: [this.authService.getEmail(), Validators.required],
-      gender: [this.authService.getGender(), Validators.required],
-      skills: [this.authService.getSkills(), Validators.required],
-      degree: [this.authService.getDegree(), Validators.required],
-      profID: [this.authService.getProfID(), Validators.required]
-    });
+  manageUser: ManageUser;
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
+  constructor(public authService: AuthService, private fb: FormBuilder, public loginService: LoginService,
+    public snackBar: MatSnackBar, public layouSv: LayoutService) {
+      layouSv.labelName = 'Manage Account';
+
 
   }
 
   ngOnInit() {
+    this.loginService.loadProfile().subscribe(data => {
+      this.manageUser = data;
+    });
   }
 
   edit(form) {
@@ -63,6 +66,13 @@ export class ManageAccountComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+  postProfile() {
+    this.loginService.postProfile(this.manageUser).subscribe(data => {
+      this.snackBar.open('Update Profile Success', 'Close', {
+        duration: 2000,
+      });
+    });
   }
 
 }

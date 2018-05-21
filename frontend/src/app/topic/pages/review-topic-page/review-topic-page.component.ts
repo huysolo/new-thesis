@@ -9,11 +9,12 @@ export class ReviewTopicPageComponent implements OnInit {
 
   navLinks = [{
     param: 'guide',
-    content: 'Guide'
+    content: 'Supervise'
   }, {
     param: 'review',
-    content: 'Review'
+    content: 'Critique'
   }]
+  
   constructor() { }
   ngOnInit() {
   }

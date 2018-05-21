@@ -8,6 +8,7 @@ import { TopicService } from '../../topic.service';
 import { Observable } from 'rxjs/Observable';
 import { Specialize } from '../../../models/Specialize';
 import { CommonService } from '../../../core/common.service';
+import { LayoutService } from '../../../layout/layout.service';
 
 @Component({
   selector: 'app-create-topic',
@@ -15,7 +16,11 @@ import { CommonService } from '../../../core/common.service';
   styleUrls: ['./create-topic.component.css']
 })
 export class CreateTopicComponent implements OnInit {
-  constructor(public authoSv: AuthService, public topicSv: TopicService, private commonSv: CommonService) { }
+  constructor(public authoSv: AuthService, public topicSv: TopicService
+    , private commonSv: CommonService, private layoutSv: LayoutService) { 
+      layoutSv.labelName = 'Create';
+
+    }
   @Input() createTopic: TopicDetail = new TopicDetail();
   specLst: Observable<Specialize[]>;
   @Output('created') created = new EventEmitter<Boolean>();

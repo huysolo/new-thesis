@@ -18,12 +18,14 @@ import { StudentDoTask } from '../../../task/components/student-do-task';
 export class TopidDetailComponent implements OnInit {
   topicDetail: TopicDetail;
   specName: Observable<String>;
-  students: Observable<StudentDoTask[]>;
+  students: StudentDoTask[];
   constructor(public dialogRef: MatDialogRef<TopicDetailDirective>,
     @Inject(MAT_DIALOG_DATA) public data: any, public topicSv: TopicService, public commonSv: CommonService) {
         this.topicDetail = data['topicDetail'];
         this.specName = commonSv.getSpecNameById(this.topicDetail.topic.idSpecialize);
-        this.students = topicSv.getAllStudentDoTopic(this.topicDetail.topic.idTop);
+         topicSv.getAllStudentDoTopic(this.topicDetail.topic.idTop).subscribe(dt => {
+          this.students = dt;
+         });
     }
 
   ngOnInit() {

@@ -231,7 +231,7 @@
     -o-border-radius:49px;
     line-height: 1.7em;
 }
-.market-update-right i.fa.fa-envelope-o {
+.market-update-right i.fa.fa-envelope {
      font-size:3em;
     color:#337AB7;
     width: 80px;
@@ -243,6 +243,19 @@
     -moz-border-radius:49px;
     -o-border-radius:49px;
     line-height: 1.7em;
+}
+.market-update-right i.fa.fa-file-alt {
+    font-size:3em;
+   color:#337AB7;
+   width: 80px;
+   height: 80px;
+   background: #fff;
+   text-align: center;
+   border-radius: 49px;
+   -webkit-border-radius: 49px;
+   -moz-border-radius:49px;
+   -o-border-radius:49px;
+   line-height: 1.7em;
 }
 .market-update-left {
     padding: 0px;

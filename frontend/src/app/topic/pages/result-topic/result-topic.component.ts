@@ -7,6 +7,7 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { SemesterService } from '../../../core/semester.service';
 import { Review } from '../../../models/Review';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LayoutService } from '../../../layout/layout.service';
 
 @Component({
   selector: 'app-result-topic',
@@ -20,10 +21,14 @@ export class ResultTopicComponent implements OnInit {
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('paginatorDraft') paginatorDraft: MatPaginator;
 
-  constructor(public route: Router,
-    public topicSv: TopicService, public authSv: AuthService, private zone: NgZone, public semSv: SemesterService) { }
+  constructor(public route: Router, private layoutSv: LayoutService,
+    public topicSv: TopicService, public authSv: AuthService, private zone: NgZone, public semSv: SemesterService) {
+      layoutSv.labelName = 'Overview';
+
+    }
 
   ngOnInit() {
+
     this.zone.run(() => {
       if (this.authSv.isStudent()) {
         this.topicSv.getAppliedList().subscribe(data => {

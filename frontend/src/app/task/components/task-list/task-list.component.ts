@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material';
 import { TopicService } from '../../../topic/topic.service';
 import { TaskCreateComponent } from '../task-create/task-create.component';
 import { TaskListService } from '../../task-list.service';
+import { LayoutService } from '../../../layout/layout.service';
 
 @Component({
   selector: 'app-task-list',
@@ -22,9 +23,9 @@ export class TaskListComponent implements OnInit {
 
   constructor(public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute,
     public dialog: MatDialog, private topicSv: TopicService,
-    public taskListSv: TaskListService
+    public taskListSv: TaskListService, private layoutSv: LayoutService
   ) {
-
+    layoutSv.labelName = 'Task';
   }
 
   ngOnInit() {

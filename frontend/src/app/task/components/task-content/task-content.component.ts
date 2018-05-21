@@ -13,6 +13,7 @@ import { Topic } from '../../../models/Topic';
 import { SemesterService } from '../../../core/semester.service';
 import { Observable } from 'rxjs/Observable';
 import { TaskListService } from '../../task-list.service';
+import { LayoutService } from '../../../layout/layout.service';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class TaskContentComponent implements OnInit {
   constructor(
     public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute,
     public dialog: MatDialog, private topicSv: TopicService, public semSv: SemesterService,
-    public taskListSv: TaskListService
+    public taskListSv: TaskListService, private layoutSv: LayoutService
   ) {
 
   }
@@ -42,6 +43,7 @@ export class TaskContentComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.topicSv.getTopicById(params['id']).subscribe(data => {
+        this.layoutSv.labelName = 'Task of topic: ' + params['id'];
         this.taskListSv.topic = data;
         this.taskListSv.getPage(0);
       });

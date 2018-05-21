@@ -15,21 +15,25 @@
   overflow: hidden;
 }
 
-.breadcrumb-top{
-  margin-top: 60px;
-}
-.sidenav-second-level{
-  background: #424242 !important;
-}
-
 @media screen and (min-width: 992px) {
   .main-container {
     margin-left: 0px !important;
   }
   .navbar-sidenav{
     margin-top: 51px !important;
-    background: #424242 !important;
     height: 100vh !important;
+    overflow-y: auto;
   
   }
+  .sidenav-second-level {
+    max-height: 200px;
+    overflow: auto;
+  }
+}
+
+.content-wrapper {
+  padding-top: 51px !important;
+}
+.breadcrumb {
+  background-color: white !important;
 }

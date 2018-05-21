@@ -51,7 +51,7 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public CurrUserInfo checkLogin(@RequestBody InfoLogin info) {        
-        CurrUserInfo currUser = new CurrUserInfo();
+        CurrUserInfo currUser;
         currUser = iuserDAO.getCurrUserInfo(info.getUsername(), info.getPassword());
         System.out.println(info);
         return currUser;
@@ -67,11 +67,5 @@ public class LoginController {
        return userEdit;
     }
 
-    @RequestMapping(value = "/demo1")
-    @ResponseBody
-    public String doEdit1() {
-//        CurrUserInfo currUser = iuserDAO.getCurrUserInfo("Min", "min");
-//        System.out.println(currUser.g);
-        return "MinBui";
-    }
+
 }
