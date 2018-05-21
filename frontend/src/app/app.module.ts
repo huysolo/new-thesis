@@ -7,10 +7,12 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import {AuthService} from './core/auth.service';
 import {UserModule} from './user/user.module';
 import { CoreModule } from './core/core.module';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    NotFoundComponent,
   ],
   imports: [
     CoreModule,

@@ -29,7 +29,17 @@ public class ManageUser {
         this.student = student;
     }
 
-    User user;
-    Professor professor;
-    Student student;
+    private User user;
+    private Professor professor;
+    private Student student;
+
+    public String getFacultyName() {
+        return facultyName;
+    }
+
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
+    }
+
+    private String facultyName;
 }

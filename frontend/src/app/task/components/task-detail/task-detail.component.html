@@ -11,14 +11,14 @@
       <span class="time">{{task.updateTime | date : 'fullDate'}}</span>
     </div>
     <div class="card-body">
-      <!-- <div>
+      <div>
         <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor() && isrecent"
           class="btn btn-default">
           <i class="fa fa-pencil"></i>Submit</button>
         <button type="button " *ngIf="task.submit && !this.authService.isProfessor() && task.pass == 1" (click)="isSubmitTask()"
           class="btn btn-default">
           <i class="fa fa-pencil"></i>Submited</button>
-      </div> -->
+      </div>
       <div class="content-block">
         <h6>
           Description:

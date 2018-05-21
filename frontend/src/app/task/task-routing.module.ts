@@ -9,6 +9,7 @@ import {TaskDetailComponent} from './components/task-detail/task-detail.componen
 import {TaskCreateComponent} from './components/task-create/task-create.component';
 import { ListUploadComponent } from './components/upload/list-upload/list-upload.component';
 import { TaskDetailPageComponent } from './pages/task-detail-page/task-detail-page.component';
+import { ChatboxComponent } from './components/chatbox/chatbox.component';
 
 const taskRoutes: Routes = [
   {
@@ -41,6 +42,9 @@ const taskRoutes: Routes = [
     path: 'task-detail/:id',
     component: TaskDetailPageComponent,
     pathMatch: 'full'
+  },{
+    path: 'chat',
+    component: ChatboxComponent,
   },
   {
     path: '',

@@ -1,0 +1,87 @@
+<div class="mat-elevation-z1 box-size" >
+  <mat-toolbar [color]="'primary'" >
+    <div (click)="open = true"> CHATBOX 
+    </div>
+  </mat-toolbar>
+  <button class="top-close btn btn-default" (click)="open = false" *ngIf="open">
+    <i class="material-icons">
+      close
+    </i>
+  </button>
+  <div *ngIf="open">
+    <div class="content-size" >
+      <div>
+        <div class="chat-text">
+          <h4>
+            Huy solo
+          </h4>
+          <p>
+            Hello its me thanh
+          </p>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="chat-text chat-text-right ">
+          <h4>
+            Huy solo
+          </h4>
+          <p>
+            Hello its me thanh
+          </p>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="chat-text chat-text-right ">
+          <h4>
+            Huy solo
+          </h4>
+          <p>
+            Hello its me thanh
+          </p>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="chat-text chat-text-right ">
+          <h4>
+            Huy solo
+          </h4>
+          <p>
+            Hello its me thanh
+          </p>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="chat-text chat-text-right ">
+          <h4>
+            Huy solo
+          </h4>
+          <p>
+            Hellodasdsadas
+          </p>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="chat-text chat-text-right ">
+          <h4>
+            Huy solo
+          </h4>
+          <p>
+            Hellodasdsadas
+          </p>
+        </div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="container">
+      <mat-form-field style="width:75%">
+        <textarea matInput matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+  
+      </mat-form-field>
+      <button class="btn btn-primary btn-circle btn-xl" type="button">
+        <i class="material-icons">
+          send
+        </i>
+      </button>
+    </div>
+  </div>
+</div>

@@ -11,6 +11,7 @@ import hcmut.thesis.backend.models.User;
 import hcmut.thesis.backend.repositories.ProfessorRepo;
 import hcmut.thesis.backend.repositories.StudentRepo;
 import hcmut.thesis.backend.repositories.UserRepo;
+import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -35,6 +36,9 @@ public class UserSession {
 
     @Autowired
     ProfessorRepo professorRepo;
+
+    @Autowired
+    CommonService commonService;
 
     private int userID;
     
@@ -84,6 +88,7 @@ public class UserSession {
         ManageUser manageUser = new ManageUser();
         User user = getUser();
         manageUser.setUser(user);
+        manageUser.setFacultyName(commonService.getFacultyNameById(user.getIdFalcuty()));
         if (isProf()) {
             manageUser.setProfessor(getProf());
         } else if (isUser()) {
@@ -97,6 +102,7 @@ public class UserSession {
         User user = userRepo.findById(userID).orElseThrow(() -> new NullPointerException("User Not Found`"));
         user.setPassword(null);
         manageUser.setUser(user);
+        manageUser.setFacultyName(commonService.getFacultyNameById(user.getIdFalcuty()));
         try {
             manageUser.setProfessor(userDAO.findProfByUserId(userID));
         } catch (NullPointerException e) {

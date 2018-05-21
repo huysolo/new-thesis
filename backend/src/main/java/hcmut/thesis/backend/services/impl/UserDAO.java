@@ -115,7 +115,6 @@ public class UserDAO implements IUserDAO {
                 }
             }
 
-            String isStd = (isStudent) ? "true" : "false";
             String userID = String.valueOf(user.getIdUser());
 
             String token = loginService.createJWT(userID);

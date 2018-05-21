@@ -45,6 +45,7 @@ public class WebSocketController {
      @RequestMapping(value = "/notify", method = RequestMethod.GET)
     public String getNotification(@RequestParam("message") String message) {
         ChatGroupInfo msg = new ChatGroupInfo();
+        System.out.println();
         int topicID = stdTopicSemRepo.getTopicIDFromStudentID(userSession.getStudent().getIdStudent());
         msg.setContent(message);
         msg.setTime(new Timestamp(System.currentTimeMillis()));

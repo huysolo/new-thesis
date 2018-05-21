@@ -23,7 +23,7 @@
     <form>
       <div class="form-row" id="filter">
         <div class="col-md-4 form-group" *ngIf="topicSv.requestType === 'history'" >
-          <select class="form-control" (change)="onChangeSemester($event.target.value)">
+          <select class="form-control" (change)="onChangeSemester($event.target.value)" placeholer="asdasd">
             <option selected [value]="0" >All Semester</option>
             <option *ngFor="let sem of semSv.getListSemster()" [value]="sem.semesterNo">Semester No: {{sem.semesterNo}}</option>
           </select>
@@ -65,14 +65,7 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-          <app-create-topic [createTopic]="topicDetail" (created)="getWithRarams()"></app-create-topic>
         </div>
     </div>
 </div>
 
-<script>
-  $('#createTopic').on('show.bs.modal', event => {
-    const button = $(event.relatedTarget);
-    const modal = $(this);
-  });
-</script>

@@ -1,14 +1,12 @@
 package hcmut.thesis.backend.services.impl;
 
+import hcmut.thesis.backend.models.Faculty;
 import hcmut.thesis.backend.models.Semester;
 import hcmut.thesis.backend.models.Specialize;
 import hcmut.thesis.backend.models.User;
 import hcmut.thesis.backend.modelview.ProfInfo;
 import hcmut.thesis.backend.modelview.UserSession;
-import hcmut.thesis.backend.repositories.ProfessorRepo;
-import hcmut.thesis.backend.repositories.SemesterRepo;
-import hcmut.thesis.backend.repositories.SpecializeRepo;
-import hcmut.thesis.backend.repositories.UserRepo;
+import hcmut.thesis.backend.repositories.*;
 import hcmut.thesis.backend.services.CommonService;
 import hcmut.thesis.backend.services.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +31,8 @@ public class CommonServiceImpl implements CommonService {
     private UserSession userSession;
     @Autowired
     private  IUserDAO userDAO;
+    @Autowired
+    private FacultyRepo facultyRepo;
 
 
     @Override
@@ -54,6 +54,7 @@ public class CommonServiceImpl implements CommonService {
             if (user.isPresent()){
                 if (user.get().getIdFalcuty().equals(idFaculty)){
                     ProfInfo profInfo = new ProfInfo();
+                    profInfo.setUserId(user.get().getIdUser());
                     profInfo.setProfessor(userDAO.findProfByUserId(user.get().getIdUser()));
                     profInfo.setName(getFullName(user.get()));
                     result.add(profInfo);
@@ -70,6 +71,7 @@ public class CommonServiceImpl implements CommonService {
             Optional<User> user = userRepo.findById(professor.getIdUser());
             if (user.isPresent()){
                     ProfInfo profInfo = new ProfInfo();
+                    profInfo.setUserId(user.get().getIdUser());
                     profInfo.setProfessor(userDAO.findProfByUserId(user.get().getIdUser()));
                     profInfo.setName(getFullName(user.get()));
                     result.add(profInfo);
@@ -126,6 +128,11 @@ public class CommonServiceImpl implements CommonService {
     public String getSpecByID(Integer idSpec) {
         Optional<Specialize> specialize = specializeRepo.findById(idSpec);
         return specialize.map(Specialize::getName).orElse(null);
+    }
+
+    @Override
+    public String getFacultyNameById(int id) {
+        return facultyRepo.findById(id).map(Faculty::getName).orElse(null);
     }
 
 

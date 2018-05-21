@@ -6,4 +6,5 @@ export class ManageUser {
     user: User;
     professor: Professor;
     student: Student;
+    facultyName: String;
 }

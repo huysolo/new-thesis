@@ -21,9 +21,10 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule,
   MatButtonModule, MatButtonToggleModule, MatCheckboxModule,
-  MatDatepickerModule, MatListModule, MatSelectModule, MatCardModule, MatProgressSpinnerModule} from '@angular/material';
+  MatDatepickerModule, MatListModule, MatSelectModule, MatCardModule, MatProgressSpinnerModule, MatToolbarModule} from '@angular/material';
 import { TaskDetailPageComponent } from './pages/task-detail-page/task-detail-page.component';
 import { TaskListService } from './task-list.service';
+import { ChatboxComponent } from './components/chatbox/chatbox.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +42,8 @@ import { TaskListService } from './task-list.service';
     MatListModule,
     MatSelectModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatToolbarModule
   ],
   declarations: [
     TaskContentComponent,
@@ -56,7 +58,8 @@ import { TaskListService } from './task-list.service';
     TaskCommentComponent,
     TaskPaginationComponent,
     StudentTaskPipe,
-    TaskDetailPageComponent
+    TaskDetailPageComponent,
+    ChatboxComponent
   ],
   providers: [TaskService, UploadFileService, TaskListService],
   entryComponents: [TaskContentComponent, TaskCreateComponent]

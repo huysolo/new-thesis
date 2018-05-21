@@ -1,0 +1,49 @@
+.box-size {
+    width: 300px;
+    position: relative;
+}
+
+
+.content-size {
+    overflow: auto;
+    height: 400px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    
+}
+.chat-text {
+    background: #e5f7ff;
+    border-radius: 0 8px 8px;
+    display: inline-block;
+    padding: 15px;
+    font-size: 14px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.chat-text h4 {
+    color: #1a2942;
+    display: block;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    margin: 0;
+    line-height: 15px;
+    position: relative;
+}
+
+.chat-text p {
+    margin: 0;
+    padding-top: 3px;
+}
+
+.chat-text-right {
+    background: #f7f7f7;
+    border-radius: 8px 0 8px 8px;
+}
+
+.top-close {
+    position: absolute;
+    top: 2px;
+    right: 0;
+}

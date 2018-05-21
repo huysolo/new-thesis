@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { CommonService } from './common.service';
 import { Semester } from '../models/Semester';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class SemesterService {
