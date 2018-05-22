@@ -10,9 +10,14 @@ import { Router } from '@angular/router';
 import { Meeting } from '../meeting/meeting';
 import { MeetingService } from '../meeting/meeting.service';
 import { MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import {MeetingCreateComponent} from '../meeting/component/meeting-create/meeting-create.component';
+import {TaskCreateComponent} from '../task/components/task-create/task-create.component';
 import { LayoutService } from '../layout/layout.service';
+import { SemesterService } from '../core/semester.service';
+
+import { MatStepper } from '@angular/material';
 
 
 @Component({
@@ -25,9 +30,7 @@ export class MainPageComponent implements OnInit {
   displayedColumnsUser = ['stdName', 'teamlead'];
 
   listRecentTask: Observable<Task[]>;
-  recentTaskCount = 0;
-  listRecentTopic: Observable<Topic[]>;
-  recentTopicCount = 0;
+  listRecentTopic: Topic[];
   listStudentTopic: Observable<StudentDoTask[]>;
   studentTopicCount = 0;
   listRecentMeeting: Array<any>;
@@ -37,35 +40,30 @@ export class MainPageComponent implements OnInit {
   countMessage: Observable<number>;
   stdTopicID: number;
   topic: Topic;
+  listAllStd: Array<StudentDoTask>;
+
 
 
   displayedColumnTask = ['title', 'deadline', 'pass'];
   displayedColumnMeeting = ['title', 'bookedSchedule', 'status'];
 
 
-  constructor(public layoutSv: LayoutService,
-    public authoSv: AuthService,
-    public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
+  constructor(public semService: SemesterService, private matdialog: MatDialog, public layoutSv: LayoutService, public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     layoutSv.labelName = 'Dashboard';
+    console.log(this.semService.getCurrrentSem());
     if (this.authoSv.isStudent()) {
-      this.listRecentTask = taskSv.getMyTasks().map(data => {
-        this.recentTaskCount = data.length;
-        return data;
-      });
+      this.listRecentTask = taskSv.getMyTasks();
+      //this.listRecentTopic = topicSv.stdGetCurrTopic();
+      this.stdGetCurrTopic();
       this.stdGetRecentMeeting();
       this.countTask = this.taskSv.countTaskByStd();
       this.countMeeting = this.meetingService.countMeetingByStd();
       this.countMessage = this.taskSv.countMessgeByStd();
       this.stdGetTopicID();
     } else {
-      this.listRecentTask = taskSv.getListTaskByApprove(0).map(data => {
-        this.recentTaskCount = data.length;
-        return data;
-      });
-      this.listRecentTopic = topicSv.getListRecentTopic().map(data => {
-        this.recentTopicCount = data.length;
-        return data;
-      });
+      this.listRecentTask = taskSv.getListTaskByApprove(0);
+      //this.listRecentTopic = topicSv.getListRecentTopic();
+      this.profGetListRecentTopic();
       this.countTask = taskSv.countTask();
       this.countMeeting = meetingService.countMeetingByProf();
       this.profGetRecentMeeting();
@@ -73,6 +71,17 @@ export class MainPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authoSv.isStudent()) {
+      this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
+        this.listAllStd = data;
+      });
+    }
+    
+    console.log(this.semService.getCurrrentSem());
+  }
+
+  goForward(stepper: MatStepper){
+    stepper.next();
   }
 
 
@@ -115,12 +124,15 @@ export class MainPageComponent implements OnInit {
   navigateToTopicDetail(id) {
     this.route.navigate(['/topic/detail', id]);
   }
+  navigateToStudentDetail(id) {
+    this.route.navigate(['/user/view', id]);
+  }
+
 
   profGetRecentMeeting() {
     this.meetingService.profGetRecenMeeting().subscribe(
       res => {
         this.listRecentMeeting = this.getBookedSchedule(res);
-        console.log(this.listRecentMeeting);
         if (this.listRecentMeeting) {
         } else {
           console.log('null');
@@ -133,7 +145,6 @@ export class MainPageComponent implements OnInit {
     this.meetingService.stdGetListRecentMeeting().subscribe(
       res => {
         this.listRecentMeeting = this.getBookedSchedule(res);
-        console.log(this.listRecentMeeting);
         if (this.listRecentMeeting) {
         } else {
           console.log('null');
@@ -167,10 +178,10 @@ export class MainPageComponent implements OnInit {
   }
 
   isMeetingToday(meetingTime: any) {
-    var thisTime = new Date();
-    var thisTimeInt = thisTime.getTime();
-    var thisTimeDay = Math.floor(thisTimeInt / (1000 * 60 * 60 * 24));
-    var meetingDay = Math.floor(meetingTime / (1000 * 60 * 60 * 24));
+    const thisTime = new Date();
+    const thisTimeInt = thisTime.getTime();
+    const thisTimeDay = Math.floor(thisTimeInt / (1000 * 60 * 60 * 24));
+    const meetingDay = Math.floor(meetingTime / (1000 * 60 * 60 * 24));
     if (thisTimeDay == meetingDay) {
       return true;
     } else {
@@ -180,6 +191,39 @@ export class MainPageComponent implements OnInit {
 
   addNewMeeting(event: Meeting) {
     this.listRecentMeeting.push(event);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.matdialog.open(TaskCreateComponent, {
+      width: '600px',
+      data: { students: this.listAllStd }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.idTask != null) {
+
+      }
+    });
+  }
+
+  stdGetCurrTopic(){
+    this.topicSv.stdGetCurrTopic().subscribe(
+      res => {
+        this.listRecentTopic = [];
+        this.listRecentTopic[0] = res;
+      }
+    );
+  }
+
+  profGetListRecentTopic(){
+    this.topicSv.getListRecentTopic().subscribe(
+      res =>{
+        if(res){
+          this.listRecentTopic = [];
+          this.listRecentTopic = res;
+        }
+      }
+    );
   }
 }
 

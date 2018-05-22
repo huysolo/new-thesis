@@ -1,40 +1,27 @@
-<!-- <div class="row">
-  <div class="col-md-4">
-    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <h2>
-                <button type="button" class="btn bmd-btn-fab">
-                    <i class="material-icons">grade</i>
-                </button>
-            </h2>          
-          </div>
-          <div class="col-md-6">
-              23
-              <h6 class="card-title">Tasks</h6>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">Primary card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">Primary card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      </div>
-    </div>
-  </div>
-</div> -->
+<div>
+  <mat-horizontal-stepper [linear]="isLinear" [selectedIndex] = "1" #stepper="matHorizontalStepper">
+    <ng-template matStepperIcon="edit">
+      <mat-icon>done</mat-icon>
+    </ng-template>
+    <mat-step>
+      <ng-template matStepLabel>
+        Start Semester
+        <br> (May 5, 2018)
+      </ng-template>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Start Do Task</ng-template>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Start Review</ng-template>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>End Semester</ng-template>
+    </mat-step>
+  </mat-horizontal-stepper>
+
+</div>
+
 <div class="inner-block">
   <div class="market-updates">
     <div class="row">
@@ -112,18 +99,20 @@
             Task
             <span class="badge badge-pill badge-info badge-title">{{recentTaskCount}}</span>
           </h4>
-          <mat-form-field class="col-md-6">
-            <input matInput placeholder="Filter">
-          </mat-form-field>
+          <div class="col-md-6 text-right">
+            <button (click)="openDialog()" type="button" class="btn btn-primary bmd-btn-fab bmd-btn-fab-sm" name="new" id="new">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
         </div>
       </div>
       <mat-table #table [dataSource]="listRecentTask | async">
         <ng-container matColumnDef="title" class="col-md-7">
           <mat-header-cell *matHeaderCellDef class="mat-column-task-title text-center"> Task Title </mat-header-cell>
           <mat-cell *matCellDef="let task" (click)="navigateToTaskDetail(task.idTask)" class="mat-column-task-title">
-           <div type="text" class="mat-column-task-title-hover">
-            {{task.title}} 
-           </div> 
+            <div type="text" class="mat-column-task-title-hover">
+              {{task.title}}
+            </div>
           </mat-cell>
         </ng-container>
 
@@ -210,7 +199,7 @@
 <br>
 <br>
 
-<div *ngIf="authoSv.isProfessor()" class="row">
+<div class="row">
   <div class="col-md-8 col-sm-12 ">
     <div class="example-container mat-elevation-z2">
       <div class="example-header">
@@ -227,7 +216,7 @@
           </mat-form-field>
         </div>
       </div>
-      <mat-table #table [dataSource]="listRecentTopic | async">
+      <mat-table #table [dataSource]="listRecentTopic">
         <ng-container matColumnDef="title">
           <mat-header-cell *matHeaderCellDef class="mat-column-topic-title text-center"> Title </mat-header-cell>
           <mat-cell *matCellDef="let topic" class="mat-column-topic-title"> <a [routerLink]="['/task/', topic.idTop]">{{topic.title}} </a> </mat-cell>
@@ -270,7 +259,8 @@
       <mat-table #table [dataSource]="listStudentTopic | async">
         <ng-container matColumnDef="stdName">
           <mat-header-cell *matHeaderCellDef class="mat-column-std-name text-center">Student Name </mat-header-cell>
-          <mat-cell *matCellDef="let student" class="mat-column-std-name text-center"> {{student.stdName}} </mat-cell>
+          <mat-cell *matCellDef="let student" (click)="navigateToStudentDetail(student.studentId)" class="mat-column-std-name text-center">
+            {{student.stdName}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="teamlead">
           <mat-header-cell *matHeaderCellDef class="mat-column-std-isTeamlead text-center"> Team Leader </mat-header-cell>
@@ -289,6 +279,7 @@
 </div>
 <br>
 <br>
-<!-- <div class="modal" id="createMeeting" tabindex="-1" role="dialog" aria-labelledby="topicTitleId">
-    <app-meeting-create (addNewMeeting)="addNewMeeting($event)"></app-meeting-create>
-  </div> -->
+
+<div class="modal" id="createMeeting" tabindex="-1" role="dialog" aria-labelledby="topicTitleId">
+  <app-meeting-create (addNewMeeting)="addNewMeeting($event)"></app-meeting-create>
+</div>

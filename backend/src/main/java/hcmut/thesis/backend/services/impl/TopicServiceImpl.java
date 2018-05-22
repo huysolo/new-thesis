@@ -428,6 +428,16 @@ public class TopicServiceImpl implements TopicService {
     public List<Review> getListReviewByIdTopic(int idTopic) {
         return reviewRepo.findReviewByIdTopic(idTopic);
     }
+    
+    @Override
+    public Topic stdGetCurrentTopic(int stdID){
+        try{
+            Integer topicID = taskService.getCurrTopicFromStdID(stdID).getIdTop();
+            return topicRepo.getTopicFromTopicID(topicID);
+        } catch(Exception e){
+            return null;
+        }       
+    }
 
 
 }

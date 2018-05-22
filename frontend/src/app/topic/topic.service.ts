@@ -36,7 +36,8 @@ export class TopicService {
   private appliedListUrl = this.topicUrl + 'appliedList';
   private listProfTopicUrl = this.topicUrl + 'listProfTopic';
   private reviewsUrl = this.topicUrl + 'reviews';
-  
+
+  private stdTopic = this.topicUrl + 'stdgetcurrtopic';
   /**
    * reject
    */
@@ -173,6 +174,10 @@ export class TopicService {
 
   getListDraft() {
     return this.http.get<Topic[]>(this.topicListDraftUrl);
+  }
+
+  stdGetCurrTopic() {
+    return this.http.get<Topic>(this.stdTopic);
   }
 
 }
