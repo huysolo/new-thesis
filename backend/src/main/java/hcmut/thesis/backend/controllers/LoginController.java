@@ -53,7 +53,6 @@ public class LoginController {
     public CurrUserInfo checkLogin(@RequestBody InfoLogin info) {        
         CurrUserInfo currUser;
         currUser = iuserDAO.getCurrUserInfo(info.getUsername(), info.getPassword());
-        System.out.println(info);
         return currUser;
     }
     
