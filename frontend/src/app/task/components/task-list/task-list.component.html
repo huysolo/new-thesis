@@ -13,7 +13,7 @@
       </ng-container>
       <mat-form-field>
         <mat-select placeholder="Topic" [(value)]="taskListSv.topic.idTop">
-          <mat-option *ngFor="let topic of listTopic" [value]="topic.idTop" [routerLink]="[topic.idTop]" (click) = "taskListSv.topic = topic">{{topic.title}}</mat-option>
+          <mat-option *ngFor="let topic of listTopic" value="topic.idTop" [routerLink]="[topic.idTop]" (click) = "taskListSv.topic = topic">{{topic.title}}</mat-option>
         </mat-select>
       </mat-form-field>
       <div class="pull-right">

@@ -1,4 +1,3 @@
-<br>
 <div class="card card-position" *ngIf="task != null">
   <ng-container *ngIf="task.showFullTask">
     <div class="button-x">
@@ -11,25 +10,31 @@
       <span class="time">{{task.updateTime | date : 'fullDate'}}</span>
     </div>
     <div class="card-body">
-      <div>
-        <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor() && isrecent"
-          class="btn btn-default">
-          <i class="fa fa-pencil"></i>Submit</button>
-        <button type="button " *ngIf="task.submit && !this.authService.isProfessor() && task.pass == 1" (click)="isSubmitTask()"
-          class="btn btn-default">
-          <i class="fa fa-pencil"></i>Submited</button>
+      <div class="pull-right">
+        <button type="button" *ngIf="isTeamlead && !task.submit && !this.authService.isProfessor()" class="btn btn-default">
+          <i class="fas fa-edit"></i>Submit</button>
+        <button type="button " *ngIf="task.submit && !this.authService.isProfessor() && task.pass == 1" class="btn btn-default">
+          <i class="fas fa-edit"></i>Submited</button>
       </div>
       <div class="content-block">
-        <h6>
+        <label>
           Description:
-        </h6>
+        </label>
         <p class="card-text">{{task.description}}</p>
+      </div>
+      <div class="content-block">
+        <label>
+          Deadline:
+        </label>
+        <p>
+          <i class="w3-text-teal fa fa-calendar fa-fw w3-margin-right"></i>{{task.deadline | date}}
+        </p>
       </div>
       <ng-container *ngIf="task.student != null && task.student.length > 0">
         <div class="content-block" *ngIf="isTaskOwner">
-          <h6>
+          <label>
             Upload to personal repository:
-          </h6>
+          </label>
           <app-form-upload [id]="task.idTask" (updateFile)="addversion(false)"></app-form-upload>
         </div>
         <div class="content-block" *ngIf="authService.isTeamLead()">
@@ -39,9 +44,9 @@
           <app-form-upload [id]="task.idTask" [general]="true" (updateFile)="addversion(true)"></app-form-upload>
         </div>
         <div>
-          <h6>
+          <label>
             Uploaded Files:
-          </h6>
+          </label>
           <mat-accordion>
             <ng-container *ngIf="!authService.isProfessor()">
               <mat-expansion-panel *ngFor="let std of task.student">
@@ -73,24 +78,20 @@
 
 
       </ng-container>
-      <div class="content-block">
-        <h6>
-          Deadline:
-        </h6>
-        <i class="w3-text-teal fa fa-calendar fa-fw w3-margin-right"></i>{{task.deadline | date}}
-      </div>
+      <br>
 
-
-      <div class="w3-dropdown-hover ">
-        <button *ngIf="this.authService.isProfessor() && task.pass == 0" type="button" class="w3-button w3-white w3-border">
-          <i class="fa fa-pencil"></i> Review</button>
-        <button *ngIf="task.pass == 2" type="button" class="w3-button w3-white w3-border w3-border-green">
-          <i class="fa fa-check"></i> Passed</button>
-        <button *ngIf="task.pass == 1" type="button" class="w3-button w3-white w3-border w3-border-red">
-          <i class="fas fa-times"></i> Not Passed</button>
-        <div id="Demo" *ngIf="this.authService.isProfessor()" class="w3-dropdown-content w3-bar-block">
-          <a (click)="reviewTask(2)" class="w3-bar-item w3-button w3-show w3-border">Pass</a>
-          <a (click)="reviewTask(1)" class="w3-bar-item w3-button w3-show w3-border">Not Pass</a>
+      <div class="pull-right">
+        <div class="w3-dropdown-hover ">
+          <button *ngIf="this.authService.isProfessor() && task.pass == 0" type="button" class="w3-button w3-white w3-border">
+            <i class="fas fa-edit"></i> Review</button>
+          <button *ngIf="task.pass == 2" type="button" class="w3-button w3-white w3-border w3-border-green">
+            <i class="fa fa-check"></i> Passed</button>
+          <button *ngIf="task.pass == 1" type="button" class="w3-button w3-white w3-border w3-border-red">
+            <i class="fas fa-times"></i> Not Passed</button>
+          <div id="Demo" *ngIf="this.authService.isProfessor()" class="w3-dropdown-content w3-bar-block">
+            <a (click)="reviewTask(2)" class="w3-bar-item w3-button w3-show w3-border">Pass</a>
+            <a (click)="reviewTask(1)" class="w3-bar-item w3-button w3-show w3-border">Not Pass</a>
+          </div>
         </div>
       </div>
 
@@ -105,34 +106,36 @@
 
   </ng-container>
 
-  <div class="card-body row" *ngIf="task.showFullTask == undefined">
-    <h4 class="col-3">{{task.title}}
-    </h4>
-    <h6 class="col-3 text-center w3-text-teal">
-      <i class="material-icons" style="vertical-align:middle">date_range</i> {{task.deadline | date}}
-
+  <div class="card-body card-fix row block-content" *ngIf="task.showFullTask == undefined" (click)="showTask(task)">
+    <div class="col-md-8 col-sm-9 no-width">
+      <h6>
+        {{task.title}}
+      </h6>
+      <strong class="text-center text-danger">
+         {{task.deadline | date}}
+  
+      </strong>
+    </div>
+    <h6 class="col-md-3 col-sm-2 text-center no-width">
+      <button type="button" *ngIf="isTeamlead && !task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()" class="btn btn-primary active">
+        <i class="fas fa-edit"></i> Submit</button>
+      <button type="button " *ngIf="task.submit && !this.authService.isProfessor()" class="btn btn-default">
+        <i class="fas fa-edit"></i> Submited</button>
     </h6>
-    <h6 class="col-3 text-center">
-      <button type="button" *ngIf="this.authService.isTeamLead() && !task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()"
-        class="btn btn-primary active">
-        <i class="fa fa-pencil"></i> Submit</button>
-      <button type="button " *ngIf="task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()" class="btn btn-secondary active">
-        <i class="fa fa-pencil"></i> Submited</button>
-    </h6>
-    <h6 class="col-1">
-      <span *ngIf="task.pass == 1" class="fas fa-times red" style="color:red;"></span>
-      <span *ngIf="task.pass == 2" class="fa fa-check" style="color:green;"></span>
-    </h6>
-    <h6 class="col-2">
-      <button type="button" (click)="showTask(task)" class="btn btn-default active">
-        Show detail
+    <h6 class="col-md-1 col-sm-1 text-right no-width">
+      <button class="btn btn-default btn-sm disabled w3-text-red" *ngIf="task.pass == 1">
+        <span  class="fas fa-times"></span>
       </button>
+      <button class="btn btn-default btn-sm disabled w3-text-green"  *ngIf="task.pass == 2">
+          <span class="fa fa-check"></span>
+        </button>
+      
     </h6>
   </div>
 
 </div>
 
-<div class="w3-modal {{issubmit}}" *ngIf="this.authService.isTeamLead()">
+<div class="w3-modal {{issubmit}}" *ngIf="isTeamlead">
   <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="padding:32px;max-width:400px">
     <div class="w3-container w3-white w3-center">
       <h3 class="w3-wide">Do you want to submit this task?</h3>

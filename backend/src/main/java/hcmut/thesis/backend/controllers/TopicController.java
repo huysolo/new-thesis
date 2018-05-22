@@ -219,6 +219,19 @@ public class TopicController {
 
     }
 
+    @GetMapping("reviewCouncil")
+    ResponseEntity<?> getReviewedTopicStandardForCouncil(
+            @RequestParam(value = "id") Integer topicId,
+            @RequestParam(value = "idCouncil") int idCouncil
+    ) {
+        try {
+            return ResponseEntity.ok(topicService.getListReviewedTopicStandardForCouncil(topicId, idCouncil));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+
+    }
+
     @GetMapping("generalStandard")
     List<Standard> getGeneralStandards(@RequestParam(value = "semNo", required = false) Integer semNo) {
         return topicService.getGeneralStandardOfCurrentSemester(semNo);

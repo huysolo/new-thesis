@@ -219,7 +219,7 @@
       <mat-table #table [dataSource]="listRecentTopic">
         <ng-container matColumnDef="title">
           <mat-header-cell *matHeaderCellDef class="mat-column-topic-title text-center"> Title </mat-header-cell>
-          <mat-cell *matCellDef="let topic" class="mat-column-topic-title" (click)="navigateToTopicDetail(topic.idTop)"> {{topic.title}} </mat-cell>
+          <mat-cell *matCellDef="let topic" class="mat-column-topic-title"> <a [routerLink]="['/task/', topic.idTop]">{{topic.title}} </a> </mat-cell>
         </ng-container>
         <ng-container matColumnDef="studentCount">
           <mat-header-cell *matHeaderCellDef class="mat-column-topic-stdnumber text-center"> Student </mat-header-cell>

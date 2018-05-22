@@ -36,6 +36,7 @@ export class TopicService {
   private appliedListUrl = this.topicUrl + 'appliedList';
   private listProfTopicUrl = this.topicUrl + 'listProfTopic';
   private reviewsUrl = this.topicUrl + 'reviews';
+
   private stdTopic = this.topicUrl + 'stdgetcurrtopic';
   /**
    * reject

@@ -63,7 +63,7 @@ export class ManageStandardComponent implements OnInit, AfterViewInit {
   }
 
   addStandard() {
-    this.standardCreate.idUser = parseInt(this.authoSv.getUserId());
+    this.standardCreate.idUser = this.authoSv.getUserId();
     this.standardSv.postStandard(this.standardCreate).subscribe(data => {
       this.standardSrc.data = this.standardSrc.data.concat(data);
       this.standardCreate = new Standard();

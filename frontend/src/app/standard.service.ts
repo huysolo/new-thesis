@@ -11,6 +11,7 @@ export class StandardService {
   private standardUrl = 'http://localhost:8080/topic/';
   private standardListUrl = this.standardUrl + 'standard';
   private reviewUrl = this.standardUrl + 'review';
+  private reviewCouncilUrl = this.standardUrl + 'reviewCouncil';
   private generalStandardUrl = this.standardUrl + 'generalStandard';
   private standardAndgeneralUrl = this.standardUrl + 'standardAndGeneral';
 
@@ -39,6 +40,12 @@ export class StandardService {
       params = params.append('profId', profId);
     }
     return this.http.get<TopicSemStandard[]>(this.reviewUrl, {params: params});
+  }
+
+  getReviewCouncil(topicId: Number, councilId) {
+    const params = new HttpParams().append('id', topicId.toString()).append('idCouncil', councilId);
+
+    return this.http.get<TopicSemStandard[]>(this.reviewCouncilUrl, {params: params});
   }
 
   getListGeneralStandard(semNo) {
