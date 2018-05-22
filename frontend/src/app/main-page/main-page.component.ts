@@ -96,7 +96,7 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   }
 
   navigateToMeetingPage() {
-    this.route.navigate(['/meeting/recent']);
+    this.route.navigate(['/meeting/list/recent']);
   }
 
   navigateToTaskPage() {

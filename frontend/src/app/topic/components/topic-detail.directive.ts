@@ -16,7 +16,7 @@ export class TopicDetailDirective {
   getTopicId(): void {
     this.topicSv.getTopicDetail(this.idTopic).subscribe(rs => {
       const dialogRef = this.dialog.open(TopidDetailComponent, {
-        width: '500px',
+        width: '600px',
         data: {
           topicDetail: rs,
         }
