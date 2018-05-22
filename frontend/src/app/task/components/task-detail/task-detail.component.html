@@ -107,7 +107,7 @@
   </ng-container>
 
   <div class="card-body card-fix row block-content" *ngIf="task.showFullTask == undefined" (click)="showTask(task)">
-    <div class="col-md-8 col-sm-12">
+    <div class="col-md-8 col-sm-9 no-width">
       <h6>
         {{task.title}}
       </h6>
@@ -116,17 +116,20 @@
   
       </strong>
     </div>
-    <h6 class="col-md-3 col-sm-12 text-center">
+    <h6 class="col-md-3 col-sm-2 text-center no-width">
       <button type="button" *ngIf="isTeamlead && !task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()" class="btn btn-primary active">
         <i class="fas fa-edit"></i> Submit</button>
       <button type="button " *ngIf="task.submit && !this.authService.isProfessor()" class="btn btn-default">
         <i class="fas fa-edit"></i> Submited</button>
     </h6>
-    <h6 class="col-md-1 text-right">
-      <button class="btn btn-default btn-sm disabled">
-        <span *ngIf="task.pass == 1" class="fas fa-times red" style="color:red;"></span>
-        <span *ngIf="task.pass == 2" class="fa fa-check" style="color:green;"></span>
+    <h6 class="col-md-1 col-sm-1 text-right no-width">
+      <button class="btn btn-default btn-sm disabled w3-text-red" *ngIf="task.pass == 1">
+        <span  class="fas fa-times"></span>
       </button>
+      <button class="btn btn-default btn-sm disabled w3-text-green"  *ngIf="task.pass == 2">
+          <span class="fa fa-check"></span>
+        </button>
+      
     </h6>
   </div>
 

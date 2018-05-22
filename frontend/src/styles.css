@@ -65,3 +65,9 @@ label {
   margin-right: 0px;
   padding: 0.5rem;
 }
+
+@media screen and (max-width: 576px) {
+  .no-width {
+    width: inherit;
+  }
+}
