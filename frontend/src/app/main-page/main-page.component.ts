@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AuthService } from '../core/auth.service';
 import { TaskService } from '../task/task.service';
 import { Observable } from 'rxjs/Observable';
@@ -25,14 +25,16 @@ import { MatStepper } from '@angular/material';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.css']
 })
-export class MainPageComponent implements OnInit {
+export class MainPageComponent implements OnInit, AfterViewInit {
   displayedColumnsTopic = ['title', 'studentCount', 'action'];
   displayedColumnsUser = ['stdName', 'teamlead'];
-
   listRecentTask: Task[];
+
   listRecentTopic: Topic[];
   listStudentTopic: Observable<StudentDoTask[]>;
+  recentTaskCount = 0;
   studentTopicCount = 0;
+  recentTopicCount = 0;
   listRecentMeeting: Array<any>;
   countTopic: Observable<Number>;
   countTask: Number;
@@ -43,13 +45,15 @@ export class MainPageComponent implements OnInit {
   listAllStd: Array<StudentDoTask>;
   semesterState: number;
 
-
-
   displayedColumnTask = ['title', 'deadline', 'pass'];
   displayedColumnMeeting = ['title', 'bookedSchedule', 'status'];
 
-
-  constructor(public semService: SemesterService, private matdialog: MatDialog, public layoutSv: LayoutService, public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
+  constructor(public semService: SemesterService,
+    private matdialog: MatDialog,
+    public layoutSv: LayoutService,
+    public authoSv: AuthService,
+    public taskSv: TaskService,
+    public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     layoutSv.labelName = 'Dashboard';
     this.getListTask();
     this.getListTopic();
@@ -59,9 +63,12 @@ export class MainPageComponent implements OnInit {
     if (this.authoSv.isStudent()) {
       this.countMessage = this.taskSv.countMessgeByStd();
       this.stdGetTopicID();
-    }
+    } 
   }
 
+  ngAfterViewInit(): void {
+    console.log(this.semService.getCurrrentSem());
+  }
   ngOnInit() {
     this.semService.init().subscribe(
       res => {
@@ -130,7 +137,6 @@ export class MainPageComponent implements OnInit {
         if (res) {
           this.stdTopicID = res;
         }
-
       });
   }
 
@@ -171,9 +177,12 @@ export class MainPageComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result.idTask != null) {
-        this.listRecentTask.push(result);
+      if(result){
+        if (result.idTask != null) {
+          //this.listRecentTask.push(result);
+        }
       }
+      
     });
   }
 
@@ -207,18 +216,20 @@ export class MainPageComponent implements OnInit {
           if (res) {
             this.listRecentTask = res;
           }
-        }
-      );
+        });
     } else {
       this.taskSv.getListTaskByApprove(0).subscribe(
         res => {
-          if (res) {
+          if(res){
             this.listRecentTask = res;
           }
         }
       );
     }
   }
+
+
+
 
   getListMeeting() {
     if (this.authoSv.isStudent()) {
@@ -245,11 +256,11 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  getTaskCount(){
-    if(this.authoSv.isStudent()){
+  getTaskCount() {
+    if (this.authoSv.isStudent()) {
       this.taskSv.countTaskByStd().subscribe(
         res => {
-          if(res){
+          if (res) {
             this.countTask = res;
           }
         }
@@ -257,7 +268,7 @@ export class MainPageComponent implements OnInit {
     } else {
       this.taskSv.countTask().subscribe(
         res => {
-          if(res){
+          if (res) {
             this.countTask = res;
           }
         }
@@ -265,11 +276,11 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  getMeetingCount(){
-    if(this.authoSv.isStudent()){
+  getMeetingCount() {
+    if (this.authoSv.isStudent()) {
       this.meetingService.countMeetingByStd().subscribe(
         res => {
-          if(res){
+          if (res) {
             this.countMeeting = res;
           }
         }
@@ -277,7 +288,7 @@ export class MainPageComponent implements OnInit {
     } else {
       this.meetingService.countMeetingByProf().subscribe(
         res => {
-          if(res){
+          if (res) {
             this.countMeeting = res;
           }
         }

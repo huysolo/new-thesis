@@ -12,20 +12,17 @@ const meetingRoutes: Routes = [
   {
     path: 'content',
     component: MeetingContentComponent,
-    pathMatch: 'full'
   },
   {
     path: 'detail',
     component: MeetingDetailComponent,
-    pathMatch: 'full'
   },
   {
     path: 'create',
     component: MeetingCreateComponent,
-    pathMatch: 'full'
   },
   {
-    path: '',
+    path: 'list',
     component: MeetingListComponent,
     children: [
       {
@@ -36,7 +33,6 @@ const meetingRoutes: Routes = [
   }, {
     path: 'meeting-detail/:id',
     component: MeetingDetailPageComponent,
-    pathMatch: 'full'
   }
 ];
 

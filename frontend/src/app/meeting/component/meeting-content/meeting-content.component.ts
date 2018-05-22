@@ -22,6 +22,7 @@ export class MeetingContentComponent implements OnInit {
   constructor(private route: ActivatedRoute, private meetingService: MeetingService, public authService: AuthService, private taskService: TaskService) { }
 
   ngOnInit() {
+    
     this.route.params.subscribe(params => {
       this.type = params['typ'];
       if (this.type === 'recent') {

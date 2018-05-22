@@ -209,7 +209,7 @@
             <span>
               <mat-icon>notes</mat-icon>
               Topic Manager
-              <span class="badge badge-pill badge-info badge-title">{{recentTaskCount}}</span>
+              <span class="badge badge-pill badge-info badge-title">{{listRecentTopic?.length}}</span>
             </span>
           </h4>
           <mat-form-field class="col-md-6 disable">
@@ -220,7 +220,7 @@
       <mat-table #table [dataSource]="listRecentTopic">
         <ng-container matColumnDef="title">
           <mat-header-cell *matHeaderCellDef class="mat-column-topic-title text-center"> Title </mat-header-cell>
-          <mat-cell *matCellDef="let topic" class="mat-column-topic-title"> <a [routerLink]="['/task/', topic.idTop]">{{topic.title}} </a> </mat-cell>
+          <mat-cell *matCellDef="let topic" class="mat-column-topic-title"> <a [routerLink]="['/task/list/', topic.idTop]">{{topic.title}} </a> </mat-cell>
         </ng-container>
         <ng-container matColumnDef="studentCount">
           <mat-header-cell *matHeaderCellDef class="mat-column-topic-stdnumber text-center"> Student </mat-header-cell>

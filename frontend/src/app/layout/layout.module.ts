@@ -27,6 +27,7 @@ import {TaskModule} from '../task/task.module';
     SidebarComponent,
     MainPageComponent
   ],
-  providers:[LayoutService]
+  providers:
+  [LayoutService]
 })
 export class LayoutModule { }

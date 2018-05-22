@@ -8,6 +8,7 @@ const routes: Routes = [
     {
         path: '',
         component: LayoutComponent,
+        canActivate: [AuthGuardUserService],
         children: [
             { path: '', redirectTo: 'mainpage'},
             { path: 'mainpage', component: MainPageComponent , data: {breadcrumbs: 'Home' }},

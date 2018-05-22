@@ -9,10 +9,6 @@ import { ProfileComponent } from './pages/profile/profile.component';
 
 const userRotes: Routes = [
   {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
     path: 'manager',
     component: ManageAccountComponent,
     canActivate: [AuthGuardUserService]
