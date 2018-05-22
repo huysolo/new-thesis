@@ -62,6 +62,7 @@ import { ChatboxComponent } from './components/chatbox/chatbox.component';
     ChatboxComponent
   ],
   providers: [TaskService, UploadFileService, TaskListService],
-  entryComponents: [TaskContentComponent, TaskCreateComponent]
+  entryComponents: [TaskContentComponent, TaskCreateComponent],
+  exports: [TaskCreateComponent]
 })
 export class TaskModule { }

@@ -5,5 +5,4 @@ export class Semester {
    endDate: Date;
    startDate: Date;
    closeDate: Date;
-
 }

@@ -9,23 +9,24 @@ import { CoreModule } from '../core/core.module';
 import { MaterialModule } from '../core/material.module';
 import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
 import { LayoutService } from './layout.service';
-
+import {MeetingModule} from '../meeting/meeting.module';
+import {TaskModule} from '../task/task.module';
 
 @NgModule({
   imports: [
     LayoutRoutingModule,
     MaterialModule,
     CommonModule,
-    McBreadcrumbsModule.forRoot()
+    McBreadcrumbsModule.forRoot(),
+    MeetingModule,
+    TaskModule
   ],
   declarations: [
     HeaderComponent,
     LayoutComponent,
     SidebarComponent,
-     MainPageComponent
+    MainPageComponent
   ],
-  providers: [
-    LayoutService
-  ]
+  providers:[LayoutService]
 })
 export class LayoutModule { }

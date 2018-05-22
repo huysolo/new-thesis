@@ -10,9 +10,14 @@ import { Router } from '@angular/router';
 import { Meeting } from '../meeting/meeting';
 import { MeetingService } from '../meeting/meeting.service';
 import { MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import {MeetingCreateComponent} from '../meeting/component/meeting-create/meeting-create.component';
+import {TaskCreateComponent} from '../task/components/task-create/task-create.component';
 import { LayoutService } from '../layout/layout.service';
+import { SemesterService } from '../core/semester.service';
+
+import { MatStepper } from '@angular/material';
 
 
 @Component({
@@ -25,7 +30,7 @@ export class MainPageComponent implements OnInit {
   displayedColumnsUser = ['stdName', 'teamlead'];
 
   listRecentTask: Observable<Task[]>;
-  listRecentTopic: Observable<Topic[]>;
+  listRecentTopic: Topic[];
   listStudentTopic: Observable<StudentDoTask[]>;
   listRecentMeeting: Array<any>;
   countTopic: Observable<Number>;
@@ -34,16 +39,21 @@ export class MainPageComponent implements OnInit {
   countMessage: Observable<number>;
   stdTopicID: number;
   topic: Topic;
+  listAllStd: Array<StudentDoTask>;
+
 
 
   displayedColumnTask = ['title', 'deadline', 'pass'];
   displayedColumnMeeting = ['title', 'bookedSchedule', 'status'];
 
 
-  constructor(public layoutSv: LayoutService, public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
+  constructor(public semService: SemesterService, private matdialog: MatDialog, public layoutSv: LayoutService, public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     layoutSv.labelName = 'Dashboard';
+    console.log(this.semService.getCurrrentSem());
     if (this.authoSv.isStudent()) {
       this.listRecentTask = taskSv.getMyTasks();
+      //this.listRecentTopic = topicSv.stdGetCurrTopic();
+      this.stdGetCurrTopic();
       this.stdGetRecentMeeting();
       this.countTask = this.taskSv.countTaskByStd();
       this.countMeeting = this.meetingService.countMeetingByStd();
@@ -51,7 +61,8 @@ export class MainPageComponent implements OnInit {
       this.stdGetTopicID();
     } else {
       this.listRecentTask = taskSv.getListTaskByApprove(0);
-      this.listRecentTopic = topicSv.getListRecentTopic();
+      //this.listRecentTopic = topicSv.getListRecentTopic();
+      this.profGetListRecentTopic();
       this.countTask = taskSv.countTask();
       this.countMeeting = meetingService.countMeetingByProf();
       this.profGetRecentMeeting();
@@ -59,6 +70,17 @@ export class MainPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authoSv.isStudent()) {
+      this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
+        this.listAllStd = data;
+      });
+    }
+    
+    console.log(this.semService.getCurrrentSem());
+  }
+
+  goForward(stepper: MatStepper){
+    stepper.next();
   }
 
 
@@ -98,12 +120,15 @@ export class MainPageComponent implements OnInit {
   navigateToTopicDetail(id) {
     this.route.navigate(['/topic/detail', id]);
   }
+  navigateToStudentDetail(id) {
+    this.route.navigate(['/user/view', id]);
+  }
+
 
   profGetRecentMeeting() {
     this.meetingService.profGetRecenMeeting().subscribe(
       res => {
         this.listRecentMeeting = this.getBookedSchedule(res);
-        console.log(this.listRecentMeeting);
         if (this.listRecentMeeting) {
         } else {
           console.log('null');
@@ -116,7 +141,6 @@ export class MainPageComponent implements OnInit {
     this.meetingService.stdGetListRecentMeeting().subscribe(
       res => {
         this.listRecentMeeting = this.getBookedSchedule(res);
-        console.log(this.listRecentMeeting);
         if (this.listRecentMeeting) {
         } else {
           console.log('null');
@@ -163,6 +187,39 @@ export class MainPageComponent implements OnInit {
 
   addNewMeeting(event: Meeting) {
     this.listRecentMeeting.push(event);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.matdialog.open(TaskCreateComponent, {
+      width: '600px',
+      data: { students: this.listAllStd }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.idTask != null) {
+
+      }
+    });
+  }
+
+  stdGetCurrTopic(){
+    this.topicSv.stdGetCurrTopic().subscribe(
+      res => {
+        this.listRecentTopic = [];
+        this.listRecentTopic[0] = res;
+      }
+    );
+  }
+
+  profGetListRecentTopic(){
+    this.topicSv.getListRecentTopic().subscribe(
+      res =>{
+        if(res){
+          this.listRecentTopic = [];
+          this.listRecentTopic = res;
+        }
+      }
+    );
   }
 }
 

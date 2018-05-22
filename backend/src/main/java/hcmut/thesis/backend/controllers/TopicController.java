@@ -133,6 +133,7 @@ public class TopicController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+    
     @PostMapping(value = "reject")
     @ResponseBody
     ResponseEntity<Object> rejectToTopic(@RequestBody Integer topicId){
@@ -284,7 +285,15 @@ public class TopicController {
         }
     }
 
-
+    @GetMapping(value = "stdgetcurrtopic")
+    ResponseEntity<?> stdGetCurrentTopic(){
+        Integer stdID = userSession.getStudent().getIdStudent();
+        try {
+            return ResponseEntity.ok(topicService.stdGetCurrentTopic(stdID));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 
 
 }
