@@ -1,1 +1,8 @@
-<app-task-detail [task]="task | async" [isTaskOwner]="isTaskOwner" ></app-task-detail>
+<ng-container *ngIf="task">
+    <app-task-detail [task]="task" [isTaskOwner]="isTaskOwner" ></app-task-detail>
+    <div class="text-right">
+        <br>
+        <button class="btn btn-default" [routerLink]="['']">To Dashboard</button>
+        <button class="btn btn-primary" [routerLink]="['/task/', task.idTopicSem]">To Task List</button>
+    </div>
+</ng-container>

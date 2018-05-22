@@ -32,7 +32,7 @@
     <mat-list>
       <label>Student Group </label>
       <div class="row">
-        <div class="col-3" *ngFor="let student of students | async" [routerLink]="['/user/view/', student.userId]">
+        <div class="col-3 block-content" *ngFor="let student of students | async" [routerLink]="['/user/view/', student.userId]">
           <mat-list-item [ngClass]="{'text-success': student.teamlead == 1}" [ngClass]="{'w3-primary': student.userId == authSv.getUserId()}">
             <mat-icon mat-list-icon>account_circle</mat-icon>
             <h6 mat-line>{{student.stdName}}</h6>
@@ -100,7 +100,7 @@
             <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
             <mat-cell *matCellDef="let review">
               <ng-container *ngIf="review.submitted == 1 ">
-                <button type="button" class="btn btn-secondary" (click)="detail(review.idProf )">Detail</button>
+                <button type="button" class="btn btn-secondary" (click)="detailCouncil(review.idCouncil)">Detail</button>
               </ng-container>
             </mat-cell>
           </ng-container>

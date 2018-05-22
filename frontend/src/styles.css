@@ -49,3 +49,19 @@ label {
   padding: 0;
   margin: 0;
 }
+
+.mat-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+
+.block-content:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+
+.card-fix {
+  margin-left: 0px;
+  margin-right: 0px;
+  padding: 0.5rem;
+}

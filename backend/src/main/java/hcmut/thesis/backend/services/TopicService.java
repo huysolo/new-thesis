@@ -35,6 +35,7 @@ public interface TopicService {
     boolean isTeamLeader(Integer idTopic, Integer idStudent);
     StudentTopicSem getStudentTopicSem(Integer idTopic, Integer idStudent);
     List<StudentDoTask> getAllStudentDoTaskFromTopicID(int topicID);
+    List<TopicSemStandard> getListReviewedTopicStandardForCouncil(Integer topicId, Integer idCouncil);
     Topic getTopicOfCurrentSem();
     Topic getTopicById(Integer idTopic);
     Integer countTopicByProfId();

@@ -12,6 +12,9 @@ public interface ReviewRepo extends JpaRepository<Review, Integer> {
     @Query("SELECT r from Review r where r.idProf = :idProf and r.idTopic = :idTopic")
     Optional<Review> findReviewByIdProfAndIdTopic(@Param("idProf") Integer idProf, @Param("idTopic") Integer idTopic);
 
+    @Query("SELECT r from Review r where r.idCouncil = :idCouncil and r.idTopic = :idTopic")
+    Optional<Review> findReviewByIdProfAndIdTopicForCouncil(@Param("idCouncil") Integer idCouncil, @Param("idTopic") Integer idTopic);
+
     @Query("SELECT r from Review r where r.idTopic = :idTopic")
     List<Review> findReviewByIdTopic(@Param("idTopic") Integer idTopic);
 }

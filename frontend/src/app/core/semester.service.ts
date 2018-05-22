@@ -34,9 +34,6 @@ export class SemesterService {
   }
 
   canApply(semNo) {
-    // if (semNo != this.currentSemester.semesterNo) {
-    //   return false;
-    // }
     return this.currentSemester != null &&
     semNo == this.currentSemester.semesterNo && this.checkTime(this.currentSemester.applyOpenDate, this.currentSemester.applyCloseDate);
   }

@@ -51,4 +51,10 @@ export class DetailResultComponent implements OnInit {
     });
   }
 
+  detailCouncil(idCouncil: Number) {
+    this.standardSv.getReviewCouncil(this.topic.topic.idTop, idCouncil).subscribe(data => {
+      this.topicRvStandardDetail = data;
+    });
+  }
+
 }

@@ -29,6 +29,7 @@ export class TaskContentComponent implements OnInit {
   pagecount: Array<number>;
 
   disconnection: any;
+  isTeamlead = false;
 
   listAllStd: Array<StudentDoTask>;
 
@@ -52,6 +53,9 @@ export class TaskContentComponent implements OnInit {
       if (this.authService.isStudent()) {
         this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
           this.listAllStd = data;
+          if (data.find(st => st.userId === this.authService.getUserId()).teamlead) {
+            this.isTeamlead = true;
+          }
         });
       }
 

@@ -4,6 +4,7 @@
 .card-position {
   position: relative;
   display: block;
+  margin-top: 10px;
 }
 .button-x {
   position: absolute;
@@ -28,4 +29,23 @@
 
 .content-block {
   padding-top: 8px;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 100px 100px 300px;
+  grid-template-rows: 200px 200px;
+  grid-gap: 10px;
+  background-color: #fff;
+  color: #444;
+  align-content: space-evenly;
+}
+.workaround{
+  border: 1px solid green;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  display: table;
+  
 }

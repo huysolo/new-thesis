@@ -320,6 +320,13 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public List<TopicSemStandard> getListReviewedTopicStandardForCouncil(Integer topicId, Integer idCouncil) {
+        Optional<Review> review = reviewRepo.findReviewByIdProfAndIdTopicForCouncil(idCouncil, topicId);
+
+        return review.map(review1 -> topicSemStandardRepo.findAllByIdReview(review1.getIdReview())).orElse(null);
+    }
+
+    @Override
     public List<Standard> getGeneralStandardOfCurrentSemester(Integer semesterNo) {
         if (semesterNo == null) {
             semesterNo = commonService.getSemOpen().getSemesterNo();

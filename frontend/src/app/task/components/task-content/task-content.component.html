@@ -1,11 +1,11 @@
-<div class="float" *ngIf="taskListSv.topic != null && this.authService.isTeamLead() && semSv.canUse(taskListSv.topic.semesterNo)">
+<div class="float" *ngIf="taskListSv.topic != null && isTeamlead && semSv.canUse(taskListSv.topic.semesterNo)">
     <button type="button" class="btn btn-primary bmd-btn-fab" (click)="openDialog()">
         <i class="material-icons">create</i>
       </button>
 </div>
 
 <div *ngFor="let task of taskListSv.taskList | async">
-  <app-task-detail [task]="task"></app-task-detail>
+  <app-task-detail [isTeamlead]="isTeamlead" [task]="task"></app-task-detail>
 </div>
 <div class="w3-padding-16">
   <app-task-pagination *ngIf="taskListSv.pageCount" (setPage)="taskListSv.getPage($event)" [page]="taskListSv.selectedPage" [pageCount]="taskListSv.pageCount" ></app-task-pagination>

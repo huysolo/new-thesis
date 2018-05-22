@@ -14,6 +14,7 @@ export class TaskDetailComponent implements OnInit {
   issubmit: String;
   @Input() isTaskOwner = false;
   @Input() task: Task;
+  @Input() isTeamlead = false;
 
   constructor(public authService: AuthService, public taskService: TaskService, public uploadSv: UploadFileService) { 
   }
