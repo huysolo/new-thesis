@@ -12,8 +12,8 @@ import { MeetingService } from '../meeting/meeting.service';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material';
 
-import {MeetingCreateComponent} from '../meeting/component/meeting-create/meeting-create.component';
-import {TaskCreateComponent} from '../task/components/task-create/task-create.component';
+import { MeetingCreateComponent } from '../meeting/component/meeting-create/meeting-create.component';
+import { TaskCreateComponent } from '../task/components/task-create/task-create.component';
 import { LayoutService } from '../layout/layout.service';
 import { SemesterService } from '../core/semester.service';
 
@@ -29,17 +29,18 @@ export class MainPageComponent implements OnInit {
   displayedColumnsTopic = ['title', 'studentCount', 'action'];
   displayedColumnsUser = ['stdName', 'teamlead'];
 
-  listRecentTask: Observable<Task[]>;
+  listRecentTask: Task[];
   listRecentTopic: Topic[];
   listStudentTopic: Observable<StudentDoTask[]>;
   listRecentMeeting: Array<any>;
   countTopic: Observable<Number>;
-  countTask: Observable<Number>;
-  countMeeting: Observable<number>;
+  countTask: Number;
+  countMeeting: number;
   countMessage: Observable<number>;
   stdTopicID: number;
   topic: Topic;
   listAllStd: Array<StudentDoTask>;
+  semesterState: number;
 
 
 
@@ -49,37 +50,31 @@ export class MainPageComponent implements OnInit {
 
   constructor(public semService: SemesterService, private matdialog: MatDialog, public layoutSv: LayoutService, public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     layoutSv.labelName = 'Dashboard';
-    console.log(this.semService.getCurrrentSem());
+    this.getListTask();
+    this.getListTopic();
+    this.getListMeeting();
+    this.getTaskCount();
+    this.getMeetingCount();
     if (this.authoSv.isStudent()) {
-      this.listRecentTask = taskSv.getMyTasks();
-      //this.listRecentTopic = topicSv.stdGetCurrTopic();
-      this.stdGetCurrTopic();
-      this.stdGetRecentMeeting();
-      this.countTask = this.taskSv.countTaskByStd();
-      this.countMeeting = this.meetingService.countMeetingByStd();
       this.countMessage = this.taskSv.countMessgeByStd();
       this.stdGetTopicID();
-    } else {
-      this.listRecentTask = taskSv.getListTaskByApprove(0);
-      //this.listRecentTopic = topicSv.getListRecentTopic();
-      this.profGetListRecentTopic();
-      this.countTask = taskSv.countTask();
-      this.countMeeting = meetingService.countMeetingByProf();
-      this.profGetRecentMeeting();
     }
   }
 
   ngOnInit() {
+    this.semService.init().subscribe(
+      res => {
+        console.log(this.semService.getCurrrentSem());
+      }
+    );
     if (this.authoSv.isStudent()) {
       this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
         this.listAllStd = data;
       });
     }
-    
-    console.log(this.semService.getCurrrentSem());
   }
 
-  goForward(stepper: MatStepper){
+  goForward(stepper: MatStepper) {
     stepper.next();
   }
 
@@ -94,7 +89,7 @@ export class MainPageComponent implements OnInit {
   }
 
   navigateToTaskPage() {
-    if(this.authoSv.isStudent()){
+    if (this.authoSv.isStudent()) {
       this.route.navigate(['/task', this.stdTopicID]);
     } else {
       this.route.navigate(['/task']);
@@ -125,39 +120,14 @@ export class MainPageComponent implements OnInit {
   }
 
 
-  profGetRecentMeeting() {
-    this.meetingService.profGetRecenMeeting().subscribe(
-      res => {
-        this.listRecentMeeting = this.getBookedSchedule(res);
-        if (this.listRecentMeeting) {
-        } else {
-          console.log('null');
-        }
-
-      }
-    );
-  }
-  stdGetRecentMeeting() {
-    this.meetingService.stdGetListRecentMeeting().subscribe(
-      res => {
-        this.listRecentMeeting = this.getBookedSchedule(res);
-        if (this.listRecentMeeting) {
-        } else {
-          console.log('null');
-        }
-
-      }
-    );
-  }
-
-  stdGetTopicID(){
+  stdGetTopicID() {
     this.taskSv.stdGetTopicID().subscribe(
       res => {
-        if(res){
+        if (res) {
           this.stdTopicID = res;
         }
-      
-    });
+
+      });
   }
 
   getBookedSchedule(listMeeting: Array<any>) {
@@ -187,39 +157,128 @@ export class MainPageComponent implements OnInit {
 
   addNewMeeting(event: Meeting) {
     this.listRecentMeeting.push(event);
+    console.log(this.listRecentMeeting);
   }
 
   openDialog(): void {
     const dialogRef = this.matdialog.open(TaskCreateComponent, {
-      width: '600px',
+      width: '550px',
       data: { students: this.listAllStd }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.idTask != null) {
-
+        this.listRecentTask.push(result);
       }
     });
   }
 
-  stdGetCurrTopic(){
-    this.topicSv.stdGetCurrTopic().subscribe(
-      res => {
-        this.listRecentTopic = [];
-        this.listRecentTopic[0] = res;
-      }
-    );
+
+  getListTopic() {
+    if (this.authoSv.isStudent()) {
+      this.topicSv.stdGetCurrTopic().subscribe(
+        res => {
+          if (res) {
+            this.listRecentTopic = [];
+            this.listRecentTopic[0] = res;
+          }
+
+        }
+      );
+    } else {
+      this.topicSv.getListRecentTopic().subscribe(
+        res => {
+          if (res) {
+            this.listRecentTopic = res;
+          }
+        }
+      );
+    }
   }
 
-  profGetListRecentTopic(){
-    this.topicSv.getListRecentTopic().subscribe(
-      res =>{
-        if(res){
-          this.listRecentTopic = [];
-          this.listRecentTopic = res;
+  getListTask() {
+    if (this.authoSv.isStudent()) {
+      this.taskSv.getMyTasks().subscribe(
+        res => {
+          if (res) {
+            this.listRecentTask = res;
+          }
         }
-      }
-    );
+      );
+    } else {
+      this.taskSv.getListTaskByApprove(0).subscribe(
+        res => {
+          if (res) {
+            this.listRecentTask = res;
+          }
+        }
+      );
+    }
+  }
+
+  getListMeeting() {
+    if (this.authoSv.isStudent()) {
+      this.meetingService.stdGetListRecentMeeting().subscribe(
+        res => {
+          this.listRecentMeeting = this.getBookedSchedule(res);
+          if (this.listRecentMeeting) {
+          } else {
+            console.log('null');
+          }
+
+        }
+      );
+    } else {
+      this.meetingService.profGetRecenMeeting().subscribe(
+        res => {
+          this.listRecentMeeting = this.getBookedSchedule(res);
+          if (this.listRecentMeeting) {
+          } else {
+            console.log('null');
+          }
+        }
+      );
+    }
+  }
+
+  getTaskCount(){
+    if(this.authoSv.isStudent()){
+      this.taskSv.countTaskByStd().subscribe(
+        res => {
+          if(res){
+            this.countTask = res;
+          }
+        }
+      );
+    } else {
+      this.taskSv.countTask().subscribe(
+        res => {
+          if(res){
+            this.countTask = res;
+          }
+        }
+      );
+    }
+  }
+
+  getMeetingCount(){
+    if(this.authoSv.isStudent()){
+      this.meetingService.countMeetingByStd().subscribe(
+        res => {
+          if(res){
+            this.countMeeting = res;
+          }
+        }
+      );
+    } else {
+      this.meetingService.countMeetingByProf().subscribe(
+        res => {
+          if(res){
+            this.countMeeting = res;
+          }
+        }
+      );
+    }
   }
 }
 

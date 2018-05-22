@@ -13,10 +13,10 @@
       <ng-template matStepLabel>Start Do Task</ng-template>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Start Review</ng-template>
+      <ng-template matStepLabel>Middle Review</ng-template>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>End Semester</ng-template>
+      <ng-template matStepLabel>Start Review</ng-template>
     </mat-step>
   </mat-horizontal-stepper>
 
@@ -29,7 +29,7 @@
         <div class="market-update-block clr-block-1">
           <div class="row">
             <div class="col-md-7 market-update-left">
-              <h3>{{countTask | async}}</h3>
+              <h3>{{countTask}}</h3>
               <h4>Tasks</h4>
             </div>
             <div class="col-md-5 market-update-right">
@@ -43,7 +43,7 @@
           <div class="row">
             <div class="col-md-7 market-update-left">
 
-              <h3>{{countMeeting | async}}</h3>
+              <h3>{{countMeeting}}</h3>
               <h4>Meetings</h4>
 
             </div>
@@ -97,7 +97,7 @@
               <mat-icon>build</mat-icon>
             </span>
             Task
-            <span class="badge badge-pill badge-info badge-title">{{(listRecentTask | async)?.length}}</span>
+            <span class="badge badge-pill badge-info badge-title">{{(listRecentTask)?.length}}</span>
           </h4>
           <div class="col-md-6 text-right">
             <button (click)="openDialog()" type="button" class="btn btn-primary bmd-btn-fab bmd-btn-fab-sm" name="new" id="new">
@@ -106,7 +106,7 @@
           </div>
         </div>
       </div>
-      <mat-table #table [dataSource]="listRecentTask | async">
+      <mat-table #table [dataSource]="listRecentTask">
         <ng-container matColumnDef="title" class="col-md-7">
           <mat-header-cell *matHeaderCellDef class="mat-column-task-title text-center"> Task Title </mat-header-cell>
           <mat-cell *matCellDef="let task" (click)="navigateToTaskDetail(task.idTask)" class="mat-column-task-title">
@@ -155,7 +155,7 @@
           </div>
         </div>
       </div>
-      <mat-table #table [dataSource]="listRecentMeeting">
+      <mat-table #table [(dataSource)]="listRecentMeeting">
 
         <ng-container matColumnDef="title" class="col-md-7">
           <mat-header-cell *matHeaderCellDef class="mat-column-meeting-title text-center"> Meeting Title </mat-header-cell>

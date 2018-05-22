@@ -11,13 +11,15 @@ export class SemesterService {
   }
 
   init() {
-    this.commonSv.getListSemester().subscribe(semList => {
+    return this.commonSv.getListSemester().map(semList => {
+
       this.listSemester = semList;
       semList.forEach(sem => {
         if (this.isOpen(sem)) {
           this.currentSemester = sem;
         }
       });
+      return semList;
     });
   }
 
@@ -34,6 +36,9 @@ export class SemesterService {
   }
 
   canApply(semNo) {
+    // if (semNo != this.currentSemester.semesterNo) {
+    //   return false;
+    // }
     return this.currentSemester != null &&
     semNo == this.currentSemester.semesterNo && this.checkTime(this.currentSemester.applyOpenDate, this.currentSemester.applyCloseDate);
   }
@@ -55,5 +60,11 @@ export class SemesterService {
     const currentTime = new Date().getTime();
     return st < currentTime && en > currentTime;
   }
+
+  // getState(semNo){
+  //   if(){
+      
+  //   }
+  // }
 
 }
