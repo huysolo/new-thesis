@@ -32,6 +32,7 @@ export class MainPageComponent implements OnInit {
   listRecentTask: Task[];
   listRecentTopic: Topic[];
   listStudentTopic: Observable<StudentDoTask[]>;
+  studentTopicCount = 0;
   listRecentMeeting: Array<any>;
   countTopic: Observable<Number>;
   countTask: Number;
@@ -81,7 +82,10 @@ export class MainPageComponent implements OnInit {
 
   getStudentTopic(topic: Topic) {
     this.topic = topic;
-    this.listStudentTopic = this.topicSv.getAllStudentDoTopic(topic.idTop);
+    this.listStudentTopic = this.topicSv.getAllStudentDoTopic(topic.idTop).map(data => {
+      this.studentTopicCount = data.length;
+      return data;
+    });
   }
 
   navigateToMeetingPage() {
@@ -144,10 +148,10 @@ export class MainPageComponent implements OnInit {
   }
 
   isMeetingToday(meetingTime: any) {
-    var thisTime = new Date();
-    var thisTimeInt = thisTime.getTime();
-    var thisTimeDay = Math.floor(thisTimeInt / (1000 * 60 * 60 * 24));
-    var meetingDay = Math.floor(meetingTime / (1000 * 60 * 60 * 24));
+    const thisTime = new Date();
+    const thisTimeInt = thisTime.getTime();
+    const thisTimeDay = Math.floor(thisTimeInt / (1000 * 60 * 60 * 24));
+    const meetingDay = Math.floor(meetingTime / (1000 * 60 * 60 * 24));
     if (thisTimeDay == meetingDay) {
       return true;
     } else {
