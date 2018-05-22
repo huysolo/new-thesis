@@ -23,7 +23,6 @@ export class LayoutComponent implements OnInit {
     private semSv: SemesterService,
     private profSv: ProfService
   ) {
-      semSv.init();
       profSv.init();
   }
 
@@ -33,7 +32,7 @@ export class LayoutComponent implements OnInit {
 
   logout() {
     localStorage.clear();
-    this.router.navigate(['/user/login']);
+    this.router.navigate(['/login']);
   }
 
 }

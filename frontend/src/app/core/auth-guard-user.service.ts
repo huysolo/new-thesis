@@ -9,11 +9,11 @@ export class AuthGuardUserService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
     if (!this.authoSv.isLogin()) {
-      this.router.navigate(['/user/login']);
+      this.router.navigate(['login/']);
     }
     return this.authoSv.isLogin();
   }
-  constructor(private authoSv: AuthService, private router: Router, semSv: SemesterService) { 
+  constructor(private authoSv: AuthService, private router: Router, semSv: SemesterService) {
     semSv.init();
   }
 

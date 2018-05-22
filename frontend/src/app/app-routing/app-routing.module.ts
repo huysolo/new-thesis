@@ -9,6 +9,7 @@ import { NotFoundComponent } from '../not-found/not-found.component';
 
 const appRoutes: Routes = [
   { path: '', loadChildren: '../layout/layout.module#LayoutModule'},
+  { path: 'login', loadChildren: '../login/login.module#LoginModule'},
   { path: '404', component: NotFoundComponent},
   { path: '**', redirectTo: '404'}
 ];

@@ -15,7 +15,6 @@ const taskRoutes: Routes = [
   {
     path: 'content',
     component: TaskContentComponent,
-    pathMatch: 'full'
   },
   {
     path: 'detail',
@@ -28,7 +27,6 @@ const taskRoutes: Routes = [
   {
     path: 'upload',
     component: FormUploadComponent,
-    pathMatch: 'full'
   },
   {
     path: 'listupload',
@@ -37,17 +35,15 @@ const taskRoutes: Routes = [
   {
     path: 'chatgroup',
     component: TaskChatgroupComponent,
-    pathMatch: 'full'
   }, {
     path: 'task-detail/:id',
     component: TaskDetailPageComponent,
-    pathMatch: 'full'
   },{
     path: 'chat',
     component: ChatboxComponent,
   },
   {
-    path: '',
+    path: 'list',
     component: TaskListComponent,
     children: [{
       path: ':id',

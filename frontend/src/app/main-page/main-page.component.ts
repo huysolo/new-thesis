@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AuthService } from '../core/auth.service';
 import { TaskService } from '../task/task.service';
 import { Observable } from 'rxjs/Observable';
@@ -12,8 +12,8 @@ import { MeetingService } from '../meeting/meeting.service';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material';
 
-import {MeetingCreateComponent} from '../meeting/component/meeting-create/meeting-create.component';
-import {TaskCreateComponent} from '../task/components/task-create/task-create.component';
+import { MeetingCreateComponent } from '../meeting/component/meeting-create/meeting-create.component';
+import { TaskCreateComponent } from '../task/components/task-create/task-create.component';
 import { LayoutService } from '../layout/layout.service';
 import { SemesterService } from '../core/semester.service';
 
@@ -25,14 +25,15 @@ import { MatStepper } from '@angular/material';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.css']
 })
-export class MainPageComponent implements OnInit {
+export class MainPageComponent implements OnInit, AfterViewInit {
   displayedColumnsTopic = ['title', 'studentCount', 'action'];
   displayedColumnsUser = ['stdName', 'teamlead'];
-
   listRecentTask: Observable<Task[]>;
   listRecentTopic: Topic[];
   listStudentTopic: Observable<StudentDoTask[]>;
+  recentTaskCount = 0;
   studentTopicCount = 0;
+  recentTopicCount = 0;
   listRecentMeeting: Array<any>;
   countTopic: Observable<Number>;
   countTask: Observable<Number>;
@@ -41,19 +42,19 @@ export class MainPageComponent implements OnInit {
   stdTopicID: number;
   topic: Topic;
   listAllStd: Array<StudentDoTask>;
-
-
-
   displayedColumnTask = ['title', 'deadline', 'pass'];
   displayedColumnMeeting = ['title', 'bookedSchedule', 'status'];
 
-
-  constructor(public semService: SemesterService, private matdialog: MatDialog, public layoutSv: LayoutService, public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
+  constructor(public semService: SemesterService,
+    private matdialog: MatDialog,
+    public layoutSv: LayoutService,
+    public authoSv: AuthService,
+    public taskSv: TaskService,
+    public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     layoutSv.labelName = 'Dashboard';
     console.log(this.semService.getCurrrentSem());
     if (this.authoSv.isStudent()) {
       this.listRecentTask = taskSv.getMyTasks();
-      //this.listRecentTopic = topicSv.stdGetCurrTopic();
       this.stdGetCurrTopic();
       this.stdGetRecentMeeting();
       this.countTask = this.taskSv.countTaskByStd();
@@ -62,7 +63,6 @@ export class MainPageComponent implements OnInit {
       this.stdGetTopicID();
     } else {
       this.listRecentTask = taskSv.getListTaskByApprove(0);
-      //this.listRecentTopic = topicSv.getListRecentTopic();
       this.profGetListRecentTopic();
       this.countTask = taskSv.countTask();
       this.countMeeting = meetingService.countMeetingByProf();
@@ -70,17 +70,18 @@ export class MainPageComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    console.log(this.semService.getCurrrentSem());
+  }
   ngOnInit() {
     if (this.authoSv.isStudent()) {
       this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
         this.listAllStd = data;
       });
     }
-    
-    console.log(this.semService.getCurrrentSem());
   }
 
-  goForward(stepper: MatStepper){
+  goForward(stepper: MatStepper) {
     stepper.next();
   }
 
@@ -98,7 +99,7 @@ export class MainPageComponent implements OnInit {
   }
 
   navigateToTaskPage() {
-    if(this.authoSv.isStudent()){
+    if (this.authoSv.isStudent()) {
       this.route.navigate(['/task', this.stdTopicID]);
     } else {
       this.route.navigate(['/task']);
@@ -154,14 +155,13 @@ export class MainPageComponent implements OnInit {
     );
   }
 
-  stdGetTopicID(){
+  stdGetTopicID() {
     this.taskSv.stdGetTopicID().subscribe(
       res => {
-        if(res){
+        if (res) {
           this.stdTopicID = res;
         }
-      
-    });
+      });
   }
 
   getBookedSchedule(listMeeting: Array<any>) {
@@ -206,7 +206,7 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  stdGetCurrTopic(){
+  stdGetCurrTopic() {
     this.topicSv.stdGetCurrTopic().subscribe(
       res => {
         this.listRecentTopic = [];
@@ -215,10 +215,10 @@ export class MainPageComponent implements OnInit {
     );
   }
 
-  profGetListRecentTopic(){
+  profGetListRecentTopic() {
     this.topicSv.getListRecentTopic().subscribe(
-      res =>{
-        if(res){
+      res => {
+        if (res) {
           this.listRecentTopic = [];
           this.listRecentTopic = res;
         }
