@@ -117,8 +117,8 @@
       </strong>
     </div>
     <h6 class="col-md-3 col-sm-2 text-center no-width">
-      <button type="button" *ngIf="isTeamlead && !task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()" class="btn btn-primary active">
-        <i class="fas fa-edit"></i> Submit</button>
+      <!-- <button type="button" *ngIf="isTeamlead && !task.submit && !this.authService.isProfessor()" (click)="isSubmitTask()" class="btn btn-primary active">
+        <i class="fas fa-edit"></i> Submit</button> -->
       <button type="button " *ngIf="task.submit && !this.authService.isProfessor()" class="btn btn-default">
         <i class="fas fa-edit"></i> Submited</button>
     </h6>

@@ -25,8 +25,11 @@ export class MainPageComponent implements OnInit {
   displayedColumnsUser = ['stdName', 'teamlead'];
 
   listRecentTask: Observable<Task[]>;
+  recentTaskCount = 0;
   listRecentTopic: Observable<Topic[]>;
+  recentTopicCount = 0;
   listStudentTopic: Observable<StudentDoTask[]>;
+  studentTopicCount = 0;
   listRecentMeeting: Array<any>;
   countTopic: Observable<Number>;
   countTask: Observable<Number>;
@@ -40,18 +43,29 @@ export class MainPageComponent implements OnInit {
   displayedColumnMeeting = ['title', 'bookedSchedule', 'status'];
 
 
-  constructor(public layoutSv: LayoutService, public authoSv: AuthService, public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
+  constructor(public layoutSv: LayoutService,
+    public authoSv: AuthService,
+    public taskSv: TaskService, public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     layoutSv.labelName = 'Dashboard';
     if (this.authoSv.isStudent()) {
-      this.listRecentTask = taskSv.getMyTasks();
+      this.listRecentTask = taskSv.getMyTasks().map(data => {
+        this.recentTaskCount = data.length;
+        return data;
+      });
       this.stdGetRecentMeeting();
       this.countTask = this.taskSv.countTaskByStd();
       this.countMeeting = this.meetingService.countMeetingByStd();
       this.countMessage = this.taskSv.countMessgeByStd();
       this.stdGetTopicID();
     } else {
-      this.listRecentTask = taskSv.getListTaskByApprove(0);
-      this.listRecentTopic = topicSv.getListRecentTopic();
+      this.listRecentTask = taskSv.getListTaskByApprove(0).map(data => {
+        this.recentTaskCount = data.length;
+        return data;
+      });
+      this.listRecentTopic = topicSv.getListRecentTopic().map(data => {
+        this.recentTopicCount = data.length;
+        return data;
+      });
       this.countTask = taskSv.countTask();
       this.countMeeting = meetingService.countMeetingByProf();
       this.profGetRecentMeeting();
@@ -64,7 +78,10 @@ export class MainPageComponent implements OnInit {
 
   getStudentTopic(topic: Topic) {
     this.topic = topic;
-    this.listStudentTopic = this.topicSv.getAllStudentDoTopic(topic.idTop);
+    this.listStudentTopic = this.topicSv.getAllStudentDoTopic(topic.idTop).map(data => {
+      this.studentTopicCount = data.length;
+      return data;
+    });
   }
 
   navigateToMeetingPage() {

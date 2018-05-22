@@ -70,7 +70,7 @@
         <div class="market-update-block clr-block-3">
           <div class="row">
             <div class="col-md-7 market-update-left">
-              <h3>{{(listRecentTopic | async)?.length}}</h3>
+              <h3>{{recentTopicCount}}</h3>
               <h4>Topics</h4>
             </div>
             <div class="col-md-5 market-update-right">
@@ -102,7 +102,7 @@
 
 <div class="row">
   <div class="col-md-6">
-    <div class="example-container mat-elevation-z8">
+    <div class="example-container mat-elevation-z2">
       <div class="example-header">
         <div class="row">
           <h4 *ngIf="listRecentTask" matBadge="4" matBadgeOverlap="false" class="col-md-6 title-header">
@@ -110,7 +110,7 @@
               <mat-icon>build</mat-icon>
             </span>
             Task
-            <span class="badge badge-pill badge-info badge-title">{{(listRecentTask | async)?.length}}</span>
+            <span class="badge badge-pill badge-info badge-title">{{recentTaskCount}}</span>
           </h4>
           <mat-form-field class="col-md-6">
             <input matInput placeholder="Filter">
@@ -149,7 +149,7 @@
   </div>
 
   <div class="col-md-6">
-    <div class="example-container mat-elevation-z8 ">
+    <div class="example-container mat-elevation-z2 ">
       <div class="example-header">
         <div class="row">
           <h4 class="col-md-6 title-header">
@@ -212,15 +212,15 @@
 
 <div *ngIf="authoSv.isProfessor()" class="row">
   <div class="col-md-8 col-sm-12 ">
-    <div class="example-container mat-elevation-z8">
+    <div class="example-container mat-elevation-z2">
       <div class="example-header">
         <div class="row">
           <h4 class="col-md-6 title-header">
             <span>
               <mat-icon>notes</mat-icon>
+              Topic Manager
+              <span class="badge badge-pill badge-info badge-title">{{recentTaskCount}}</span>
             </span>
-            Topic Manager
-            <span class="badge badge-pill badge-info badge-title">{{(listRecentTopic | async)?.length}}</span>
           </h4>
           <mat-form-field class="col-md-6 disable">
             <input matInput placeholder="Filter">
@@ -255,7 +255,7 @@
   </div>
 
   <div class="col-md-4 col-sm-12">
-    <div class="example-container mat-elevation-z8">
+    <div class="example-container mat-elevation-z2">
       <div class="example-header">
         <div class="row">
           <h6 class="col-md-12 title-header">
@@ -263,11 +263,8 @@
               <mat-icon>person</mat-icon>
             </span>
             Students
-            <span class="badge badge-pill badge-info badge-title">{{(listStudentTopic | async)?.length}}</span>
+            <span class="badge badge-pill badge-info badge-title">{{studentTopicCount}}</span>
           </h6>
-          <!-- <mat-form-field class="col-md-6 disable">
-                <input matInput placeholder="Filter">
-              </mat-form-field> -->
         </div>
       </div>
       <mat-table #table [dataSource]="listStudentTopic | async">

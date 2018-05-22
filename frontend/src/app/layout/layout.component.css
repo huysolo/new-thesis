@@ -27,7 +27,7 @@
   }
   .sidenav-second-level {
     max-height: 200px;
-    overflow: auto;
+    overflow-y: auto;
   }
 }
 
