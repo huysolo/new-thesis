@@ -7,6 +7,12 @@
   <p>
     {{topicDetail.topic.sumary}}
   </p>
+  <label>AUTHOR</label>
+  <p>
+    <a [routerLink]="['/user/view', (topicDetail.topic.idProf | prof: 'id')]">
+      {{topicDetail.topic.idProf | prof}}
+    </a>
+  </p>
   <label>STUDENT LIMIT</label>
   <p>
     {{topicDetail.topic.stNumLimit}}
@@ -24,7 +30,8 @@
 
   <mat-list *ngIf="students != null ">
     <label>STUDENT GROUP</label>
-    <mat-list-item class="block-content" *ngFor="let student of students" [routerLink]="['/user/view', student.userId]" [ngClass]="{'text-success': student.teamlead == 1}" [ngClass]="{'text-primary': student.userId == authSv.getUserId()}">
+    <mat-list-item class="block-content" *ngFor="let student of students" [routerLink]="['/user/view', student.userId]" [ngClass]="{'text-success': student.teamlead == 1}"
+      [ngClass]="{'text-primary': student.userId == authSv.getUserId()}">
       <mat-icon mat-list-icon>account_circle</mat-icon>
       <h6 mat-line>{{student.stdName}}</h6>
       <p mat-line> {{student.studentId}} </p>
