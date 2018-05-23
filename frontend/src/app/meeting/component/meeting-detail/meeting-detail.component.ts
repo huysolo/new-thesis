@@ -7,6 +7,7 @@ import { MeetingService } from '../../meeting.service';
 import { AuthService } from '../../../core/auth.service';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { MeetingReport } from '../../meeting-report'
 
 @Component({
   selector: 'app-meeting-detail',
@@ -26,6 +27,8 @@ export class MeetingDetailComponent implements OnInit {
   tempListStudent: Array<StudentMeeting> = [];
   meetingDiary: any;
 
+  isPublicDiary: Boolean = true;
+
   constructor(public snackBar: MatSnackBar, private meetingService: MeetingService, public authService: AuthService) {
 
   }
@@ -38,11 +41,6 @@ export class MeetingDetailComponent implements OnInit {
     this.getAllStudentDoTopic();
     if (this.authService.isStudent()) {
       this.getMeetingDiary();
-    }
-    if(this.meeting.timeLocation.length > 0){
-      for(let i = 0; i< this.meeting.timeLocation.length; i++){
-        this.getAlertBeforeMeeting(this.meeting.timeLocation[i].meetingTime);
-      }
     }
 
   }
@@ -141,15 +139,6 @@ export class MeetingDetailComponent implements OnInit {
 
   }
 
-  getAlertBeforeMeeting(meetingTime: String) {
-    var t = Number(meetingTime);
-    var date = new Date(t);
-    var thisDay = new Date();
-    console.log(thisDay.getDay(), thisDay.getMonth(), thisDay.getFullYear());
-    if(date.getDay() == thisDay.getDay() && date.getMonth() == thisDay.getMonth()){
-     
-    }
-  }
 
   isCheckedSchedule(schedule: TimeLocation) {
     if (schedule.status == 1) {
@@ -262,9 +251,20 @@ export class MeetingDetailComponent implements OnInit {
     );
   }
 
-  isDiaryMeeting(matExpansionPanel) {
+  getPublicDiary(matExpansionPanel) {
     matExpansionPanel.toggle();
     this.isDiary = !this.isDiary;
+    this.isPublicDiary = true;
+  }
+  getPersonalDiary(matExpansionPanel) {
+    matExpansionPanel.toggle();
+    this.isPublicDiary = false;
+  }
+
+  getMeetingContent(matExpansionPanel) {
+    matExpansionPanel.toggle();
+    this.isDiary = !this.isDiary;
+    this.isPublicDiary = true;
   }
 
   getMeetingDiary() {
@@ -276,15 +276,31 @@ export class MeetingDetailComponent implements OnInit {
   }
 
   editMeetingDiary() {
-    this.meetingService.editMeetingDiary(this.meetingDiary).subscribe(
-      res => {
-        if (res) {
-          this.snackBar.open("    Edit Success!!!    ", "Close", {
-            duration: 2000,
-          });
+    if (this.isPublicDiary) {
+      let temp = new MeetingReport();
+      temp.content = this.meeting.reportContent;
+      temp.plan = this.meeting.reportPlan;
+      temp.meetingID = this.meeting.meetingID;
+
+      this.meetingService.editMeetingReport(temp).subscribe(
+        res => {
+          if (res) {
+            console.log(res);
+          }
         }
-      }
-    );
+      );
+    } else {
+      this.meetingService.editMeetingDiary(this.meetingDiary).subscribe(
+        res => {
+          if (res) {
+            this.snackBar.open("    Edit Success!!!    ", "Close", {
+              duration: 2000,
+            });
+          }
+        }
+      );
+    }
+
   }
 
 }

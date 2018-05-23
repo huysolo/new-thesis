@@ -307,6 +307,16 @@ public class TopicController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+    
+    @GetMapping(value = "profgetcurrappliedtopic")
+    ResponseEntity<?> profGetCurrentAppliedTopic(){
+        Integer profID = userSession.getProf().getIdProfessor();
+        try {
+            return ResponseEntity.ok(topicService.profGetCurrAppliedListTopic(profID));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 
 
 }

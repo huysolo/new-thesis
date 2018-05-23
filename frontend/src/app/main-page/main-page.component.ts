@@ -56,7 +56,6 @@ export class MainPageComponent implements OnInit, AfterViewInit {
     public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     layoutSv.labelName = 'Dashboard';
     this.getListTask();
-    this.getListTopic();
     this.getListMeeting();
     this.getTaskCount();
     this.getMeetingCount();
@@ -67,12 +66,12 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.semService.getCurrrentSem());
   }
   ngOnInit() {
     this.semService.init().subscribe(
       res => {
-        console.log(this.semService.getCurrrentSem());
+        this.semesterState = this.semService.getState(this.semService.getCurrrentSem().semesterNo);
+        this.getListTopic( this.semesterState);
       }
     );
     if (this.authoSv.isStudent()) {
@@ -96,14 +95,14 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   }
 
   navigateToMeetingPage() {
-    this.route.navigate(['/meeting/recent']);
+    this.route.navigate(['/meeting/list/recent']);
   }
 
   navigateToTaskPage() {
     if (this.authoSv.isStudent()) {
-      this.route.navigate(['/task', this.stdTopicID]);
+      this.route.navigate(['/task/list', this.stdTopicID]);
     } else {
-      this.route.navigate(['/task']);
+      this.route.navigate(['/task/list']);
     }
   }
 
@@ -187,7 +186,7 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   }
 
 
-  getListTopic() {
+  getListTopic(semState) {
     if (this.authoSv.isStudent()) {
       this.topicSv.stdGetCurrTopic().subscribe(
         res => {
@@ -199,13 +198,24 @@ export class MainPageComponent implements OnInit, AfterViewInit {
         }
       );
     } else {
-      this.topicSv.getListRecentTopic().subscribe(
-        res => {
-          if (res) {
-            this.listRecentTopic = res;
+      if(semState == 0){
+        this.topicSv.getListRecentTopic().subscribe(
+          res => {
+            if (res) {
+              this.listRecentTopic = res;
+            }
           }
-        }
-      );
+        );
+      } else {
+        this.topicSv.profGetCurrAppliedTopic().subscribe(
+          res => {
+            if(res){
+              this.listRecentTopic = res;
+            }
+          }
+        );
+      }
+      
     }
   }
 

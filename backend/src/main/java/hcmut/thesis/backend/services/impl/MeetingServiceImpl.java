@@ -12,6 +12,7 @@ import hcmut.thesis.backend.models.MeetingSchelule;
 import hcmut.thesis.backend.models.StudentTopicSem;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.modelview.MeetingInfo;
+import hcmut.thesis.backend.modelview.MeetingReport;
 import hcmut.thesis.backend.modelview.MeetingTimeLocation;
 import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.StudentJoinMeeting;
@@ -67,7 +68,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     CommonService commonService;
-    
+
     @Autowired
     TaskService taskService;
 
@@ -121,20 +122,28 @@ public class MeetingServiceImpl implements MeetingService {
         return info;
     }
 
+    MeetingInfo mappingMeetingToMeetingInfo(Meeting meeting) {
+        MeetingInfo temp = new MeetingInfo();
+        temp.setTopicID(meeting.getIdTopicSem());
+        temp.setMeetingID(meeting.getIdMeeting());
+        temp.setStatus(meeting.getStatus());
+        temp.setTitle(meeting.getTitle());
+        temp.setContent(meeting.getContent());
+        temp.setReason(meeting.getReason());
+        temp.setReportContent(meeting.getReportContent());
+        temp.setReportPlan(meeting.getReportPlan());
+        temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
+        temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
+        
+         return temp;
+    }
+
     @Override
     public List<MeetingInfo> getListMeetingFromTopicID(int topicid) {
         List<MeetingInfo> list = new ArrayList<>();
         List<Meeting> listMeeting = meetingRepo.getListMeetingFromTopicID(topicid);
         for (Meeting meeting : listMeeting) {
-            MeetingInfo temp = new MeetingInfo();
-            temp.setTopicID(meeting.getIdTopicSem());
-            temp.setMeetingID(meeting.getIdMeeting());
-            temp.setStatus(meeting.getStatus());
-            temp.setTitle(meeting.getTitle());
-            temp.setContent(meeting.getContent());
-            temp.setReason(meeting.getReason());
-            temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
-            temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
+            MeetingInfo temp = this.mappingMeetingToMeetingInfo(meeting);
             list.add(temp);
         }
         return list;
@@ -143,15 +152,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public MeetingInfo getMeetingFromMeetingID(int meetingID) {
         Meeting meeting = meetingRepo.getMeetingFromMeetingID(meetingID);
-        MeetingInfo temp = new MeetingInfo();
-        temp.setTopicID(meeting.getIdTopicSem());
-        temp.setMeetingID(meeting.getIdMeeting());
-        temp.setStatus(meeting.getStatus());
-        temp.setTitle(meeting.getTitle());
-        temp.setContent(meeting.getContent());
-        temp.setReason(meeting.getReason());
-        temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
-        temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
+        MeetingInfo temp = this.mappingMeetingToMeetingInfo(meeting);
         return temp;
     }
 
@@ -271,27 +272,11 @@ public class MeetingServiceImpl implements MeetingService {
                 }
 
                 for (Meeting waitingMeeting : listWaiting) {
-                    MeetingInfo waitingTemp = new MeetingInfo();
-                    waitingTemp.setTopicID(waitingMeeting.getIdTopicSem());
-                    waitingTemp.setMeetingID(waitingMeeting.getIdMeeting());
-                    waitingTemp.setStatus(waitingMeeting.getStatus());
-                    waitingTemp.setTitle(waitingMeeting.getTitle());
-                    waitingTemp.setContent(waitingMeeting.getContent());
-                    waitingTemp.setReason(waitingMeeting.getReason());
-                    waitingTemp.setStudent(mappingToStdJoinMeeting(waitingMeeting.getIdMeeting()));
-                    waitingTemp.setTimeLocation(mappingFromScheduleToTimeLocation(waitingMeeting.getIdMeeting()));
+                    MeetingInfo waitingTemp = this.mappingMeetingToMeetingInfo(waitingMeeting);
                     listStudent.add(waitingTemp);
                 }
                 for (Meeting meeting : listBooked) {
-                    MeetingInfo temp = new MeetingInfo();
-                    temp.setTopicID(meeting.getIdTopicSem());
-                    temp.setMeetingID(meeting.getIdMeeting());
-                    temp.setStatus(meeting.getStatus());
-                    temp.setTitle(meeting.getTitle());
-                    temp.setContent(meeting.getContent());
-                    temp.setReason(meeting.getReason());
-                    temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
-                    temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
+                    MeetingInfo temp = this.mappingMeetingToMeetingInfo(meeting);
                     listStudent.add(temp);
                 }
             }
@@ -322,15 +307,7 @@ public class MeetingServiceImpl implements MeetingService {
                 }
 
                 for (Meeting meeting : listBooked) {
-                    MeetingInfo temp = new MeetingInfo();
-                    temp.setTopicID(meeting.getIdTopicSem());
-                    temp.setMeetingID(meeting.getIdMeeting());
-                    temp.setStatus(meeting.getStatus());
-                    temp.setTitle(meeting.getTitle());
-                    temp.setContent(meeting.getContent());
-                    temp.setReason(meeting.getReason());
-                    temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
-                    temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
+                    MeetingInfo temp = this.mappingMeetingToMeetingInfo(meeting);
                     listStudent.add(temp);
                 }
             }
@@ -357,15 +334,7 @@ public class MeetingServiceImpl implements MeetingService {
         }
 
         for (Meeting meeting : listBooked) {
-            MeetingInfo temp = new MeetingInfo();
-            temp.setTopicID(meeting.getIdTopicSem());
-            temp.setMeetingID(meeting.getIdMeeting());
-            temp.setStatus(meeting.getStatus());
-            temp.setTitle(meeting.getTitle());
-            temp.setContent(meeting.getContent());
-            temp.setReason(meeting.getReason());
-            temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
-            temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
+            MeetingInfo temp = this.mappingMeetingToMeetingInfo(meeting);
             listStudent.add(temp);
         }
         return listStudent;
@@ -389,28 +358,12 @@ public class MeetingServiceImpl implements MeetingService {
         }
 
         for (Meeting waitingMeeting : listWaiting) {
-            MeetingInfo waitingTemp = new MeetingInfo();
-            waitingTemp.setTopicID(waitingMeeting.getIdTopicSem());
-            waitingTemp.setMeetingID(waitingMeeting.getIdMeeting());
-            waitingTemp.setStatus(waitingMeeting.getStatus());
-            waitingTemp.setTitle(waitingMeeting.getTitle());
-            waitingTemp.setContent(waitingMeeting.getContent());
-            waitingTemp.setReason(waitingMeeting.getReason());
-            waitingTemp.setStudent(mappingToStdJoinMeeting(waitingMeeting.getIdMeeting()));
-            waitingTemp.setTimeLocation(mappingFromScheduleToTimeLocation(waitingMeeting.getIdMeeting()));
+            MeetingInfo waitingTemp = this.mappingMeetingToMeetingInfo(waitingMeeting);
             listStudent.add(waitingTemp);
         }
 
         for (Meeting meeting : listBooked) {
-            MeetingInfo temp = new MeetingInfo();
-            temp.setTopicID(meeting.getIdTopicSem());
-            temp.setMeetingID(meeting.getIdMeeting());
-            temp.setStatus(meeting.getStatus());
-            temp.setTitle(meeting.getTitle());
-            temp.setContent(meeting.getContent());
-            temp.setReason(meeting.getReason());
-            temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
-            temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
+            MeetingInfo temp = this.mappingMeetingToMeetingInfo(meeting);
             listStudent.add(temp);
         }
         return listStudent;
@@ -430,33 +383,48 @@ public class MeetingServiceImpl implements MeetingService {
         joinMeetingRepo.save(jpm);
         return jpm;
     }
+    
+
     @Override
-    public Integer countTaskByTopicID(Integer topicID){
-        try{
+    public Integer countTaskByTopicID(Integer topicID) {
+        try {
             return meetingRepo.countTaskByTopicID(topicID);
-        } catch(Exception e) {
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public Integer countMeetingByStd(Integer stdID) {
+        int topicID = taskService.getCurrTopicFromStdID(stdID).getIdTop();
+        return this.countTaskByTopicID(topicID);
+    }
+
+    @Override
+    public Integer countMeetingByProf(Integer profID) {
+        Integer meetingCount = 0;
+        try {
+            int currSem = commonService.getCurrentSem();
+            List<Topic> listTopic = topicRepo.findListTopicFromSemID(profID, currSem);
+            for (Topic topic : listTopic) {
+                meetingCount = meetingCount + this.countTaskByTopicID(topic.getIdTop());
+            }
+            return meetingCount;
+        } catch (Exception e) {
             return 0;
         }
     }
     
     @Override
-    public Integer countMeetingByStd(Integer stdID){
-        int topicID = taskService.getCurrTopicFromStdID(stdID).getIdTop();
-        return this.countTaskByTopicID(topicID);
-    }
-    
-    @Override
-    public Integer countMeetingByProf(Integer profID){
-        Integer meetingCount = 0;
-        try {
-            int currSem = commonService.getCurrentSem();
-            List<Topic> listTopic = topicRepo.findListTopicFromSemID(profID, currSem);
-            for(Topic topic: listTopic){
-                meetingCount = meetingCount + this.countTaskByTopicID(topic.getIdTop());
-            }
-            return meetingCount;
-        } catch (Exception e){
-            return 0;
+    public Boolean editMeetingReport(MeetingReport report){
+        try{
+            Meeting meeting = meetingRepo.getMeetingFromMeetingID(report.getMeetingID());
+            meeting.setReportContent(report.getContent());
+            meeting.setReportPlan(report.getPlan());
+            meetingRepo.save(meeting);
+            return true;
+        } catch(Exception e){
+            return false;
         }
     }
 }

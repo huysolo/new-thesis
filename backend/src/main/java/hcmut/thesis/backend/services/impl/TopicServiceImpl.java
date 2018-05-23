@@ -438,6 +438,15 @@ public class TopicServiceImpl implements TopicService {
             return null;
         }       
     }
-
+    
+    @Override
+    public List<Topic> profGetCurrAppliedListTopic(Integer profID){
+        try{
+            Integer currSem = commonService.getCurrentSem();
+            return topicRepo.findListAppliedTopicFromSemIDProfID(profID, currSem);
+        } catch(Exception e){
+            return null;
+        }
+    }
 
 }

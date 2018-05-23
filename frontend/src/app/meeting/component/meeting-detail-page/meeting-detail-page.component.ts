@@ -22,7 +22,6 @@ export class MeetingDetailPageComponent implements OnInit {
     this.meetingService.getMeetingFromMeetingID(meetingID).subscribe(
       res => {
         this.meeting = res;
-        console.log(this.meeting);
       }
     );
   }

@@ -23,10 +23,13 @@
       </mat-panel-title>
 
       <span matTooltip="Meeting Diary" hideToggle="false">
-        <mat-icon class="example-icon" *ngIf="!isDiary" (click)="isDiaryMeeting(matExpansionPanel)">event_note</mat-icon>
+        <mat-icon class="example-icon" *ngIf="!isDiary" (click)="getPublicDiary(matExpansionPanel)">event_note</mat-icon>
       </span>
       <span matTooltip="Meeting Content">
-        <mat-icon class="example-icon" *ngIf="isDiary" (click)="isDiaryMeeting(matExpansionPanel)">group</mat-icon>
+        <mat-icon class="example-icon" *ngIf="isDiary && !isPublicDiary" (click)="getMeetingContent(matExpansionPanel)">group</mat-icon>
+      </span>
+      <span matTooltip="Meeting Content">
+          <mat-icon class="example-icon" *ngIf="isDiary && isPublicDiary" (click)="getPersonalDiary(matExpansionPanel)">perm_contact_calendar</mat-icon>
       </span>
 
     </mat-expansion-panel-header>
@@ -73,20 +76,33 @@
     </div>
 
     <div *ngIf="isDiary" class="example-container">
-      <div *ngIf="meetingDiary">
+      <div *ngIf="isPublicDiary">
           <mat-form-field class="mat-form-meeting-content">
-              <textarea [(ngModel)]="meetingDiary.diaryContent" matInput cols="10" rows="5" placeholder="Content">
+              <textarea [(ngModel)]="meeting.reportContent" matInput cols="10" rows="5" placeholder="Content">
               </textarea>
             </mat-form-field>
             <mat-form-field class="mat-form-meeting-content">
-              <textarea [(ngModel)]="meetingDiary.diaryPlan" matInput cols="10" rows="5" placeholder="Plan">
+              <textarea [(ngModel)]="meeting.reportPlan" matInput cols="10" rows="5" placeholder="Plan">
               </textarea>
             </mat-form-field>
       </div>
-      
-      <div *ngIf="!meetingDiary">
-        <h3>You not join this meeting</h3>
+      <div *ngIf="!isPublicDiary">
+          <div *ngIf="meetingDiary">
+              <mat-form-field class="mat-form-meeting-content">
+                  <textarea [(ngModel)]="meetingDiary.diaryContent" matInput cols="10" rows="5" placeholder="Content">
+                  </textarea>
+                </mat-form-field>
+                <mat-form-field class="mat-form-meeting-content">
+                  <textarea [(ngModel)]="meetingDiary.diaryPlan" matInput cols="10" rows="5" placeholder="Plan">
+                  </textarea>
+                </mat-form-field>
+          </div>
+          
+          <div *ngIf="!meetingDiary">
+            <h3>You not join this meeting</h3>
+          </div>
       </div>
+      
     </div>
 
 

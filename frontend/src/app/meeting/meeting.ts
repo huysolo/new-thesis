@@ -8,6 +8,8 @@ export class Meeting {
     reason: String;
     topicID: number;
     status: number;
+    reportContent: String;
+    reportPlan: String;
     student: Array<StudentMeeting>;
     timeLocation: Array<TimeLocation>;
     constructor(){

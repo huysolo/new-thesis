@@ -10,6 +10,7 @@ import hcmut.thesis.backend.models.JoinPerMeeting;
 import hcmut.thesis.backend.models.Meeting;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.modelview.MeetingInfo;
+import hcmut.thesis.backend.modelview.MeetingReport;
 import hcmut.thesis.backend.modelview.MeetingTimeLocation;
 import hcmut.thesis.backend.modelview.StudentJoinMeeting;
 import hcmut.thesis.backend.modelview.TopicDetail;
@@ -30,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javafx.scene.input.KeyCode.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -180,12 +182,29 @@ public class MeetingController {
     public JoinPerMeeting editMeetingDiary(@RequestBody JoinPerMeeting jpm) {
         return meetingService.editMeetingDiary(jpm);
     }
+    
+      @RequestMapping(value = "/editmeetingreport", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> editMeeting(@RequestBody MeetingReport report) {
+        try{
+            if(meetingService.editMeetingReport(report)){
+                return ResponseEntity.ok(HttpStatus.OK);
+            } else {
+                return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
+            }
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 
     @RequestMapping(value = "/editmeeting", method = RequestMethod.POST)
     @ResponseBody
     public MeetingInfo editMeeting(@RequestBody MeetingInfo info) {
         return meetingService.stdBookMeeting(info);
     }
+    
+  
 
     @RequestMapping(value = "/createschedulemeeting", method = RequestMethod.POST)
     @ResponseBody

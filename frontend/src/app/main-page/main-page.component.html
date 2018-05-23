@@ -1,22 +1,35 @@
 <div>
-  <mat-horizontal-stepper [linear]="isLinear" [selectedIndex] = "1" #stepper="matHorizontalStepper">
+  <mat-horizontal-stepper *ngIf="semesterState" linear [selectedIndex] = "semesterState" #stepper="matHorizontalStepper">
     <ng-template matStepperIcon="edit">
       <mat-icon>done</mat-icon>
     </ng-template>
-    <mat-step>
-      <ng-template matStepLabel>
-        Start Semester
-        <br> (May 5, 2018)
+    <mat-step editable="false">
+      <ng-template *ngIf="this.semService.getCurrrentSem()" matStepLabel>
+        Start Apply Topic
+        <br> 
+        ({{this.semService.getCurrrentSem().applyOpenDate | date}})
       </ng-template>
     </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Start Do Task</ng-template>
+    <mat-step editable="false">
+      <ng-template *ngIf="this.semService.getCurrrentSem()" matStepLabel>
+        Start Do Task
+        <br> 
+        ({{this.semService.getCurrrentSem().startDate | date}})
+      </ng-template>
     </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Middle Review</ng-template>
+    <mat-step editable="false">
+      <ng-template *ngIf="this.semService.getCurrrentSem()" matStepLabel>       
+        Middle Review
+        <br> 
+        ({{this.semService.getCurrrentSem().midtermReviewDate | date}})
+      </ng-template>
     </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Start Review</ng-template>
+    <mat-step editable="false">
+      <ng-template *ngIf="this.semService.getCurrrentSem()" matStepLabel>
+        Final Review
+        <br> 
+        ({{this.semService.getCurrrentSem().reviewDate | date}})
+      </ng-template>
     </mat-step>
   </mat-horizontal-stepper>
 
@@ -57,7 +70,7 @@
         <div class="market-update-block clr-block-3">
           <div class="row">
             <div class="col-md-7 market-update-left">
-              <h3>{{recentTopicCount}}</h3>
+              <h3>{{listRecentTopic?.length}}</h3>
               <h4>Topics</h4>
             </div>
             <div class="col-md-5 market-update-right">
@@ -260,7 +273,7 @@
       <mat-table #table [dataSource]="listStudentTopic | async">
         <ng-container matColumnDef="stdName">
           <mat-header-cell *matHeaderCellDef class="mat-column-std-name text-center">Student Name </mat-header-cell>
-          <mat-cell *matCellDef="let student" (click)="navigateToStudentDetail(student.studentId)" class="mat-column-std-name text-center">
+          <mat-cell *matCellDef="let student" (click)="navigateToStudentDetail(student.userId)" class="mat-column-std-name text-center">
             {{student.stdName}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="teamlead">

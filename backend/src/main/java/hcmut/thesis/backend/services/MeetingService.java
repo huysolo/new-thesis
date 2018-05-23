@@ -7,7 +7,7 @@ package hcmut.thesis.backend.services;
 
 import hcmut.thesis.backend.models.JoinPerMeeting;
 import hcmut.thesis.backend.modelview.MeetingInfo;
-import hcmut.thesis.backend.modelview.MeetingTimeLocation;
+import hcmut.thesis.backend.modelview.MeetingReport;
 import hcmut.thesis.backend.modelview.StudentJoinMeeting;
 import java.util.List;
 
@@ -28,6 +28,7 @@ public interface MeetingService {
     List<MeetingInfo> stdGetListHistoryMeeting(int topicID);
     JoinPerMeeting getJPMFromMeetingIDStdID(int stdID, int meetingID);
     JoinPerMeeting editMeetingDiary(JoinPerMeeting jpm);
+    Boolean editMeetingReport(MeetingReport report);
     MeetingInfo getMeetingFromMeetingID(int meetingID);
     Integer countTaskByTopicID(Integer topicID);
     Integer countMeetingByStd(Integer stdID);
