@@ -20,6 +20,12 @@ import { LayoutService } from '../../../layout/layout.service';
 export class DetailResultComponent implements OnInit {
   listReviewSrc: MatTableDataSource<Review>;
   topicRvStandardDetail: TopicSemStandard[];
+  listColReviewFullWithRole = [
+    'idProf',
+    'role',
+    'score',
+    'action'
+  ];
   listColReviewFull = [
     'idProf',
     'score',
@@ -32,7 +38,7 @@ export class DetailResultComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.layoutSv.labelName = 'Detail topic: ' + params['id'];
+      this.layoutSv.labelName = 'Topic Scores';
 
       this.topicSv.getTopicDetail(params['id']).subscribe(data => {
         this.topic = data;

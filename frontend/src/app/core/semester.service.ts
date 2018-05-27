@@ -8,6 +8,9 @@ export class SemesterService {
   private listSemester: Semester[];
   private currentSemester: Semester;
   constructor(private commonSv: CommonService) {
+    this.init().subscribe(data => {
+
+    });
   }
 
   init() {
@@ -36,11 +39,12 @@ export class SemesterService {
   }
 
   canApply(semNo) {
-    // if (semNo != this.currentSemester.semesterNo) {
-    //   return false;
-    // }
     return this.currentSemester != null &&
     semNo == this.currentSemester.semesterNo && this.checkTime(this.currentSemester.applyOpenDate, this.currentSemester.applyCloseDate);
+  }
+
+  canApplyToCurrentSem() {
+    return this.currentSemester != null && this.checkTime(this.currentSemester.applyOpenDate, this.currentSemester.applyCloseDate);
   }
 
   canUse(semNo) {
@@ -60,11 +64,5 @@ export class SemesterService {
     const currentTime = new Date().getTime();
     return st < currentTime && en > currentTime;
   }
-
-  // getState(semNo){
-  //   if(){
-      
-  //   }
-  // }
 
 }

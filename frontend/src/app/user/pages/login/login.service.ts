@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { CurrUserInfo } from './curr-user-info';
 import { AuthService } from '../../../core/auth.service';
 import { Router } from '@angular/router';
@@ -60,6 +60,20 @@ export class LoginService {
       profID: form.profID,
       userID: localStorage.getItem('userID')
     });
+  }
+  pushFileToStorage(file: File): Observable<HttpEvent<{}>> {
+    const formdata: FormData = new FormData();
+    formdata.append('file', file);
+    const req = new HttpRequest('POST', 'http://localhost:8080/user/avatar', formdata, {
+      reportProgress: true,
+      responseType: 'text'
+    });
+
+    return this.httpClient.request(req);
+  }
+
+  getAvatar(userId) {
+    return this.httpClient.get<String>('http://localhost:8080/user/avatar?id=' + userId);
   }
 
 }

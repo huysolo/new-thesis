@@ -15,6 +15,7 @@ import { Specialize } from '../../../models/Specialize';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { SemesterService } from '../../../core/semester.service';
 import { CreateFormModalComponent } from '../create-form-modal/create-form-modal.component';
+import { LayoutService } from '../../../layout/layout.service';
 
 declare var $: any;
 @Component({
@@ -37,8 +38,10 @@ export class TopicListComponent implements OnInit {
   title: String = 'New';
   p = 1;
 
-  constructor(public topicSv: TopicService, private zone: NgZone, public semSv: SemesterService,
-    public commonSv: CommonService, public authoSv: AuthService, private route: ActivatedRoute,  public snackBar: MatSnackBar) { }
+  constructor(public topicSv: TopicService, private zone: NgZone, public semSv: SemesterService, private layoutSv: LayoutService,
+    public commonSv: CommonService, public authoSv: AuthService, private route: ActivatedRoute,  public snackBar: MatSnackBar) { 
+      layoutSv.labelName = 'Topic Apply';
+    }
 
   ngOnInit() {
     this.selectedProfId = this.authoSv.isProfessor() ? this.authoSv.getProfID() : null;

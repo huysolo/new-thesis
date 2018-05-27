@@ -252,6 +252,7 @@ public class TaskController {
         return ResponseEntity.ok().body(fileNames);
     }
 
+
     @GetMapping("/files/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String fileName, Integer taskId, Integer version, Integer idUser) {

@@ -3,7 +3,7 @@
         <div class="box-title">
             {{authSv.isStudent() ? 'Applied' : 'Published'}} Topics
             <div class="pull-right" *ngIf="authSv.isProfessor()">
-                <button matInput mat-raised-button appTopicFormButton (success)="addTopic($event)">Add</button>
+                <button matInput mat-raised-button appTopicFormButton [disabled]="!semSv.canApplyToCurrentSem()" (success)="addTopic($event)">Add</button>
             </div>
         </div>
         <div class="filter-header">

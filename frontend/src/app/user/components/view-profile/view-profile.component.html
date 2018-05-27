@@ -1,9 +1,9 @@
 <div class="row" *ngIf="user != null">
   <div class="col-4">
     <div class="mat-elevation-z1">
-      <div class="white-box">
-        <div class="box-title">
-          View Profile
+      <div class="white-box text-center">
+        <div>
+          <app-avatar [userId]="user.user.idUser"></app-avatar>
         </div>
         <label>
           User Name
