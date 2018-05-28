@@ -26,6 +26,23 @@ create index comment_task_task_id_task_fk
 create index comment_task_user_id_user_fk
   on comment_task (id_user);
 
+create table council
+(
+  id_council   int auto_increment
+    primary key,
+  create_date  timestamp default CURRENT_TIMESTAMP not null,
+  council_name varchar(45)                         not null
+);
+
+create table council_user
+(
+  id_council int             not null,
+  id_user    int             not null,
+  role       int default '0' not null
+  comment '0: member',
+  primary key (id_council, id_user)
+);
+
 create table faculty
 (
   id_faculty int auto_increment
@@ -71,8 +88,10 @@ create table hibernate_sequence
 
 create table join_per_meeting
 (
-  id_student int not null,
-  id_meeting int not null,
+  id_student    int          not null,
+  id_meeting    int          not null,
+  diary_content varchar(255) null,
+  diary_plan    varchar(255) null,
   primary key (id_student, id_meeting)
 )
   charset = utf8mb4;
@@ -82,7 +101,7 @@ create index join_per_meeting_meeting_id_meeting_fk
 
 create table meeting
 (
-  id_meeting    int             not null
+  id_meeting    int auto_increment
     primary key,
   status        int default '1' null,
   content       varchar(150)    not null,
@@ -114,6 +133,7 @@ create table notification
   create_date timestamp default CURRENT_TIMESTAMP not null,
   content     varchar(120)                        null,
   notify_type varchar(45)                         null,
+  id_content  int                                 null,
   constraint id_notify_UNIQUE
   unique (id_notify)
 )
@@ -131,27 +151,29 @@ create table professor
 
 create table review
 (
-  id_prof   int             not null,
-  id_topic  int             not null,
-  score     float           null,
-  submitted int default '0' not null,
-  id_review int auto_increment
-    primary key
+  id_prof    int             null,
+  id_topic   int             not null,
+  score      float           null,
+  submitted  int default '0' not null,
+  id_review  int auto_increment
+    primary key,
+  id_council int             null
 )
   charset = utf8mb4;
 
 create table semester
 (
-  semester_no      int                                     not null
+  semester_no         int                                     not null
     primary key,
-  apply_open_date  timestamp                               null
+  begin_date          timestamp                               null,
+  apply_open_date     timestamp                               null
   on update CURRENT_TIMESTAMP,
-  apply_close_date timestamp                               null
-  on update CURRENT_TIMESTAMP,
-  end_date         timestamp default '0000-00-00 00:00:00' not null,
-  start_date       timestamp default '0000-00-00 00:00:00' not null,
-  review_date      timestamp                               null,
-  close_date       timestamp                               null
+  start_date          timestamp default '0000-00-00 00:00:00' not null,
+  midterm_review_date timestamp                               null,
+  review_date         timestamp                               null,
+  close_date          timestamp                               null,
+  apply_close_date    timestamp                               null,
+  end_date            timestamp default '0000-00-00 00:00:00' not null
 )
   charset = utf8mb4;
 
@@ -229,8 +251,7 @@ create table task
   submit          int                                 null,
   current_version int default '0'                     null,
   update_time     timestamp default CURRENT_TIMESTAMP null
-  on update CURRENT_TIMESTAMP,
-  topic_name      varchar(255)                        null
+  on update CURRENT_TIMESTAMP
 )
   charset = utf8mb4;
 
@@ -241,7 +262,7 @@ create table topic
 (
   id_top        int auto_increment
     primary key,
-  title         varchar(150)                        not null,
+  title         varchar(200)                        not null,
   st_num_limit  int default '0'                     not null,
   sumary        varchar(300)                        null,
   id_prof       int                                 not null,
@@ -289,8 +310,8 @@ create table topic_requirement
 (
   id_req   int auto_increment
     primary key,
-  id_topic int         not null,
-  detail   varchar(50) null,
+  id_topic int          not null,
+  detail   varchar(200) null,
   constraint topic_requirement_req_id_uindex
   unique (id_req)
 )

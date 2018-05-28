@@ -52,6 +52,7 @@ public class TopicDAO implements ITopicDAO {
 
     @Override
     public List<Topic> getListReviewTopicByProfIdAndSemesterNo(Integer profId, Integer semNo, Boolean isGuide, Integer submitted) {
+
         String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ? AND r.submitted = ?) " +
                 "AND semester_no = ?  AND id_prof " + (isGuide ? " = " : " != ") + "?";
         System.out.println(sql);
