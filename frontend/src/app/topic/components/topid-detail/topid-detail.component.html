@@ -28,7 +28,7 @@
     {{specName | async}}
   </p>
 
-  <mat-list *ngIf="students != null ">
+  <mat-list *ngIf="students != null && students.length > 0 ">
     <label>STUDENT GROUP</label>
     <mat-list-item class="block-content" *ngFor="let student of students" [routerLink]="['/user/view', student.userId]" [ngClass]="{'text-success': student.teamlead == 1}"
       [ngClass]="{'text-primary': student.userId == authSv.getUserId()}">
@@ -37,21 +37,24 @@
       <p mat-line> {{student.studentId}} </p>
     </mat-list-item>
   </mat-list>
-  <label>TOPIC REQUIREMENTS</label>
-  <p>
-    <mat-list *ngFor="let topicReq of topicDetail.topicRequirement">
-      <mat-list-item> {{topicReq.detail}} </mat-list-item>
-    </mat-list>
-  </p>
-
-  <label>
-    TOPIC REFERENCES
-  </label>
-  <p>
-    <mat-list *ngFor="let topicReq of topicDetail.topicMission">
-      <mat-list-item> {{topicReq.detail}} </mat-list-item>
-    </mat-list>
-  </p>
+  <ng-container *ngIf=" topicDetail.topicRequirement.length > 0">
+    <label>TOPIC REQUIREMENTS</label>
+    <p>
+      <mat-list *ngFor="let topicReq of topicDetail.topicRequirement">
+        <mat-list-item> {{topicReq.detail}} </mat-list-item>
+      </mat-list>
+    </p>
+  </ng-container>
+  <ng-container *ngIf=" topicDetail.topicMission.length > 0">
+    <label>
+      TOPIC REFERENCES
+    </label>
+    <p>
+      <mat-list *ngFor="let topicReq of topicDetail.topicMission">
+        <mat-list-item> {{topicReq.detail}} </mat-list-item>
+      </mat-list>
+    </p>
+  </ng-container>
 </mat-dialog-content>
 
 <mat-dialog-actions>
