@@ -199,7 +199,7 @@ export class MainPageComponent implements OnInit {
         }
       );
     } else {
-      if(semState == 0){
+      if( semState == 0 ){
         this.topicSv.getListRecentTopic().subscribe(
           res => {
             if (res) {
