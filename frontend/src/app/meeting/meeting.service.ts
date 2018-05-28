@@ -62,6 +62,11 @@ export class MeetingService {
     return this.httpClient.post<any>(loginUrl, meetingDiary);
   }
 
+  editMeetingReport(meetingReport){
+    const loginUrl = `http://localhost:8080/meeting/editmeetingreport`;
+    return this.httpClient.post<any>(loginUrl, meetingReport);
+  }
+
   editMeeting(schedule) {
     const loginUrl = `http://localhost:8080/meeting/editmeeting`;
     return this.httpClient.post<any>(loginUrl,schedule);

@@ -39,5 +39,8 @@ public interface TopicRepo extends JpaRepository<Topic, Integer>, JpaSpecificati
 
     @Query("SELECT COUNT (t) FROM Topic t WHERE t.idProf = :idProf")
     Integer countTopicByIdProf(@Param("idProf") Integer idProf);
+    
+    @Query("SELECT t FROM Topic t WHERE t.idProf = :idProf AND t.semesterNo = :semesterNo AND t.studentCount > 0")
+    List<Topic> findListAppliedTopicFromSemIDProfID(@Param("idProf") Integer idProf, @Param("semesterNo") Integer semesterNo);
 }
 

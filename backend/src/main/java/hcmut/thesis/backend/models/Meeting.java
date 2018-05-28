@@ -16,6 +16,8 @@ public class Meeting {
     private Integer idTopicSem;
     private String reason;
     private String title;
+    private String reportContent;
+    private String reportPlan;
 
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY )
@@ -87,6 +89,26 @@ public class Meeting {
     public void setTitle(String title) {
         this.title = title;
     }
+    
+    @Basic
+    @Column(name = "report_content")
+    public String getReportContent() {
+        return this.reportContent;
+    }
+
+    public void setReportContent(String content) {
+        this.reportContent = content;
+    }
+    
+    @Basic
+    @Column(name = "report_plan")
+    public String getReportPlan() {
+        return this.reportPlan;
+    }
+
+    public void setReportPlan(String plan) {
+        this.reportPlan = plan;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -99,7 +121,9 @@ public class Meeting {
                 Objects.equals(studentCount, meeting.studentCount) &&
                 Objects.equals(idTopicSem, meeting.idTopicSem) &&
                 Objects.equals(reason, meeting.reason) &&
-                Objects.equals(title, meeting.title);
+                Objects.equals(title, meeting.title) &&
+                Objects.equals(reportContent, meeting.reportContent)&&
+                Objects.equals(reportPlan, meeting.reportPlan);
     }
 
     @Override

@@ -20,6 +20,8 @@ public class MeetingInfo {
     private String reason;
     private Integer topicID;
     private Integer status;
+    private String reportContent;
+    private String reportPlan;
     private List<StudentJoinMeeting> student;
     private List<MeetingTimeLocation> timeLocation;
     
@@ -34,6 +36,12 @@ public class MeetingInfo {
     }
     public void setReason(String reason){
         this.reason = reason;
+    }
+    public void setReportContent(String content){
+        this.reportContent = content;
+    }
+    public void setReportPlan(String plan){
+        this.reportPlan = plan;
     }
     public void setTopicID(Integer id){
         this.topicID = id;
@@ -59,6 +67,12 @@ public class MeetingInfo {
     }
     public String getReason(){
         return this.reason;
+    }
+    public String getReportContent(){
+        return this.reportContent;
+    }
+    public String getReportPlan(){
+        return this.reportPlan;
     }
     public Integer getTopicID(){
         return this.topicID;

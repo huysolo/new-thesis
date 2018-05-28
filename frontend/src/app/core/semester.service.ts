@@ -65,4 +65,34 @@ export class SemesterService {
     return st < currentTime && en > currentTime;
   }
 
+  isStartDoTask(semNo){
+    return this.currentSemester != null &&
+    semNo == this.currentSemester.semesterNo && 
+    this.checkTime(this.currentSemester.startDate, this.currentSemester.midtermReviewDate);
+  }
+
+  isMiddleReview(semNo){
+    return this.currentSemester != null &&
+    semNo == this.currentSemester.semesterNo && 
+    this.checkTime(this.currentSemester.midtermReviewDate, this.currentSemester.endDate);
+  }
+
+  isFinalReview(semNo){ 
+    return this.currentSemester != null &&
+    semNo == this.currentSemester.semesterNo && 
+    this.checkTime(this.currentSemester.reviewDate, this.currentSemester.closeDate);
+  }
+
+  getState(semNo){
+    if(this.canApply(semNo)){
+      return 0;
+    } else if (this.isStartDoTask(semNo)){
+      return 1;
+    } else if(this.isMiddleReview(semNo)) {
+      return 2;
+    } else if(this.isFinalReview){
+      return 3;
+    }
+  }
+
 }

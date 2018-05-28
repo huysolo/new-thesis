@@ -38,6 +38,7 @@ export class TopicService {
   private reviewsUrl = this.topicUrl + 'reviews';
 
   private stdTopic = this.topicUrl + 'stdgetcurrtopic';
+  private profCurrTopic = this.topicUrl + 'profgetcurrappliedtopic';
   /**
    * reject
    */
@@ -178,6 +179,10 @@ export class TopicService {
 
   stdGetCurrTopic() {
     return this.http.get<Topic>(this.stdTopic);
+  }
+
+  profGetCurrAppliedTopic() {
+    return this.http.get<Topic[]>(this.profCurrTopic);
   }
 
 }
