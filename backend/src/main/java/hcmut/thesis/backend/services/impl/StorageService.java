@@ -1,12 +1,11 @@
 package hcmut.thesis.backend.services.impl;
 
 import hcmut.thesis.backend.models.File;
-import hcmut.thesis.backend.models.Student;
-import hcmut.thesis.backend.models.StudentTask;
-import hcmut.thesis.backend.models.User;
+
 import hcmut.thesis.backend.modelview.UserSession;
 import hcmut.thesis.backend.services.TaskService;
 import hcmut.thesis.backend.services.TopicService;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -18,6 +17,10 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StorageService {
@@ -37,6 +40,47 @@ public class StorageService {
             version = taskService.addNewVersionForStudentTask(taskId, idStudent);
         }
         return storeTask(file, taskId, version, isGeneral);
+    }
+
+    public Boolean storeAvatar(MultipartFile file) throws IOException {
+        Path path = Paths.get("upload","avatar", Integer.toString(userSession.getUserID()));
+        if (!Files.exists(path)) {
+
+            Files.createDirectories(path);
+        } else {
+            FileUtils.cleanDirectory(path.toFile());
+        }
+
+        Files.copy(file.getInputStream(), path.resolve(file.getOriginalFilename()));
+        return true;
+    }
+
+    public String getAvatarName(int userId) throws IOException {
+        Path file = Paths.get("upload","avatar", Integer.toString(userId));
+
+        List<Path> paths = new LinkedList<>();
+        Files.list(file).forEach(((LinkedList<Path>) paths)::push);
+        return ((LinkedList<Path>) paths).getFirst().getName(3).toString();
+    }
+
+    public Resource loadAvatar(String userId) throws IOException {
+        Path file = Paths.get("upload","avatar", userId);
+
+        List<Path> paths = new LinkedList<>();
+        Files.list(file).forEach(((LinkedList<Path>) paths)::push);
+
+            try {
+                Resource resource = new UrlResource(((LinkedList<Path>) paths).getFirst().toUri());
+                if (resource.exists() || resource.isReadable()) {
+                    return resource;
+                } else {
+                    throw new RuntimeException("FAIL!");
+                }
+
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("FAIL!");
+        }
     }
 
     public Boolean storeTask(MultipartFile file, Integer taskId, Integer version, boolean isGeneral) throws IOException {
@@ -80,12 +124,6 @@ public class StorageService {
         }
 
         return rs;
-//        try {
-//
-//
-//            } catch (Exception e) {
-//                throw new RuntimeException(e.getMessage());
-//            }
     }
 
     public Resource loadFile(String filename, Integer taskId, Integer version, Integer idUser) {

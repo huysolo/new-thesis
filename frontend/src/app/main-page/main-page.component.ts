@@ -25,7 +25,7 @@ import { MatStepper } from '@angular/material';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.css']
 })
-export class MainPageComponent implements OnInit, AfterViewInit {
+export class MainPageComponent implements OnInit {
   displayedColumnsTopic = ['title', 'studentCount', 'action'];
   displayedColumnsUser = ['stdName', 'teamlead'];
   listRecentTask: Task[];
@@ -62,11 +62,12 @@ export class MainPageComponent implements OnInit, AfterViewInit {
     if (this.authoSv.isStudent()) {
       this.countMessage = this.taskSv.countMessgeByStd();
       this.stdGetTopicID();
-    } 
+    }
   }
 
   ngAfterViewInit(): void {
   }
+
   ngOnInit() {
     this.semService.init().subscribe(
       res => {

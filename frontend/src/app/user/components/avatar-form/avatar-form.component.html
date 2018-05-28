@@ -1,0 +1,9 @@
+<div >
+  <br>
+  <label for="file-upload" class="file-upload">
+      <i class="fas fa-upload"></i> Change Avatar
+  </label>
+  <input id="file-upload" *ngIf="!selectedFiles" class="btn btn-default" type="file" (change)="selectFile($event)">  
+  <button class="btn btn-primary" *ngIf="selectedFiles" (click)="upload()">Save</button>
+  <button class="btn btn-secondary" *ngIf="selectedFiles" (click)="selectedFiles = null">Cancel</button>
+</div>

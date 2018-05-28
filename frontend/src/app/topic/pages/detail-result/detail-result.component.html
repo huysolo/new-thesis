@@ -51,40 +51,44 @@
     <div class="mat-elevation-z1">
       <div class="white-box">
         <h3 class="box-title">
-          Professors Reviews Of Topic Id: {{route.snapshot.params['id']}}
+          Proffessor Reviews
         </h3>
         <mat-table #table [dataSource]="listReviewSrc | review : 'prof'">
           <ng-container matColumnDef="idProf">
             <mat-header-cell *matHeaderCellDef> Proffessor Name </mat-header-cell>
             <mat-cell *matCellDef="let review"> {{review.idProf | prof}} </mat-cell>
           </ng-container>
+          <ng-container matColumnDef="role">
+            <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
+            <mat-cell *matCellDef="let review"> {{review.idProf == topic.topic.idProf ? 'Supervisor': 'Debater'}} </mat-cell>
+          </ng-container>
 
           <ng-container matColumnDef="score">
-            <mat-header-cell *matHeaderCellDef>Score </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>Final Score</mat-header-cell>
             <mat-cell *matCellDef="let review"> {{review.submitted == 1 ? review.score : 'No Review'}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="action">
             <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
             <mat-cell *matCellDef="let review">
               <ng-container *ngIf="review.submitted == 1 ">
-                <button type="button" class="btn btn-secondary" (click)="detail(review.idProf )">Detail</button>
+                <button type="button" class="btn btn-secondary" (click)="detail(review.idProf )">Score Detail</button>
               </ng-container>
               <ng-container *ngIf="review.submitted == 0 && review.idProf == authSv.getProfID() ">
-                <button type="button" class="btn btn-primary" (click)="topic.topic.idTop == review.idTopic ? router.navigate(['topic/review/guide']) : router.navigate(['topic/review/guide'])">Go to Review</button>
+                <button type="button" class="btn btn-primary" (click)="topic.topic.idTop == review.idTopic ? router.navigate(['topic/review/guide']) : router.navigate(['topic/review/guide'])">Review</button>
               </ng-container>
             </mat-cell>
           </ng-container>
 
 
-          <mat-header-row *matHeaderRowDef="listColReviewFull "></mat-header-row>
-          <mat-row *matRowDef="let row; columns: listColReviewFull"></mat-row>
+          <mat-header-row *matHeaderRowDef="listColReviewFullWithRole "></mat-header-row>
+          <mat-row *matRowDef="let row; columns: listColReviewFullWithRole" ></mat-row>
         </mat-table>
       </div>
     </div>
     <div class="mat-elevation-z1">
       <div class="white-box">
         <h3 class="box-title">
-          Council Reviews Of Topic Id: {{route.snapshot.params['id']}}
+          Council Reviews
         </h3>
         <mat-table #table [dataSource]="listReviewSrc | review : 'council'">
           <ng-container matColumnDef="idProf">
@@ -93,14 +97,14 @@
           </ng-container>
 
           <ng-container matColumnDef="score">
-            <mat-header-cell *matHeaderCellDef> Score </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef> Final Score </mat-header-cell>
             <mat-cell *matCellDef="let review"> {{review.submitted == 1 ? review.score : 'No Review'}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="action">
             <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
             <mat-cell *matCellDef="let review">
               <ng-container *ngIf="review.submitted == 1 ">
-                <button type="button" class="btn btn-secondary" (click)="detailCouncil(review.idCouncil)">Detail</button>
+                <button type="button" class="btn btn-secondary" (click)="detailCouncil(review.idCouncil)">Score Detail</button>
               </ng-container>
             </mat-cell>
           </ng-container>

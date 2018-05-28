@@ -14,7 +14,9 @@ import {CheckloginGuard} from './pages/login/checklogin.guard.service';
 import { MatFormFieldModule, MatSelectModule, MatInputModule } from '@angular/material';
 import { ViewProfileComponent } from './components/view-profile/view-profile.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-
+import { AvatarComponent } from './components/avatar/avatar.component';
+import { AvatarFormComponent } from './components/avatar-form/avatar-form.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   imports: [
@@ -26,7 +28,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
     HttpClientModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    MatSnackBarModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
@@ -40,7 +43,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
     LoginComponent,
     ManageAccountComponent,
     ViewProfileComponent,
-    ProfileComponent
+    ProfileComponent,
+    AvatarComponent,
+    AvatarFormComponent
 
   ]
 })
