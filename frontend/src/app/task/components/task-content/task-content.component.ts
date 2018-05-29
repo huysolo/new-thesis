@@ -48,6 +48,7 @@ export class TaskContentComponent implements OnInit {
         this.taskListSv.topic = data;
         this.taskListSv.getPage(0);
       });
+      
       this.listTask = null;
       this.page = 0;
       if (this.authService.isStudent()) {

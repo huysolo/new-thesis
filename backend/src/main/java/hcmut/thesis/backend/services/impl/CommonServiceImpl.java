@@ -33,6 +33,12 @@ public class CommonServiceImpl implements CommonService {
     private  IUserDAO userDAO;
     @Autowired
     private FacultyRepo facultyRepo;
+    
+    @Autowired
+    private TopicRepo topicRepo;
+    
+    @Autowired
+    private SemesterRepo semRepo;
 
 
     @Override
@@ -133,6 +139,39 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public String getFacultyNameById(int id) {
         return facultyRepo.findById(id).map(Faculty::getName).orElse(null);
+    }
+    
+    @Override
+    public Integer getSemFromTopicID(Integer topicID){
+        try{
+            return topicRepo.getTopicFromTopicID(topicID).getSemesterNo();
+        } catch(Exception e){
+            return null;
+        }
+    }
+    
+    @Override
+    public Boolean isCurrDoTask(Integer semID){
+        try {
+            return true;
+        } catch(Exception e){
+            return true;
+        }
+    }
+    
+    @Override
+    public Boolean isCurrApply(Integer semID){
+        try {
+            Semester check = semRepo.isCurrApplySem(semID);
+            if(check != null){
+                return true;
+            } else {
+                return false;
+            }
+            
+        } catch(Exception e){
+            return false;
+        }
     }
 
 

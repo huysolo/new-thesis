@@ -1,5 +1,5 @@
 <div>
-  <mat-horizontal-stepper *ngIf="semesterState" linear [selectedIndex] = "semesterState" #stepper="matHorizontalStepper">
+  <mat-horizontal-stepper *ngIf="semesterState != null" linear [selectedIndex] = "semesterState" #stepper="matHorizontalStepper">
     <ng-template matStepperIcon="edit">
       <mat-icon>done</mat-icon>
     </ng-template>
@@ -105,7 +105,7 @@
     <div class="example-container mat-elevation-z2">
       <div class="example-header">
         <div class="row">
-          <h4 *ngIf="listRecentTask" matBadge="4" matBadgeOverlap="false" class="col-md-6 title-header">
+          <h4  matBadge="4" matBadgeOverlap="false" class="col-md-6 title-header">
             <span>
               <mat-icon>build</mat-icon>
             </span>
@@ -113,7 +113,7 @@
             <span class="badge badge-pill badge-info badge-title">{{(listRecentTask)?.length}}</span>
 
           </h4>
-          <div class="col-md-6 text-right">
+          <div *ngIf="semesterState == 1 || semesterState == 2" class="col-md-6 text-right">
             <button (click)="openDialog()" type="button" class="btn btn-primary bmd-btn-fab bmd-btn-fab-sm" name="new" id="new">
               <i class="material-icons">add</i>
             </button>
@@ -162,7 +162,7 @@
             Meeting
             <span class="badge badge-pill badge-info badge-title">{{listRecentMeeting?.length}}</span>
           </h4>
-          <div class="col-md-6 text-right">
+          <div *ngIf="semesterState == 1 || semester == 2" class="col-md-6 text-right">
             <button type="button" class="btn btn-primary bmd-btn-fab bmd-btn-fab-sm" name="new" id="new" data-toggle="modal" data-target="#createMeeting">
               <i class="material-icons">add</i>
             </button>
