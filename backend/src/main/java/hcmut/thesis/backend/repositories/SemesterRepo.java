@@ -8,12 +8,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.repository.query.Param;
+
 @Repository
 public interface SemesterRepo extends JpaRepository<Semester, Integer> {
     @Query("SELECT s.semesterNo FROM Semester s WHERE s.applyOpenDate < current_timestamp AND  s.applyCloseDate > current_timestamp")
     List<Integer> getCurrentApplySemester();
 
-    @Query("SELECT s.semesterNo FROM Semester s WHERE s.startDate < current_timestamp AND  s.endDate > current_timestamp")
+    @Query("SELECT s.semesterNo FROM Semester s WHERE s.beginDate < current_timestamp AND  s.closeDate > current_timestamp")
     List<Integer> getCurrentSemester();
 
     @Query("SELECT s FROM  Semester s WHERE  s.applyCloseDate < current_timestamp")
@@ -24,4 +26,7 @@ public interface SemesterRepo extends JpaRepository<Semester, Integer> {
 
     @Query("SELECT s FROM Semester s WHERE s.reviewDate < current_timestamp  and s.closeDate > current_timestamp")
     Optional<Semester> getSemesterByAtReviewTime();
+    
+    @Query("SELECT s FROM Semester s WHERE s.semesterNo = :semID AND s.applyOpenDate < current_timestamp AND  s.applyCloseDate > current_timestamp")
+    Semester isCurrApplySem(@Param("semID") Integer semID);
 }

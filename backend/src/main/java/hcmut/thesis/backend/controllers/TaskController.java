@@ -5,6 +5,7 @@
  */
 package hcmut.thesis.backend.controllers;
 
+import hcmut.thesis.backend.models.Semester;
 import hcmut.thesis.backend.models.Task;
 import hcmut.thesis.backend.models.Topic;
 import hcmut.thesis.backend.modelview.ChatGroupInfo;
@@ -28,7 +29,6 @@ import hcmut.thesis.backend.services.TaskService;
 
 import hcmut.thesis.backend.services.TopicService;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
 
 import hcmut.thesis.backend.services.impl.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class TaskController {
 
     @Autowired
     ITaskDAO itaskDAO;
-    
+
     @Autowired
     IUserDAO iuserDAO;
 
@@ -77,7 +77,6 @@ public class TaskController {
     @Autowired
     StorageService storageService;
 
-  
     @Autowired
     TopicRepo topicRepo;
 
@@ -86,16 +85,16 @@ public class TaskController {
 
     @Autowired
     StudentRepo stdRepo;
-    
+
     @Autowired
     ChatGroupService chatGroupService;
-    
+
     @Autowired
     SemesterRepo semRepo;
-    
+
     @Autowired
     TopicService topicService;
-    
+
     @Autowired
     CommonService commonService;
 
@@ -113,16 +112,27 @@ public class TaskController {
             @RequestParam("page") Integer pageNumber) {
         if (topicID == -1) {
             Integer currSem = commonService.getCurrentSem();
-            if(currSem == null){
+            if (currSem == null) {
                 return null;
             }
-            topicID = topicService.getAppliedTopic(currSem,userSession.getStudent().getIdStudent()).getIdTop();
+            topicID = topicService.getAppliedTopic(currSem, userSession.getStudent().getIdStudent()).getIdTop();
         }
-        if (userSession.isStudent()) {
-            return taskService.getPage(pageNumber,topicID, true, title);
-        } else {
-            return taskService.getPage(pageNumber,topicID, false, title);
+        
+        try {
+            Integer semID = commonService.getSemFromTopicID(topicID);
+            if (semID != null && !commonService.isCurrApply(semID)) {
+                if (userSession.isStudent()) {
+                    return taskService.getPage(pageNumber, topicID, true, title);
+                } else {
+                    return taskService.getPage(pageNumber, topicID, false, title);
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
+
     }
 
     @RequestMapping(value = "/topiccount", method = RequestMethod.GET)
@@ -130,33 +140,31 @@ public class TaskController {
     public List<Topic> getListTaskTest() {
         return topicRepo.findTopicFromProfID(profRepo.getProfessorIdByIdUser(userSession.getUserID()));
     }
-    
+
     @RequestMapping(value = "/getlisttopic", method = RequestMethod.GET)
     @ResponseBody
-    public List<Topic> getTopicFromSemID(@RequestParam(value="semid") Integer semid) {
-        if(semid == -1){
+    public List<Topic> getTopicFromSemID(@RequestParam(value = "semid") Integer semid) {
+        if (semid == -1) {
             Integer currSem = commonService.getCurrentSem();
-            if(currSem == null){
+            if (currSem == null) {
                 return null;
             }
             semid = currSem;
         }
         return topicRepo.findListTopicFromSemID(userSession.getProf().getIdProfessor(), semid);
     }
-    
+
     @RequestMapping(value = "/stdgetlisttopic", method = RequestMethod.GET)
     @ResponseBody
     public List<Topic> getTopicFromStd() {
-       return taskService.getListTopicFromStdID(userSession.getStudent().getIdStudent());
+        return taskService.getListTopicFromStdID(userSession.getStudent().getIdStudent());
     }
-    
+
     @RequestMapping(value = "/semcount", method = RequestMethod.GET)
     @ResponseBody
     public List<Integer> getListSem() {
         return topicRepo.findListSemFromProfID(userSession.getProf().getIdProfessor());
     }
-
-
 
     @RequestMapping(value = "/submittask")
     @ResponseBody
@@ -171,36 +179,34 @@ public class TaskController {
             @RequestParam("pass") Integer pass) {
         return taskService.updateTaskPass(taskID, pass);
     }
-    
+
     @RequestMapping(value = "/getallmessage")
     @ResponseBody
-    public List<ChatGroupInfo> getAllMessage(){
+    public List<ChatGroupInfo> getAllMessage() {
         int stdID = userSession.getStudent().getIdStudent();
         return chatGroupService.getchatGroupFromStdID(stdID);
     }
-    
+
     @RequestMapping(value = "/gettaskcomment")
     @ResponseBody
-    public List<TaskComment> getTaskComment(@RequestParam("taskid") Integer taskID){
+    public List<TaskComment> getTaskComment(@RequestParam("taskid") Integer taskID) {
         return taskService.getTaskComment(taskID);
     }
 
-    @RequestMapping(value = "/tasktest")
+    @RequestMapping(value = "/task/testsem")
     @ResponseBody
-    public Topic createTasktest(@RequestParam("topicid") Integer topicID){
-        return topicRepo.getTopicFromTopicID(topicID);
+    public Semester createTasktest(@RequestParam("semID") Integer semID) {
+        return semRepo.isCurrApplySem(semID);
     }
-
 
     @PostMapping("/post")
     public ResponseEntity<?> handleFileUpload(
             @RequestParam("file") MultipartFile file,
             @RequestParam("id") Integer taskId,
-            @RequestParam( value = "ver", required = false) Integer version,
+            @RequestParam(value = "ver", required = false) Integer version,
             @RequestParam("general") boolean general
     ) {
         String message;
-
 
         try {
             storageService.storeTask(file, taskId, version, general);
@@ -214,7 +220,7 @@ public class TaskController {
     }
 
     @GetMapping("getStudents")
-    public ResponseEntity<?> getListStudent(@RequestParam("id") Integer idTask){
+    public ResponseEntity<?> getListStudent(@RequestParam("id") Integer idTask) {
         try {
             return ResponseEntity.ok(taskService.getListStudentTask(idTask));
         } catch (Exception e) {
@@ -227,7 +233,7 @@ public class TaskController {
             @RequestParam("general") boolean general,
             @RequestParam("id") Integer taskId,
             @RequestParam("file") MultipartFile file
-            ){
+    ) {
 
         String message;
         try {
@@ -242,16 +248,15 @@ public class TaskController {
 
     @GetMapping("/getallfiles")
     public ResponseEntity<List<String>> getListFiles(Model model,
-        @RequestParam("id") Integer taskId, @RequestParam(value = "ver", required = false) Integer version,
-                                                     @RequestParam(value = "idUser", required = false) Integer idUser) {
+            @RequestParam("id") Integer taskId, @RequestParam(value = "ver", required = false) Integer version,
+            @RequestParam(value = "idUser", required = false) Integer idUser) {
         List<String> fileNames = taskService.getFileByTaskId(taskId, version, idUser)
                 .stream().map(f -> MvcUriComponentsBuilder
-                        .fromMethodName(TaskController.class, "getFile", f.getName(), f.getIdTask(), f.getVersion(), f.getIdUser()).build().toString())
+                .fromMethodName(TaskController.class, "getFile", f.getName(), f.getIdTask(), f.getVersion(), f.getIdUser()).build().toString())
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(fileNames);
     }
-
 
     @GetMapping("/files/{fileName:.+}")
     @ResponseBody
@@ -277,47 +282,45 @@ public class TaskController {
     }
 
     @GetMapping("tasksapprove")
-    public  ResponseEntity<?> getAllTaskByApprove(@RequestParam("approve") Integer approve) {
+    public ResponseEntity<?> getAllTaskByApprove(@RequestParam("approve") Integer approve) {
         try {
             return ResponseEntity.ok(taskService.getListTaskOfRecentTopicByApprove(approve));
         } catch (Exception e) {
-            return  ResponseEntity.status(500).body(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
     @GetMapping("taskcount")
-    public  ResponseEntity<?> countTaskByProf() {
-        try{
+    public ResponseEntity<?> countTaskByProf() {
+        try {
             return ResponseEntity.ok(taskService.countTaskByProf());
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
-    
+
     @GetMapping("counttaskbystd")
-    public  ResponseEntity<?> countTaskByStd() {
+    public ResponseEntity<?> countTaskByStd() {
         int stdID = userSession.getStudent().getIdStudent();
-        try{
+        try {
             return ResponseEntity.ok(taskService.countTaskByStudent(stdID));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
-    
-    
-    
+
     @GetMapping("countmessagebystd")
-    public  ResponseEntity<?> countMessageByStd() {
+    public ResponseEntity<?> countMessageByStd() {
         int stdID = userSession.getStudent().getIdStudent();
-        try{
+        try {
             return ResponseEntity.ok(chatGroupService.countMessageByStd(stdID));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
-    
+
     @GetMapping("stdgettopicid")
-    public  ResponseEntity<?> stdGetTopicID() {
+    public ResponseEntity<?> stdGetTopicID() {
         try {
             int stdID = userSession.getStudent().getIdStudent();
             return ResponseEntity.ok(taskService.getCurrTopicFromStdID(stdID).getIdTop());
@@ -334,7 +337,7 @@ public class TaskController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
-    
+
     @RequestMapping(value = "/getmytasks", method = RequestMethod.GET)
     @ResponseBody
     public List<Task> getMyTasks() {
@@ -342,8 +345,5 @@ public class TaskController {
         int CurrTopic = taskService.getCurrTopicFromStdID(stdID).getIdTop();
         return taskService.getMyRecentTask(CurrTopic, stdID);
     }
-
-
-
 
 }

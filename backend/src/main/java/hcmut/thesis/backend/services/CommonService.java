@@ -21,4 +21,7 @@ public interface CommonService {
     String getSpecByID(Integer idSpec);
     String getFacultyNameById(int Id);
     Integer getReviewSemester();
+    Integer getSemFromTopicID(Integer topicID);
+    Boolean isCurrDoTask(Integer semID);
+    Boolean isCurrApply(Integer semID);
 }

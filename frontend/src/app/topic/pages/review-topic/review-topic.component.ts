@@ -29,7 +29,7 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Topic>;
   dataSourceRe: MatTableDataSource<Topic>;
   displayedColumns = ['title', 'stNumLimit',  'action'];
-  displayedColumnsFull = ['title', 'stNumLimit', 'publishDate',  'action'];
+  displayedColumnsFull = ['title',  'stNumLimit', 'publishDate',  'action'];
   selectedSem;
   typ: String;
   @ViewChild('paginator') paginator: MatPaginator;

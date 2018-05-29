@@ -55,37 +55,38 @@ export class MainPageComponent implements OnInit {
     public taskSv: TaskService,
     public topicSv: TopicService, public route: Router, private meetingService: MeetingService) {
     layoutSv.labelName = 'Dashboard';
-    this.getListTask();
-    this.getListMeeting();
-    this.getTaskCount();
-    this.getMeetingCount();
-    if (this.authoSv.isStudent()) {
-      this.countMessage = this.taskSv.countMessgeByStd();
-      this.stdGetTopicID();
-    }
   }
 
   ngAfterViewInit(): void {
   }
 
   ngOnInit() {
+
     this.semService.init().subscribe(
       res => {
-        this.semesterState = this.semService.getState(this.semService.getCurrrentSem().semesterNo);
-        this.getListTopic( this.semesterState);
+        if (res) {
+          this.semesterState = this.semService.getState(this.semService.getCurrrentSem().semesterNo);
+          this.getListTopic();
+          this.stdGetTopicID();
+          if (this.semesterState != 0) {
+            this.getListTask();
+            this.getListMeeting();
+            this.getTaskCount();
+            this.getMeetingCount();
+            if (this.authoSv.isStudent()) {
+              this.countMessage = this.taskSv.countMessgeByStd();
+
+
+              this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
+                this.listAllStd = data;
+              });
+            }
+          }
+        }
+
       }
     );
-    if (this.authoSv.isStudent()) {
-      this.topicSv.getAllStudentDoTopic(null).subscribe(data => {
-        this.listAllStd = data;
-      });
-    }
   }
-
-  goForward(stepper: MatStepper) {
-    stepper.next();
-  }
-
 
   getStudentTopic(topic: Topic) {
     this.topic = topic;
@@ -101,7 +102,12 @@ export class MainPageComponent implements OnInit {
 
   navigateToTaskPage() {
     if (this.authoSv.isStudent()) {
-      this.route.navigate(['/task/list', this.stdTopicID]);
+      if (this.stdTopicID) {
+        this.route.navigate(['/task/list', this.stdTopicID]);
+      } else {
+        this.route.navigate(['/task/list']);
+      }
+
     } else {
       this.route.navigate(['/task/list']);
     }
@@ -132,12 +138,15 @@ export class MainPageComponent implements OnInit {
 
 
   stdGetTopicID() {
-    this.taskSv.stdGetTopicID().subscribe(
-      res => {
-        if (res) {
-          this.stdTopicID = res;
-        }
-      });
+    if (this.authoSv.isStudent()) {
+      this.taskSv.stdGetTopicID().subscribe(
+        res => {
+          if (res) {
+            this.stdTopicID = res;
+          }
+        });
+    }
+
   }
 
   getBookedSchedule(listMeeting: Array<any>) {
@@ -177,17 +186,17 @@ export class MainPageComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
         if (result.idTask != null) {
           //this.listRecentTask.push(result);
         }
       }
-      
+
     });
   }
 
 
-  getListTopic(semState) {
+  getListTopic() {
     if (this.authoSv.isStudent()) {
       this.topicSv.stdGetCurrTopic().subscribe(
         res => {
@@ -199,7 +208,7 @@ export class MainPageComponent implements OnInit {
         }
       );
     } else {
-      if( semState == 0 ){
+      if (this.semesterState == 0) {
         this.topicSv.getListRecentTopic().subscribe(
           res => {
             if (res) {
@@ -210,13 +219,13 @@ export class MainPageComponent implements OnInit {
       } else {
         this.topicSv.profGetCurrAppliedTopic().subscribe(
           res => {
-            if(res){
+            if (res) {
               this.listRecentTopic = res;
             }
           }
         );
       }
-      
+
     }
   }
 
@@ -231,7 +240,7 @@ export class MainPageComponent implements OnInit {
     } else {
       this.taskSv.getListTaskByApprove(0).subscribe(
         res => {
-          if(res){
+          if (res) {
             this.listRecentTask = res;
           }
         }

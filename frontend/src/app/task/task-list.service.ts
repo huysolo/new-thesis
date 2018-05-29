@@ -34,8 +34,11 @@ export class TaskListService {
   getTaskList(topicId) {
     return this.taskSv.getPage(topicId, this.selectedPage, this.titleFilter).map(
       res => {
-        this.pageCount = new Array(res.pageCount);
-        return res.taskList;
+        if(res){
+          this.pageCount = new Array(res.pageCount);
+          return res.taskList;
+        }
+        
       }
     );
   }

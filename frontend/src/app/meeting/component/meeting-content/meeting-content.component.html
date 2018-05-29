@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<a class="float">
+<a *ngIf="semesterState != 0 && type == 'recent'" class="float">
   <button type="button" class="btn btn-primary bmd-btn-fab" name="new" id="new" data-toggle="modal" data-target="#createTopic">
     <i class="material-icons">add</i>
   </button>
