@@ -135,5 +135,10 @@ public class CommonServiceImpl implements CommonService {
         return facultyRepo.findById(id).map(Faculty::getName).orElse(null);
     }
 
+    @Override
+    public Integer getReviewSemester() {
+        return semesterRepo.getSemesterByAtReviewTime().orElseThrow( () -> new NullPointerException("Cannot get semester review time")).getSemesterNo();
+    }
+
 
 }

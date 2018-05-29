@@ -263,9 +263,7 @@ public class TopicServiceImpl implements TopicService {
         float denominator = 0;
         if (review.isPresent() && review.get().getSubmitted() == 0){
             Topic topic = getTopicById(review.get().getIdTopic());
-            if (topic.getReviewDate() != null &&
-                            topic.getReviewDate().after(new Timestamp(System.currentTimeMillis()))
-                    ){
+            if (!topic.getSemesterNo().equals(commonService.getReviewSemester())){
                 throw new NullPointerException("Cannot review topic before review date");
             }
             for (StandardScore standardScore : reviewTopic.getStandardScores()) {
@@ -447,6 +445,36 @@ public class TopicServiceImpl implements TopicService {
         } catch(Exception e){
             return null;
         }
+    }
+
+    @Override
+    public List<StudentTopicSem> setTeamLead(int idTopic) {
+
+        List<StudentTopicSem> studentTopicSems = getStudentTopicByIdTopic(idTopic);
+        boolean isBelongToTopic = false;
+        int studentId = userSession.getStudent().getIdStudent();
+        for (StudentTopicSem st : studentTopicSems) {
+            if (st.getIdStudent() == studentId) {
+                isBelongToTopic = true;
+                st.setTeamLead(1);
+            } else {
+                st.setTeamLead((0));
+            }
+        }
+
+        if (!isBelongToTopic) {
+            throw new NullPointerException("Student is Not Belong To Topic");
+        }
+        return studentTopicSemRepo.saveAll(studentTopicSems);
+        }
+
+    @Override
+    public List<StudentTopicSem> getStudentTopicByIdTopic(int idTopic) {
+        List<StudentTopicSem> studentTopicSem = studentTopicSemRepo.getAllStudentByIdTopicSem(idTopic);
+        if (studentTopicSem.isEmpty()) {
+            throw new NullPointerException("No Student Applies To This Topic");
+        }
+        return studentTopicSem;
     }
 
 }

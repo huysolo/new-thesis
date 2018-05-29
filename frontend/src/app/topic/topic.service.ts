@@ -36,9 +36,19 @@ export class TopicService {
   private appliedListUrl = this.topicUrl + 'appliedList';
   private listProfTopicUrl = this.topicUrl + 'listProfTopic';
   private reviewsUrl = this.topicUrl + 'reviews';
+  private teamleadUrl = this.topicUrl + 'teamlead';
 
   private stdTopic = this.topicUrl + 'stdgetcurrtopic';
   private profCurrTopic = this.topicUrl + 'profgetcurrappliedtopic';
+
+
+  /**
+   * setTeamlead
+   */
+  public setTeamlead(idTopic) {
+    return this.http.post<StudentDoTask>(this.teamleadUrl, idTopic);
+  }
+
   /**
    * reject
    */

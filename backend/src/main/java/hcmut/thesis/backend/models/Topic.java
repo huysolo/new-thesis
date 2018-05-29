@@ -18,7 +18,6 @@ public class Topic {
     private Timestamp publishDate;
     private Integer studentCount;
     private Integer profScore;
-    private Timestamp reviewDate;
 
     public Topic(int idTop, String title, int stNumLimit, String sumary, int idProf, Integer score, Integer semesterNo, Integer idSpecialize, Integer studentCount, Timestamp publishDate) {
         this.idTop = idTop;
@@ -180,14 +179,5 @@ public class Topic {
         this.profScore = profScore;
     }
 
-    @Basic
-    @Column(name = "review_date")
-    public Timestamp getReviewDate() {
-        return reviewDate;
-    }
-
-    public void setReviewDate(Timestamp reviewDate) {
-        this.reviewDate = reviewDate;
-    }
 
 }

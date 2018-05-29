@@ -1,10 +1,7 @@
 package hcmut.thesis.backend.controllers;
 
 import com.google.gson.Gson;
-import hcmut.thesis.backend.models.Review;
-import hcmut.thesis.backend.models.Standard;
-import hcmut.thesis.backend.models.Topic;
-import hcmut.thesis.backend.models.TopicSemStandard;
+import hcmut.thesis.backend.models.*;
 import hcmut.thesis.backend.modelview.ReviewTopic;
 import hcmut.thesis.backend.modelview.StudentDoTask;
 import hcmut.thesis.backend.modelview.TopicDetail;
@@ -315,6 +312,15 @@ public class TopicController {
             return ResponseEntity.ok(topicService.profGetCurrAppliedListTopic(profID));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("teamlead")
+    ResponseEntity<?> setTeamleader(@RequestBody int idTopic) {
+        try {
+            return ResponseEntity.ok(topicService.setTeamLead(idTopic));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

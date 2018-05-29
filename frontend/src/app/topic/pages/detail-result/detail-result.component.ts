@@ -20,6 +20,7 @@ import { LayoutService } from '../../../layout/layout.service';
 export class DetailResultComponent implements OnInit {
   listReviewSrc: MatTableDataSource<Review>;
   topicRvStandardDetail: TopicSemStandard[];
+  curStudent: StudentDoTask = null;
   listColReviewFullWithRole = [
     'idProf',
     'role',
@@ -32,18 +33,22 @@ export class DetailResultComponent implements OnInit {
     'action'
   ];
   topic: TopicDetail;
-  students: Observable<StudentDoTask[]>;
+  students: StudentDoTask[];
   constructor(public authSv: AuthService, public router: Router, private layoutSv: LayoutService,
     public topicSv: TopicService, public route: ActivatedRoute, public standardSv: StandardService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.layoutSv.labelName = 'Topic Scores';
+      this.layoutSv.labelName = 'Topic Detail';
 
       this.topicSv.getTopicDetail(params['id']).subscribe(data => {
         this.topic = data;
       });
-      this.students = this.topicSv.getAllStudentDoTopic(params['id']);
+      this.topicSv.getAllStudentDoTopic(params['id']).subscribe(data => {
+        this.curStudent = data.find(dt => dt.userId == this.authSv.getUserId());
+
+        this.students = data;
+      });
       this.topicRvStandardDetail = null;
       this.topicSv.getReviewsByIdTopic(params['id']).subscribe(data => {
         this.listReviewSrc = new MatTableDataSource(data);
@@ -60,6 +65,19 @@ export class DetailResultComponent implements OnInit {
   detailCouncil(idCouncil: Number) {
     this.standardSv.getReviewCouncil(this.topic.topic.idTop, idCouncil).subscribe(data => {
       this.topicRvStandardDetail = data;
+    });
+  }
+
+  setTeamlead() {
+    this.topicSv.setTeamlead(this.topic.topic.idTop).subscribe(data => {
+      for (let index = 0; index < this.students.length; index++) {
+        if (this.students[index].userId != this.authSv.getUserId()) {
+          this.students[index].teamlead = false;
+        } else {
+          this.students[index].teamlead = true;
+          this.curStudent.teamlead = true;
+        }
+      }
     });
   }
 

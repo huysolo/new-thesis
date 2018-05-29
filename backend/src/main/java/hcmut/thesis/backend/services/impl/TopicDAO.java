@@ -77,7 +77,7 @@ public class TopicDAO implements ITopicDAO {
                 (Integer) row.get("st_num_limit"),
                 (String) row.get("sumary"),
                 (Integer) row.get("id_prof"),
-                row.get("score") != null ? (Integer) row.get("score") : 0,
+                (Integer) row.get("score"),
                 (Integer) row.get("semesterNo"),
                 (Integer) row.get("id_specialize"),
                 (Integer) row.get("student_count"),

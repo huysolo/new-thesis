@@ -44,4 +44,6 @@ public interface TopicService {
     List<Review> getListReviewByIdTopic(int idTopic);
     Topic stdGetCurrentTopic(int stdID);
     List<Topic> profGetCurrAppliedListTopic(Integer profID);
+    List<StudentTopicSem> setTeamLead(int idTopic);
+    List<StudentTopicSem> getStudentTopicByIdTopic(int idTopic);
 }

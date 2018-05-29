@@ -20,4 +20,5 @@ public interface CommonService {
     List<Specialize> getAllByIdFaculty(Integer idFal);
     String getSpecByID(Integer idSpec);
     String getFacultyNameById(int Id);
+    Integer getReviewSemester();
 }

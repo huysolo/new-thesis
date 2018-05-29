@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SemesterRepo extends JpaRepository<Semester, Integer> {
@@ -20,4 +21,7 @@ public interface SemesterRepo extends JpaRepository<Semester, Integer> {
 
     @Query("SELECT s FROM Semester s WHERE s.beginDate < current_timestamp AND  s.closeDate > current_timestamp")
     List<Semester> getCurrentSemesterOpen();
+
+    @Query("SELECT s FROM Semester s WHERE s.reviewDate < current_timestamp  and s.closeDate > current_timestamp")
+    Optional<Semester> getSemesterByAtReviewTime();
 }

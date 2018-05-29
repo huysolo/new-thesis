@@ -1,52 +1,47 @@
-<br>
-<mat-accordion *ngIf="topic != null">
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Topic
-      </mat-panel-title>
-      <mat-panel-description>
-        <div class="title">
-          {{topic.topic.title}}
-        </div>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <label>Title</label>
-    <p>{{topic.topic.title}}</p>
-    <label>Description</label>
-    <p>{{topic.topic.sumary}}</p>
-    <div class="row">
-      <div class="col-4">
-        <label>Student Limits</label>
-        <p>{{topic.topic.stNumLimit}}</p>
-      </div>  
-      <div class="col-4">
-        <label>Semester No</label>
-        <p>{{topic.topic.semesterNo}}</p>
-      </div>
-      <div class="col-4">
-        <label>Proffessor</label>
-        <p>{{topic.topic.idProf | prof}}</p>
-      </div>
+<div class="mat-elevation-z1">
+  <div class="white-box">
+    <div class="box-title">
+       Topic Infomation
     </div>
-    <mat-list>
-      <label>Student Group </label>
+    <div>
+      <label>Title</label>
+      <p>{{topic.topic.title}}</p>
+      <label>Description</label>
+      <p>{{topic.topic.sumary}}</p>
       <div class="row">
-        <div class="col-3 block-content" *ngFor="let student of students | async" [routerLink]="['/user/view/', student.userId]">
-          <mat-list-item [ngClass]="{'text-success': student.teamlead == 1}" [ngClass]="{'text-primary': student.userId == authSv.getUserId()}">
-            <mat-icon mat-list-icon>account_circle</mat-icon>
-            <h6 mat-line>{{student.stdName}}</h6>
-            <p mat-line> {{student.studentId}} </p>
-          </mat-list-item>
+        <div class="col-4">
+          <label>Student Limits</label>
+          <p>{{topic.topic.stNumLimit}}</p>
+        </div>
+        <div class="col-4">
+          <label>Semester No</label>
+          <p>{{topic.topic.semesterNo ? topic.topic.semesterNo : 'Unpublished'}}</p>
+        </div>
+        <div class="col-4">
+          <label>Proffessor</label>
+          <p>{{topic.topic.idProf | prof}}</p>
         </div>
       </div>
-    </mat-list>
-
-  </mat-expansion-panel>
-</mat-accordion>
-
+      <mat-list *ngIf="students != null && students.length > 0">
+        <label>Student Group </label> 
+        <div *ngIf="curStudent != null && !curStudent.teamlead">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="setTeamlead()">Set Teamleader</button>
+        </div>
+        <div class="row">
+          <div class="col-3 block-content" *ngFor="let student of students" [routerLink]="['/user/view/', student.userId]">
+            <mat-list-item [ngClass]="{'text-success': student.teamlead == 1}" [ngClass]="{'text-primary': student.userId == authSv.getUserId()}">
+              <mat-icon mat-list-icon>account_circle</mat-icon>
+              <h6 mat-line>{{student.stdName}}</h6>
+              <p mat-line> {{student.studentId}} </p>
+            </mat-list-item>
+          </div>
+        </div>
+      </mat-list>
+    </div>
+  </div>
+</div>
 <br>
-<div class="row">
+<div class="row" *ngIf="topic.topic.semesterNo != null">
   <div [ngClass]="topicRvStandardDetail == null ? 'col-md-12' : 'col-md-5'">
     <div class="mat-elevation-z1">
       <div class="white-box">
@@ -81,7 +76,7 @@
 
 
           <mat-header-row *matHeaderRowDef="listColReviewFullWithRole "></mat-header-row>
-          <mat-row *matRowDef="let row; columns: listColReviewFullWithRole" ></mat-row>
+          <mat-row *matRowDef="let row; columns: listColReviewFullWithRole"></mat-row>
         </mat-table>
       </div>
     </div>
