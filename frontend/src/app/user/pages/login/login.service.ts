@@ -73,7 +73,9 @@ export class LoginService {
   }
 
   getAvatar(userId) {
-    return this.httpClient.get<String>('http://localhost:8080/user/avatar?id=' + userId);
+    return this.httpClient.get<String>('http://localhost:8080/user/avatar?id=' + userId).map(st => {
+      return st + '?random+\=' + Math.random();
+    });
   }
 
 }
