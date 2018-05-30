@@ -76,7 +76,6 @@ export class ResultTopicComponent implements OnInit {
         this.listDraftSrc.data =  listTopic;
       }
     }
-
   }
 
 
