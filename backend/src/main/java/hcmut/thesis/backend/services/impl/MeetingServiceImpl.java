@@ -134,8 +134,8 @@ public class MeetingServiceImpl implements MeetingService {
         temp.setReportPlan(meeting.getReportPlan());
         temp.setStudent(mappingToStdJoinMeeting(meeting.getIdMeeting()));
         temp.setTimeLocation(mappingFromScheduleToTimeLocation(meeting.getIdMeeting()));
-        
-         return temp;
+
+        return temp;
     }
 
     @Override
@@ -191,55 +191,93 @@ public class MeetingServiceImpl implements MeetingService {
             return null;
         }
     }
-
-    @Override
-    public MeetingInfo profCreateScheduleMeeting(MeetingInfo info) {
-        if (info.getTimeLocation().size() > 0 && info.getTimeLocation().get(0).getLocation() != null) {
-            for (MeetingTimeLocation aT : info.getTimeLocation()) {
-                MeetingSchelule schedule = new MeetingSchelule();
-                schedule.setIdMeeting(info.getMeetingID());
-                schedule.setLocation(aT.getLocation());
-                schedule.setMeetingTime(aT.getMeetingTime());
-                schedule.setStatus(0);
-                meetingScheduleRepo.save(schedule);
+    
+    void deleteTimeLocationFromMeetingID(Integer meetingID){
+        List<MeetingSchelule> listSchedule = meetingScheduleRepo.getListMeetingScheduleFromMeetingID(meetingID);
+        if(listSchedule.size() > 0){
+            for(MeetingSchelule temp: listSchedule){
+                meetingScheduleRepo.delete(temp);
             }
-            return info;
-        } else {
-            return null;
         }
+        
     }
 
     @Override
-    public MeetingInfo stdBookMeeting(MeetingInfo info) {
-        if (info.getStudent().size() > 0) {
-            for (StudentJoinMeeting aT : info.getStudent()) {
-                JoinPerMeeting tem = new JoinPerMeeting();
-                tem.setIdMeeting(info.getMeetingID());
-                tem.setIdStudent(aT.getStdID());
-                joinMeetingRepo.save(tem);
-            }
-
+    public String profCreateScheduleMeeting(MeetingInfo info) {
+        Meeting meeting = meetingRepo.getMeetingFromMeetingID(info.getMeetingID());
+        if (meeting.getStatus() == 1) {
+            return "CONFLICT";
         } else {
-
+            if (info.getTimeLocation().size() > 0 && info.getTimeLocation().get(0).getLocation() != null) {
+                this.deleteTimeLocationFromMeetingID(info.getMeetingID());
+                for (MeetingTimeLocation aT : info.getTimeLocation()) {
+                    MeetingSchelule schedule = new MeetingSchelule();
+                    schedule.setIdMeeting(info.getMeetingID());
+                    schedule.setLocation(aT.getLocation());
+                    schedule.setMeetingTime(aT.getMeetingTime());
+                    schedule.setStatus(0);
+                    meetingScheduleRepo.save(schedule);
+                }
+                return "OK";
+            } else {
+                return null;
+            }
         }
 
-        if (info.getTimeLocation().size() > 0 && info.getTimeLocation().get(0).getLocation() != null) {
-            for (MeetingTimeLocation aT : info.getTimeLocation()) {
-                if (aT.getStatus() == 1) {
-                    MeetingSchelule temp = meetingScheduleRepo.getScheduleFromTimeLocationID(
-                            info.getMeetingID(), aT.getMeetingTime(), aT.getLocation());
-                    temp.setStatus(1);
-                    meetingScheduleRepo.save(temp);
+    }
+
+    @Override
+    public String stdBookMeeting(MeetingInfo info) {
+        if (info.getStatus() == 0) {
+            if (info.getStudent().size() > 0) {
+                for (StudentJoinMeeting aT : info.getStudent()) {
+                    JoinPerMeeting tem = new JoinPerMeeting();
+                    tem.setIdMeeting(info.getMeetingID());
+                    tem.setIdStudent(aT.getStdID());
+                    joinMeetingRepo.save(tem);
+                }
+
+            } else {
+
+            }
+
+            if (info.getTimeLocation().size() > 0 && info.getTimeLocation().get(0).getLocation() != null) {
+                for (MeetingTimeLocation aT : info.getTimeLocation()) {
+                    if (aT.getStatus() == 1) {
+                        MeetingSchelule temp = meetingScheduleRepo.getScheduleFromTimeLocationID(
+                                info.getMeetingID(), aT.getMeetingTime(), aT.getLocation());
+                        temp.setStatus(1);
+                        meetingScheduleRepo.save(temp);
+                    }
                 }
             }
+
+            info.setStatus(1);
+
+            Meeting temp = meetingRepo.getMeetingFromMeetingID(info.getMeetingID());
+            temp.setStatus(1);
+            meetingRepo.save(temp);
+            return "OK";
+        } else {
+            if (info.getTimeLocation().size() > 0) {
+                deleteStudentJoinMeeting(info.getMeetingID());
+                for (StudentJoinMeeting aT : info.getStudent()) {
+                    JoinPerMeeting tem = new JoinPerMeeting();
+                    tem.setIdMeeting(info.getMeetingID());
+                    tem.setIdStudent(aT.getStdID());
+                    joinMeetingRepo.save(tem);
+                }
+            }
+            return "OK";
         }
 
-        info.setStatus(1);
+    }
 
-        Meeting temp = meetingRepo.getMeetingFromMeetingID(info.getMeetingID());
-        temp.setStatus(1);
-        meetingRepo.save(temp);
-        return info;
+    void deleteStudentJoinMeeting(Integer meetingID) {
+        List<JoinPerMeeting> liststd = joinMeetingRepo.getListStudentFromMeetingID(meetingID);
+        for (JoinPerMeeting temp : liststd) {
+            joinMeetingRepo.delete(temp);
+        }
     }
 
     @Override
@@ -383,7 +421,6 @@ public class MeetingServiceImpl implements MeetingService {
         joinMeetingRepo.save(jpm);
         return jpm;
     }
-    
 
     @Override
     public Integer countTaskByTopicID(Integer topicID) {
@@ -414,16 +451,16 @@ public class MeetingServiceImpl implements MeetingService {
             return 0;
         }
     }
-    
+
     @Override
-    public Boolean editMeetingReport(MeetingReport report){
-        try{
+    public Boolean editMeetingReport(MeetingReport report) {
+        try {
             Meeting meeting = meetingRepo.getMeetingFromMeetingID(report.getMeetingID());
             meeting.setReportContent(report.getContent());
             meeting.setReportPlan(report.getPlan());
             meetingRepo.save(meeting);
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

@@ -3,7 +3,7 @@
 
 
 
-  <div *ngIf="this.authService.isProfessor()" class="form-group">
+  <div  class="form-group">
     <label>
       <h5>
         <i class="fa fa-pencil-square-o"></i> Topic </h5>
@@ -14,7 +14,7 @@
     </select> -->
     <div class="container example-container">
       <div class="row">
-        <mat-form-field class="mat-form-topic col-md-8">
+        <mat-form-field *ngIf="this.authService.isProfessor()" class="mat-form-topic col-md-8">
           <mat-select (selectionChange)="getListMeetingFromTopicID(value)" [(ngModel)]="topicID" placeholder="Select Topic">
             <mat-option *ngFor="let topic of listTopic" [value]="topic.idTop">{{topic.title}}</mat-option>
           </mat-select>

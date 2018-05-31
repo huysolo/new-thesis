@@ -49,6 +49,9 @@ export class MeetingCreateComponent implements OnInit {
 
   addTimeLocation(){
     const temp = new TimeLocation();
+    var date = new Date(); 
+    var JSONdate = date.toJSON();
+    temp.meetingTime = JSONdate.slice(0,16);
     this.meetingCreate.timeLocation.push(temp);
   }
 
