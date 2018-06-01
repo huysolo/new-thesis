@@ -12,7 +12,7 @@ export class ReviewTopicPageComponent implements OnInit {
     content: 'Supervise'
   }, {
     param: 'review',
-    content: 'Critique'
+    content: 'Debate'
   }]
   
   constructor() { }
