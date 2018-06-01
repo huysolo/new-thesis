@@ -196,32 +196,37 @@ public class MeetingController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }
-    }
-
-    @RequestMapping(value = "/editmeeting", method = RequestMethod.POST)
-    @ResponseBody
-    public MeetingInfo editMeeting(@RequestBody MeetingInfo info) {
-        return meetingService.stdBookMeeting(info);
-    }
-    
+    } 
   
-
     @RequestMapping(value = "/createschedulemeeting", method = RequestMethod.POST)
     @ResponseBody
-    public MeetingInfo profCreateScheduleMeeting(@RequestBody MeetingInfo info) {
-        return meetingService.profCreateScheduleMeeting(info);
+    public ResponseEntity<?> profCreateScheduleMeeting(@RequestBody MeetingInfo info) {
+         
+        try{
+            String status = meetingService.profCreateScheduleMeeting(info);
+            if(status == "OK"){
+                return ResponseEntity.ok(HttpStatus.OK);
+            } else {
+                return ResponseEntity.ok(HttpStatus.CONFLICT);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/stdbookmeeting", method = RequestMethod.POST)
     @ResponseBody
-    public MeetingInfo stdBookMeeting(@RequestBody MeetingInfo info) {
-//        for(MeetingTimeLocation aT: info.getTimeLocation()){
-//            System.out.println(aT.getMeetingTime());
-//            System.out.println(aT.getStatus());
-//            System.out.println("-----");
-//        }
-//        return null;
-        return meetingService.stdBookMeeting(info);
+    public ResponseEntity<?> stdBookMeeting(@RequestBody MeetingInfo info) { 
+        String t = meetingService.stdBookMeeting(info);
+        try{
+            if(t == "OK"){
+                return ResponseEntity.ok(HttpStatus.OK);
+            } else {
+                return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/cancelmeeting", method = RequestMethod.POST)

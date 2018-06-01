@@ -29,34 +29,16 @@
         <mat-icon class="example-icon" *ngIf="isDiary && !isPublicDiary" (click)="getMeetingContent(matExpansionPanel)">group</mat-icon>
       </span>
       <span matTooltip="Meeting Content">
-          <mat-icon class="example-icon" *ngIf="isDiary && isPublicDiary" (click)="getPersonalDiary(matExpansionPanel)">perm_contact_calendar</mat-icon>
+        <mat-icon class="example-icon" *ngIf="isDiary && isPublicDiary" (click)="getPersonalDiary(matExpansionPanel)">perm_contact_calendar</mat-icon>
       </span>
 
     </mat-expansion-panel-header>
 
-
-
-    <!-- <mat-toolbar>
-      <mat-toolbar-row>
-        <span>Third Line</span>
-        <span class="example-spacer"></span>
-        <mat-icon class="example-icon">favorite</mat-icon>
-        <mat-icon class="example-icon">delete</mat-icon>
-        <span  matTooltip="Meeting Diary" hideToggle="false">
-          <mat-icon class="example-icon" *ngIf="!isDiary" (click)="isDiaryMeeting()">event_note</mat-icon>
-        </span>
-        <span  matTooltip="Meeting Content">
-          <mat-icon class="example-icon" *ngIf="isDiary" (click)="isDiaryMeeting()">group</mat-icon>
-        </span>
-      </mat-toolbar-row>
-    </mat-toolbar> -->
-
-
     <div *ngIf="!isDiary">
-        <mat-form-field class="mat-form-meeting-content">
-            <textarea readonly [(ngModel)]="meeting.content" matInput cols="10" rows="5" placeholder="Meeting Content: ">
+      <mat-form-field class="mat-form-meeting-content">
+        <textarea readonly [(ngModel)]="meeting.content" matInput cols="10" rows="5" placeholder="Meeting Content: ">
             </textarea>
-          </mat-form-field>
+      </mat-form-field>
       <!-- <p>{{meeting.content}}</p> -->
       <div class="row">
         <mat-form-field class="time-location-list col-md-6">
@@ -66,51 +48,52 @@
         </mat-form-field>
 
         <mat-form-field class="time-location-list col-md-5">
-          <mat-select placeholder="Time-Location" [(ngModel)]="bookedSchedule">
+          <mat-select placeholder="Time-Location" [(ngModel)]="bookedSchedule" [disabled]="(meeting.status ==1 || meeting.status == 2)? 'true' : 'false'">
             <mat-option *ngFor="let sch of meeting.timeLocation" [value]="sch">
               {{sch.meetingTime | date}} - {{sch.location}}
             </mat-option>
           </mat-select>
+          <mat-hint>You can't rebook Time-Location if the meeting was booked!</mat-hint>
         </mat-form-field>
       </div>
     </div>
 
     <div *ngIf="isDiary" class="example-container">
       <div *ngIf="isPublicDiary">
-          <mat-form-field class="mat-form-meeting-content">
-              <textarea [(ngModel)]="meeting.reportContent" matInput cols="10" rows="5" placeholder="Content">
+        <mat-form-field class="mat-form-meeting-content">
+          <textarea [(ngModel)]="meeting.reportContent" matInput cols="10" rows="5" placeholder="Content">
               </textarea>
-            </mat-form-field>
-            <mat-form-field class="mat-form-meeting-content">
-              <textarea [(ngModel)]="meeting.reportPlan" matInput cols="10" rows="5" placeholder="Plan">
+        </mat-form-field>
+        <mat-form-field class="mat-form-meeting-content">
+          <textarea [(ngModel)]="meeting.reportPlan" matInput cols="10" rows="5" placeholder="Plan">
               </textarea>
-            </mat-form-field>
+        </mat-form-field>
       </div>
       <div *ngIf="!isPublicDiary">
-          <div *ngIf="meetingDiary">
-              <mat-form-field class="mat-form-meeting-content">
-                  <textarea [(ngModel)]="meetingDiary.diaryContent" matInput cols="10" rows="5" placeholder="Content">
+        <div *ngIf="meetingDiary">
+          <mat-form-field class="mat-form-meeting-content">
+            <textarea [(ngModel)]="meetingDiary.diaryContent" matInput cols="10" rows="5" placeholder="Content">
                   </textarea>
-                </mat-form-field>
-                <mat-form-field class="mat-form-meeting-content">
-                  <textarea [(ngModel)]="meetingDiary.diaryPlan" matInput cols="10" rows="5" placeholder="Plan">
+          </mat-form-field>
+          <mat-form-field class="mat-form-meeting-content">
+            <textarea [(ngModel)]="meetingDiary.diaryPlan" matInput cols="10" rows="5" placeholder="Plan">
                   </textarea>
-                </mat-form-field>
-          </div>
-          
-          <div *ngIf="!meetingDiary">
-            <h3>You not join this meeting</h3>
-          </div>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="!meetingDiary">
+          <h3>You not join this meeting</h3>
+        </div>
       </div>
-      
+
     </div>
 
 
     <mat-action-row>
-      <button mat-button *ngIf="!isDiary && authService.isProfessor()" class="btn btn-raised btn-primary" (click)="isCreateScheduleMeeting()">Schedule</button>
+      <button mat-button *ngIf="!isDiary && authService.isProfessor()" class="btn btn-raised btn-primary" (click)="openScheduleDialog()">Schedule</button>
       <button mat-button *ngIf="!isDiary && authService.isStudent()" class="btn btn-raised btn-primary" (click)="stdBookMeeting()">Book</button>
       <button mat-button *ngIf="!isDiary && authService.isProfessor()" class="btn btn-raised btn-danger" (click)="isCancelMeeting()">Cancel</button>
-      <button mat-button *ngIf="isDiary" (click)="editMeetingDiary()" class="btn btn-raised btn-primary"  >Save</button>
+      <button mat-button *ngIf="isDiary" (click)="editMeetingDiary()" class="btn btn-raised btn-primary">Save</button>
     </mat-action-row>
   </mat-expansion-panel>
 
@@ -146,6 +129,10 @@
   </div>
 </div>
 
+<!-- <div class="modal" id="createTopic" tabindex="-1" role="dialog" aria-labelledby="topicTitleId">
+  <app-meeting-schedule [timelocation]="meeting.timeLocation"></app-meeting-schedule>
+</div> -->
+
 <div class="w3-modal {{isCreateSchedule}}">
   <div class="modal-dialog" style="max-width: 600px" role="document">
     <div class="modal-content">
@@ -179,6 +166,24 @@
             </ng-container>
             <input (click)="addTimeLocation()" name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button"
               value="Add">
+
+            <!-- <ng-container *ngFor="let shedule of meeting.timeLocation; let i = index">
+                <div class="row">
+                  <mat-form-field class="mat-from-title col-md-6">
+                    <input matInput [(ngModel)]="shedule.meetingTime" type="datetime-local" placeholder="Time">
+                  </mat-form-field>
+                  <mat-form-field class="mat-from-title col-md-5">
+                    <input matInput [(ngModel)]="shedule.location" placeholder="Location">
+                  </mat-form-field>
+                  <div class="input-group-append col-md-1">
+                    <i class="material-icons btn-icon" *ngIf="meetingCreate.timeLocation.length > 1" (click)="removeMeeting(i)">remove</i>
+                  </div>
+                </div>
+              </ng-container>
+              <div (click)="addTimeLocation()" class="input-group-append pull-right">
+                <i class="material-icons btn-icon">add</i>
+              </div> -->
+
           </div>
         </div>
       </div>

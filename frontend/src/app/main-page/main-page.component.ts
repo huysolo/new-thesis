@@ -28,16 +28,17 @@ import { MatStepper } from '@angular/material';
 export class MainPageComponent implements OnInit {
   displayedColumnsTopic = ['title', 'studentCount', 'action'];
   displayedColumnsUser = ['stdName', 'teamlead'];
-  listRecentTask: Task[];
 
+  listRecentTask: Task[];
+  listRecentTaskSource: MatTableDataSource<Task>;
   listRecentTopic: Topic[];
   listStudentTopic: Observable<StudentDoTask[]>;
-  recentTaskCount = 0;
-  studentTopicCount = 0;
-  recentTopicCount = 0;
   listRecentMeeting: Array<any>;
+  listRecentMeetingSource: MatTableDataSource<any>;
+
+  studentTopicCount: number = 0;
   countTopic: Observable<Number>;
-  countTask: Number;
+  countTask: number;
   countMeeting: number;
   countMessage: Observable<number>;
   stdTopicID: number;
@@ -176,19 +177,22 @@ export class MainPageComponent implements OnInit {
 
   addNewMeeting(event: Meeting) {
     this.listRecentMeeting.push(event);
-    console.log(this.listRecentMeeting);
+    this.listRecentMeetingSource.data = this.listRecentMeeting;
+    this.countMeeting ++;
   }
 
   openDialog(): void {
     const dialogRef = this.matdialog.open(TaskCreateComponent, {
-      width: '550px',
+      width: '500px',
       data: { students: this.listAllStd }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (result.idTask != null) {
-          //this.listRecentTask.push(result);
+          this.listRecentTask.push(result);
+          this.listRecentTaskSource.data = this.listRecentTask;
+          this.countTask ++;
         }
       }
 
@@ -235,6 +239,7 @@ export class MainPageComponent implements OnInit {
         res => {
           if (res) {
             this.listRecentTask = res;
+            this.listRecentTaskSource = new MatTableDataSource(this.listRecentTask);
           }
         });
     } else {
@@ -242,6 +247,7 @@ export class MainPageComponent implements OnInit {
         res => {
           if (res) {
             this.listRecentTask = res;
+            this.listRecentTaskSource = new MatTableDataSource(this.listRecentTask);
           }
         }
       );
@@ -256,6 +262,7 @@ export class MainPageComponent implements OnInit {
       this.meetingService.stdGetListRecentMeeting().subscribe(
         res => {
           this.listRecentMeeting = this.getBookedSchedule(res);
+          this.listRecentMeetingSource = new MatTableDataSource(this.listRecentMeeting);
           if (this.listRecentMeeting) {
           } else {
             console.log('null');
@@ -267,6 +274,7 @@ export class MainPageComponent implements OnInit {
       this.meetingService.profGetRecenMeeting().subscribe(
         res => {
           this.listRecentMeeting = this.getBookedSchedule(res);
+          this.listRecentMeetingSource = new MatTableDataSource(this.listRecentMeeting);
           if (this.listRecentMeeting) {
           } else {
             console.log('null');
@@ -274,6 +282,7 @@ export class MainPageComponent implements OnInit {
         }
       );
     }
+    
   }
 
   getTaskCount() {

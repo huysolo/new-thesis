@@ -120,7 +120,7 @@
           </div>
         </div>
       </div>
-      <mat-table #table [dataSource]="listRecentTask">
+      <mat-table #table [dataSource]="listRecentTaskSource">
         <ng-container matColumnDef="title" class="col-md-7">
           <mat-header-cell *matHeaderCellDef class="mat-column-task-title text-center"> Task Title </mat-header-cell>
           <mat-cell *matCellDef="let task" (click)="navigateToTaskDetail(task.idTask)" class="mat-column-task-title">
@@ -162,14 +162,14 @@
             Meeting
             <span class="badge badge-pill badge-info badge-title">{{listRecentMeeting?.length}}</span>
           </h4>
-          <div *ngIf="semesterState == 1 || semester == 2" class="col-md-6 text-right">
+          <div *ngIf="semesterState == 1 || semesterState == 2 || semesterState == 3" class="col-md-6 text-right">
             <button type="button" class="btn btn-primary bmd-btn-fab bmd-btn-fab-sm" name="new" id="new" data-toggle="modal" data-target="#createMeeting">
               <i class="material-icons">add</i>
             </button>
           </div>
         </div>
       </div>
-      <mat-table #table [(dataSource)]="listRecentMeeting">
+      <mat-table #table [(dataSource)]="listRecentMeetingSource">
 
         <ng-container matColumnDef="title" class="col-md-7">
           <mat-header-cell *matHeaderCellDef class="mat-column-meeting-title text-center"> Meeting Title </mat-header-cell>

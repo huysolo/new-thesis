@@ -19,8 +19,8 @@ public interface MeetingService {
     List<StudentJoinMeeting> getAllStdDoTopic(int topicid);
     MeetingInfo createMeeting(MeetingInfo info);
     List<MeetingInfo> getListMeetingFromTopicID(int topicid);
-    MeetingInfo profCreateScheduleMeeting(MeetingInfo info);
-    MeetingInfo stdBookMeeting(MeetingInfo info);
+    String profCreateScheduleMeeting(MeetingInfo info);
+    String stdBookMeeting(MeetingInfo info);
     void cancelMeeting (int meetingid, String reason);
     List<MeetingInfo> profGetListRecentMeeting(int profID);
     List<MeetingInfo> profGetListHistoryMeeting(int profID);

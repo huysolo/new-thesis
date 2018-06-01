@@ -25,7 +25,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatDialogModule} from '@angular/material/dialog';
 import { MeetingDetailPageComponent } from './component/meeting-detail-page/meeting-detail-page.component';
+import { MeetingScheduleComponent } from './component/meeting-schedule/meeting-schedule.component';
 
 
 @NgModule({
@@ -46,7 +48,8 @@ import { MeetingDetailPageComponent } from './component/meeting-detail-page/meet
     MatTabsModule,
     MatToolbarModule,
     MatDatepickerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   declarations: [
     MeetingDetailComponent,
@@ -54,10 +57,12 @@ import { MeetingDetailPageComponent } from './component/meeting-detail-page/meet
     MeetingListComponent,
     FilterPipe,
     MeetingDetailPageComponent,
-    MeetingCreateComponent
+    MeetingCreateComponent,
+    MeetingScheduleComponent
   ],
   providers: [MeetingService],
-  exports: [MeetingCreateComponent]
+  exports: [MeetingCreateComponent],
+  entryComponents: [MeetingScheduleComponent],
 })
 export class MeetingModule { }
 
