@@ -37,6 +37,24 @@
           </div>
         </div>
       </mat-list>
+      <ng-container *ngIf=" topic.topicRequirement.length > 0">
+        <label>Topic Requirements</label>
+        <p>
+          <mat-list *ngFor="let topicReq of topic.topicRequirement">
+            <mat-list-item> {{topicReq.detail}} </mat-list-item>
+          </mat-list>
+        </p>
+      </ng-container>
+      <ng-container *ngIf=" topic.topicMission.length > 0">
+        <label>
+          Topic References And Keywords
+        </label>
+        <p>
+          <mat-list *ngFor="let topicReq of topic.topicMission">
+            <mat-list-item> {{topicReq.detail}} </mat-list-item>
+          </mat-list>
+        </p>
+      </ng-container>
     </div>
   </div>
 </div>
