@@ -35,4 +35,5 @@ public interface TaskService {
     List<Task> getListTaskOfRecentTopicByApprove(Integer approve);
     Integer countTaskByProf();
     Integer countTaskByStudent(int stdID);
+    String editTask(TaskInfo taskInfo);
 }

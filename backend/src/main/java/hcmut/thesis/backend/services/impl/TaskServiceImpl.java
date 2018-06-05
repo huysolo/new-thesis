@@ -62,21 +62,17 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     SemesterRepo semRepo;
 
-
     @Autowired
     CommonService commonService;
-    
+
     @Autowired
     StudentRepo stdRepo;
-
 
     @Autowired
     FileRepo fileRepo;
 
     @Autowired
     UserSession userSession;
-        
-
 
     @Override
     public Task updateTaskSubmit(int taskID, int submit) {
@@ -147,25 +143,26 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Topic getCurrTopicFromStdID(int stdid) {
-        try{
+        try {
             Integer currSem = commonService.getCurrentSem();
             return topicService.getAppliedTopic(currSem, stdid);
-        } catch(Exception e){
+        } catch (Exception e) {
             return null;
-        }       
+        }
     }
+
     @Override
-    public List<Task> getMyRecentTask(int topicID, int stdID){
+    public List<Task> getMyRecentTask(int topicID, int stdID) {
         List<Task> listTask = new ArrayList<>();
         List<Task> tempList = taskRepo.getTaskFromIDTopic(topicID);
-        for(Task task: tempList){
-            try{
+        for (Task task : tempList) {
+            try {
                 StudentTask temp = getStudentTaskByIdTaskAndIdStudent(task.getIdTask(), stdID);
-                if(temp != null){
+                if (temp != null) {
                     listTask.add(task);
                 }
-            } catch(Exception e){
-            
+            } catch (Exception e) {
+
             }
         }
         return listTask;
@@ -176,7 +173,7 @@ public class TaskServiceImpl implements TaskService {
         System.out.println(file.getIdTask());
         Optional<Task> task = taskRepo.findById(file.getIdTask());
 
-        if (task.isPresent()){
+        if (task.isPresent()) {
             System.out.println(task.get().getIdTask());
             Optional<File> f = fileRepo.findNameByIdTaskAndNameAndIdUser(file.getIdTask(), file.getName(), file.getVersion(), file.getIdUser());
             if (!f.isPresent()) {
@@ -193,7 +190,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<File> getFileByTaskId(Integer taskId, Integer version, Integer idUser) {
-        return idUser == null ? fileRepo.findAllByIdTaskAndVersionGeneral(taskId, version): fileRepo.findAllByIdTaskAndVersion(taskId, version, idUser);
+        return idUser == null ? fileRepo.findAllByIdTaskAndVersionGeneral(taskId, version) : fileRepo.findAllByIdTaskAndVersion(taskId, version, idUser);
     }
 
     @Override
@@ -212,14 +209,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Integer addNewVersionForGeneral(Integer taskId, Integer idStudent) {
         Task task = getTaskByTaskId(taskId);
-        if (!topicService.isTeamLeader(task.getIdTopicSem(), idStudent)){
+        if (!topicService.isTeamLeader(task.getIdTopicSem(), idStudent)) {
             throw new NullPointerException("User Don't Have Permission To Add New Version");
         }
         task.setCurrentVersion(task.getCurrentVersion() == null ? 0 : task.getCurrentVersion() + 1);
 
         return taskRepo.save(task).getCurrentVersion();
     }
-
 
     @Override
     public String deleteFile(String name, Integer idTask, Integer version, Integer idUser) {
@@ -228,7 +224,7 @@ public class TaskServiceImpl implements TaskService {
         return f.map(file -> {
             fileRepo.delete(file);
             return file.getName();
-        }).orElseThrow(() -> new  NullPointerException("File not found"));
+        }).orElseThrow(() -> new NullPointerException("File not found"));
     }
 
     @Override
@@ -246,7 +242,8 @@ public class TaskServiceImpl implements TaskService {
         List<UserUpload> userUploadList = new ArrayList<>();
         stdTaskRepo.getStudentDoTaskFromIDTask(idTask).forEach(studentTask -> {
             User user = userSession.getUserByIdStudent(studentTask.getIdStudent());
-            userUploadList.add(new UserUpload(user.getUserName(), user.getIdUser(), studentTask.getCurrentVersion()));
+            userUploadList.add(new UserUpload(user.getUserName(), user.getIdUser(),
+                    stdRepo.getStdIDFromUserID(user.getIdUser()), studentTask.getCurrentVersion()));
         });
         return userUploadList;
     }
@@ -271,16 +268,40 @@ public class TaskServiceImpl implements TaskService {
         }
         return count;
     }
-    
+
     @Override
-    public Integer countTaskByStudent(int stdID){
+    public Integer countTaskByStudent(int stdID) {
         int topicID = this.getCurrTopicFromStdID(stdID).getIdTop();
         try {
             return taskRepo.countTaskFromIDTopic(topicID);
-        } catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
+    
+    void deleteStudentTask(Integer taskID){
+        List<StudentTask> list =  stdTaskRepo.getStudentDoTaskFromIDTask(taskID);
+        for(StudentTask temp: list){
+            stdTaskRepo.delete(temp);
+        }
+    }
 
+    public String editTask(TaskInfo taskInfo) {
+        try {
+            Task task = taskRepo.getTaskFromTaskID(taskInfo.getTaskID());
+            task.setTitle(taskInfo.getTitle());
+            task.setDescription(taskInfo.getDescription());
+            task.setDeadline(taskInfo.getDeadline());
+            this.deleteStudentTask(taskInfo.getTaskID());
+            for(Integer stdID: taskInfo.getStudentIdList()){
+                StudentTask stdTask = new StudentTask(taskInfo.getTaskID(),stdID );
+                stdTaskRepo.save(stdTask);
+            }
+            return "OK";
+        } catch (Exception e) {
+            return "FAIL";
+        }
+
+    }
 
 }

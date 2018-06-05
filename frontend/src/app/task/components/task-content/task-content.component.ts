@@ -70,12 +70,15 @@ export class TaskContentComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result.idTask != null) {
-        result.taskID = result.idTask;
-        this.taskListSv.taskList = this.taskListSv.taskList.map(data => {
-          return data;
-        });
+      if(result != null){
+        if (result.idTask != null) {
+          result.taskID = result.idTask;
+          this.taskListSv.taskList = this.taskListSv.taskList.map(data => {
+            return data;
+          });
+        }
       }
+     
     });
   }
 
