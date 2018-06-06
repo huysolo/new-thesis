@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Schedule</h1>
+<div mat-dialog-content>
+  <div class="container-fluid">
+    <div class="form-group">
+      <mat-form-field class="full-width">
+        <input matInput [(ngModel)] = "task.title" placeholder="Task Title" name="taskTitle">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <textarea matInput [(ngModel)] = "task.description" placeholder="Task Description" name="taskDescription"></textarea>
+      </mat-form-field>
+      <p>Students Of Task</p>
+      <ng-container *ngFor="let st of listAllStd">
+        <mat-checkbox (change)="getValue($event.checked, st)" [(ngModel)]="st.selected">{{st.stdName}}</mat-checkbox>
+        <br>
+      </ng-container>
+      <mat-form-field>
+        <input matInput [(ngModel)]="task.deadline" [matDatepicker]="picker" placeholder="Choose a date" [value]= "task.deadline">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button (click)="editTask()" type="button" class="btn btn-raised btn-primary">Save</button>
+</div>

@@ -25,6 +25,7 @@ import {MatInputModule,
 import { TaskDetailPageComponent } from './pages/task-detail-page/task-detail-page.component';
 import { TaskListService } from './task-list.service';
 import { ChatboxComponent } from './components/chatbox/chatbox.component';
+import { TaskEditComponent } from './components/task-edit/task-edit.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -59,10 +60,11 @@ import { ChatboxComponent } from './components/chatbox/chatbox.component';
     TaskPaginationComponent,
     StudentTaskPipe,
     TaskDetailPageComponent,
-    ChatboxComponent
+    ChatboxComponent,
+    TaskEditComponent
   ],
   providers: [TaskService, UploadFileService, TaskListService],
-  entryComponents: [TaskContentComponent, TaskCreateComponent],
+  entryComponents: [TaskContentComponent, TaskCreateComponent, TaskEditComponent],
   exports: [TaskCreateComponent]
 })
 export class TaskModule { }

@@ -1,7 +1,12 @@
 <div class="card card-position" *ngIf="task != null">
   <ng-container *ngIf="task.showFullTask">
+    <div class="button-x" style="padding-right: 40px">
+      <span (click)="openEditDialog()" class="btn btn-default">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+      </span>
+    </div>
     <div class="button-x">
-      <span (click)="showTask(task)" class="btn btn-default active">
+      <span (click)="showTask(task)" class="btn btn-default">
         <i class="fas fa-times"></i>
       </span>
     </div>
@@ -11,10 +16,11 @@
     </div>
     <div class="card-body">
       <div class="pull-right">
-        <button type="button" *ngIf="isTeamlead && !task.submit && !this.authService.isProfessor()" class="btn btn-default">
+        <button type="button" (click)="isSubmitTask()" *ngIf="isTeamlead && !task.submit && !this.authService.isProfessor()" class="btn btn-default">
           <i class="fas fa-edit"></i>Submit</button>
-        <button type="button " *ngIf="task.submit && !this.authService.isProfessor() && task.pass == 1" class="btn btn-default">
+        <button type="button " *ngIf="task.submit && this.authService.isStudent()" class="btn btn-default">
           <i class="fas fa-edit"></i>Submited</button>
+
       </div>
       <div class="content-block">
         <label>
@@ -112,8 +118,8 @@
         {{task.title}}
       </h6>
       <strong class="text-center text-danger">
-         {{task.deadline | date}}
-  
+        {{task.deadline | date}}
+
       </strong>
     </div>
     <h6 class="col-md-3 col-sm-2 text-center no-width">
@@ -124,12 +130,12 @@
     </h6>
     <h6 class="col-md-1 col-sm-1 text-right no-width">
       <button class="btn btn-default btn-sm disabled w3-text-red" *ngIf="task.pass == 1">
-        <span  class="fas fa-times"></span>
+        <span class="fas fa-times"></span>
       </button>
-      <button class="btn btn-default btn-sm disabled w3-text-green"  *ngIf="task.pass == 2">
-          <span class="fa fa-check"></span>
-        </button>
-      
+      <button class="btn btn-default btn-sm disabled w3-text-green" *ngIf="task.pass == 2">
+        <span class="fa fa-check"></span>
+      </button>
+
     </h6>
   </div>
 

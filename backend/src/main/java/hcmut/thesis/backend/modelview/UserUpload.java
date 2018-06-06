@@ -24,9 +24,10 @@ public class UserUpload {
 
     private String username;
 
-    public UserUpload(String username, Integer userId, Integer currentVersion) {
+    public UserUpload(String username, Integer userId, Integer studentId, Integer currentVersion) {
         this.username = username;
         this.userId = userId;
+        this.studentId = studentId;
         this.currentVersion = currentVersion;
     }
 

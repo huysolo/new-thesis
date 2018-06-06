@@ -1,84 +1,8 @@
-<!-- <div mat-dialog-content>
-  <div class="modal-dialog" style="max-width: 600px" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Create Schedule</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="container-fluid">
-          <div class="form-group">
-            <label>
-              <h5>
-                <i class="fa fa-map-marker"></i> Time - Location</h5>
-            </label>
-            <ng-container *ngFor="let shedule of timelocation; let i = index">
-              <div class="input-group mb-3">
-                <div class="form-row">
-                  <div class="col-md-6">
-                    <input [(ngModel)]="shedule.meetingTime" name="time{{i}}" type="datetime-local" class="form-control">
-                  </div>
-                  <div class="col-md-6">
-                    <input placeholder="Location" [(ngModel)]="shedule.location" name="location{{i}}" type="text" class="form-control">
-                  </div>
-                </div>
-                <div class="input-group-append col-md-1">
-                  <i class="material-icons btn-icon" *ngIf="timelocation > 1" (click)="removeMeeting(i)">remove</i>
-                </div>
-              </div>
-            </ng-container>
-            <input (click)="addTimeLocation()" name="btnAddReq" id="btnAddReq" class="btn btn-outline-primary btn-sm pull-right" type="button"
-              value="Add">
-
-            <ng-container *ngFor="let shedule of meeting.timeLocation; let i = index">
-              <div class="row">
-                <mat-form-field class="mat-from-title col-md-6">
-                  <input matInput [(ngModel)]="shedule.meetingTime" type="datetime-local" placeholder="Time">
-                </mat-form-field>
-                <mat-form-field class="mat-from-title col-md-5">
-                  <input matInput [(ngModel)]="shedule.location" placeholder="Location">
-                </mat-form-field>
-                <div class="input-group-append col-md-1">
-                  <i class="material-icons btn-icon" *ngIf="meetingCreate.timeLocation.length > 1" (click)="removeMeeting(i)">remove</i>
-                </div>
-              </div>
-            </ng-container>
-            <div (click)="addTimeLocation()" class="input-group-append pull-right">
-              <i class="material-icons btn-icon">add</i>
-            </div>  
-
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-raised btn-danger" data-dismiss="modal">Close</button>
-        <button (click)="profCreateScheduleMeeting()" type="button" class="btn btn-raised btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <h1 mat-dialog-title>Schedule</h1>
 <div mat-dialog-content>
   <div class="container-fluid">
     <div class="form-group">
-      <!-- <ng-container *ngFor="let shedule of timelocation; let i = index">
-        <div class="input-group mb-3">
-          <div class="form-row">
-            <div class="col-md-6">
-              <input [(ngModel)]="shedule.meetingTime" name="time{{i}}" type="datetime-local" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <input placeholder="Location" [(ngModel)]="shedule.location" name="location{{i}}" type="text" class="form-control">
-            </div>
-          </div>
-          <div class="input-group-append col-md-1">
-            <i class="material-icons btn-icon" *ngIf="timelocation > 1" (click)="removeMeeting(i)">remove</i>
-          </div>
-        </div>
-      </ng-container> -->
 
       <ng-container *ngFor="let shedule of meeting.timeLocation; let i = index">
         <div class="row">

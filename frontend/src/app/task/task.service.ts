@@ -22,6 +22,11 @@ export class TaskService {
     return this.httpClient.post<TaskInfo>(loginUrl, task);
   }
 
+  editTask(task: TaskInfo) {
+    const loginUrl = `http://localhost:8080/edittask`;
+    return this.httpClient.post<TaskInfo>(loginUrl, task);
+  }
+
   getlistTask(topicID: number) {
     const loginUrl = `http://localhost:8080/getlisttask`;
     return this.httpClient.get<any>(loginUrl + '?topicID=' + topicID);

@@ -104,6 +104,22 @@ public class TaskController {
         int topicid = taskService.getCurrTopicFromStdID(userSession.getStudent().getIdStudent()).getIdTop();
         return itaskDAO.createTask(createInfo, topicid);
     }
+    
+    
+    @RequestMapping(value = "/edittask", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> editTask(@RequestBody TaskInfo taskInfo) {
+        String t = taskService.editTask(taskInfo);
+        try{
+            if(t == "OK"){
+                return ResponseEntity.ok(HttpStatus.OK);
+            } else {
+                return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 
     @RequestMapping(value = "/getlisttask", method = RequestMethod.GET)
     @ResponseBody

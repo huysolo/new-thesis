@@ -5,22 +5,25 @@
       <input matInput placeholder="Task Title" [(ngModel)]="taskInfo.title" required name="taskTitle" #taskTitle="ngModel">
     </mat-form-field>
     <mat-form-field class="full-width">
-        <textarea matInput placeholder="Task Description" [(ngModel)]="taskInfo.description" required name="taskDescription" #taskDescription="ngModel"></textarea>
-      </mat-form-field>
+      <textarea matInput placeholder="Task Description" [(ngModel)]="taskInfo.description" required name="taskDescription" #taskDescription="ngModel"></textarea>
+    </mat-form-field>
     <mat-form-field>
-        <input matInput [matDatepicker]="picker" placeholder="Choose deadline" [(ngModel)]="taskInfo.deadline" required name="taskDeadline" #taskDeadline="ngModel">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    <p> <strong> Students Of Task </strong></p>
+      <input matInput [matDatepicker]="picker" placeholder="Choose deadline" [(ngModel)]="taskInfo.deadline" required name="taskDeadline"
+        #taskDeadline="ngModel">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <p>
+      <strong> Students Of Task </strong>
+    </p>
     <ng-container *ngFor="let st of listAllStd">
-      <mat-checkbox  (change)="getValue($event.checked, st)">{{st.stdName}} - {{st.studentId}}</mat-checkbox>
+      <mat-checkbox (change)="getValue($event.checked, st)">{{st.stdName}} - {{st.studentId}}</mat-checkbox>
       <br>
     </ng-container>
-    
+
   </form>
 </div>
 <div mat-dialog-actions>
   <button class="btn btn-secondary" mat-button (click)="this.dialogRef.close();">Cancel</button>
-  <button class="btn btn-success"  mat-button (click)="submit()"[disabled]="!createTaskForm.valid" cdkFocusInitial>Create</button>
+  <button class="btn btn-success" mat-button (click)="submit()" [disabled]="!createTaskForm.valid" cdkFocusInitial>Create</button>
 </div>

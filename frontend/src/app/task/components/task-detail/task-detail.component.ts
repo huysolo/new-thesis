@@ -4,6 +4,8 @@ import {TaskService} from '../../task.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UploadFileService } from '../../upload-file.service';
 import { Task } from '../../../models/Task';
+import { MatDialog } from '@angular/material';
+import {TaskEditComponent} from '../task-edit/task-edit.component';
 
 @Component({
   selector: 'app-task-detail',
@@ -16,16 +18,18 @@ export class TaskDetailComponent implements OnInit {
   @Input() task: Task;
   @Input() isTeamlead = false;
 
-  constructor(public authService: AuthService, public taskService: TaskService, public uploadSv: UploadFileService) { 
+  constructor(public dialog: MatDialog, public authService: AuthService, public taskService: TaskService, public uploadSv: UploadFileService) { 
   }
 
   ngOnInit() {
+    
   }
 
   showTask(task) {
     if (task.showFullTask === undefined) {
     task.showFullTask = true;
       this.loadStudent();
+      console.log(this.task);
     } else {
       task.showFullTask = undefined;
     }
@@ -94,6 +98,22 @@ export class TaskDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  openEditDialog(): void {
+    const dialogRef = this.dialog.open(TaskEditComponent, {
+      width: '500px',
+      data: { task: this.task }
+    });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result.idTask != null) {
+    //     result.taskID = result.idTask;
+    //     this.taskListSv.taskList = this.taskListSv.taskList.map(data => {
+    //       return data;
+    //     });
+    //   }
+    // });
   }
 
 }
