@@ -5,7 +5,7 @@
 </a>
 <div *ngIf="topicSv.appliedTopic != null">
   <h3 class="text-center">Applied Topic</h3>
-  <app-topic-content [topic]="topicSv.appliedTopic"></app-topic-content>
+  <app-topic-content [topic]="topicSv.appliedTopic" (removeTopic)="topicSv.appliedTopic = null"></app-topic-content>
   <br>
 </div>
 <div>

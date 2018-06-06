@@ -18,6 +18,7 @@ public class Topic {
     private Timestamp publishDate;
     private Integer studentCount;
     private Integer profScore;
+    private Integer disapprove;
 
     public Topic(int idTop, String title, int stNumLimit, String sumary, int idProf, Integer score, Integer semesterNo, Integer idSpecialize, Integer studentCount, Timestamp publishDate) {
         this.idTop = idTop;
@@ -179,5 +180,13 @@ public class Topic {
         this.profScore = profScore;
     }
 
+    @Basic
+    @Column(name = "disapprove")
+    public Integer getDisapprove() {
+        return disapprove;
+    }
 
+    public void setDisapprove(Integer disapprove) {
+        this.disapprove = disapprove;
+    }
 }

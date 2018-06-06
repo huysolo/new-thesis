@@ -29,6 +29,12 @@
     <mat-cell *matCellDef="let topic">
       <!-- <button type="button" class="btn" [ngClass]="actionButtonClass" appTopicDetail [idTopic]="topic.idTop">Detail</button> -->
       <button type="button" class="btn" class="btn btn-primary" [routerLink]="['/topic/detail/', topic.idTop]">Detail</button>
+      <ng-container  *ngIf="semSv.isMiddleReview(topic.semesterNo)" >
+        
+        <button type="button" *ngIf="topic.disapprove == 1" class="btn btn-primary" (click)="approve(topic.idTop)" >Approve</button>
+        <button type="button" *ngIf="topic.disapprove == null" class="btn btn-danger" appDisapprove [idTopic]="topic.idTop"  (disapprove)="disapprove($event)" >Disapprove</button>                    
+      </ng-container>
+
       <button *ngIf="showDelete" type="button" class="btn btn-danger" (click)="delete(topic.idTop)">Delete</button>
       <button *ngIf="showEdit" type="button" class="btn btn-success" appTopicFormButton [idTop]="topic.idTop" [draft]="true" (success)="edit($event)">Edit</button>
       <button *ngIf="showPublish" type="button" class="btn btn-primary" (click)="publishTopic(topic.idTop)">Publish</button>

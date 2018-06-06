@@ -32,6 +32,7 @@
         <mapping class="hcmut.thesis.backend.models.GeneralStandard"/>
         <mapping class="hcmut.thesis.backend.models.Council"/>
         <mapping class="hcmut.thesis.backend.models.CouncilUser"/>
+        <mapping class="hcmut.thesis.backend.models.Disapprove"/>
         <!-- <property name="connection.username"/> -->
         <!-- <property name="connection.password"/> -->
 

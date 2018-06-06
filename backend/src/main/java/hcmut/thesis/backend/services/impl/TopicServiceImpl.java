@@ -55,6 +55,9 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     TopicSemStandardRepo  topicSemStandardRepo;
 
+    @Autowired
+    DisapproveRepo disapproveRepo;
+
     @Override
     public List<Topic> getListTopicBySemester( Integer semesterNo, Integer profId, Boolean aval, Integer specialize) {
         aval = aval == null ? true : aval;
@@ -115,26 +118,34 @@ public class TopicServiceImpl implements TopicService {
 
 
     @Override
-    public Topic applyToTopic(Integer topId, Integer studentId) {
+    public Topic applyToTopic(Integer topId) {
+        Integer idStudent = userSession.getStudent().getIdStudent();
         Integer semester = commonService.getCurrentApplySem();
         Topic topic = getTopicById(topId);
         if (!semester.equals(topic.getSemesterNo())) {
             throw new NullPointerException("Cannot Apply To Old Topic");
         }
-        List<Topic> topicList = topicRepo.findTopBySemesterNo(semester);
-        for (Topic top :
-                topicList) {
-            if(studentTopicSemRepo.getStudentTopicSemByAll(studentId, top.getIdTop()).size() > 0){
-                throw new NullPointerException("Student have already apply to this topic");
+//        List<Topic> topicList = topicRepo.findTopBySemesterNo(semester);
+        List<StudentTopicSem> studentTopics = studentTopicSemRepo.getStudentTopicSemByIdStudent(idStudent);
+        for (StudentTopicSem studentTopic : studentTopics) {
+            Optional<Integer> topicSemester = topicRepo.getTopicSemesterNoByIdTopic(studentTopic.getIdTopicSem());
+            if (topicSemester.isPresent() && topicSemester.get().equals(semester)) {
+                throw new NullPointerException("Student have already apply to this a topic this semester");
             }
-            if (!availableTopic(top)){
-                throw  new NullPointerException("Topic is full");
-            }
+        }
+//        for (Topic top :
+//                topicList) {
+//            if(studentTopicSemRepo.getStudentTopicSemByAll(studentId, top.getIdTop()).size() > 0){
+//                throw new NullPointerException("Student have already apply to this topic");
+//            }
+//        }
+        if (!availableTopic(topic)){
+            throw new NullPointerException("Topic is full");
         }
         topic.setStudentCount(topic.getStudentCount() + 1);
         topicRepo.save(topic);
         StudentTopicSem studentTopicSem = new StudentTopicSem();
-        studentTopicSem.setIdStudent(studentId);
+        studentTopicSem.setIdStudent(idStudent);
         studentTopicSem.setIdTopicSem(topic.getIdTop());
         studentTopicSemRepo.save(studentTopicSem);
         return topic;
@@ -166,22 +177,20 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Boolean availableTopic(Topic topic) {
+        System.out.println(topic.getStNumLimit());
         return numberOfApply(topic.getIdTop()) < topic.getStNumLimit();
     }
 
     @Override
-    public Topic rejectTopic(Integer topId, Integer studentId) {
+    public Topic rejectTopic(Integer idTopic, Integer idStudent) {
         commonService.getCurrentApplySem();
 
-        Topic topic = getTopicById(topId);
-
-            topic.setStudentCount(topic.getStudentCount() - 1);
-            topicRepo.save(topic);
-            StudentTopicSem studentTopicSem = new StudentTopicSem();
-            studentTopicSem.setIdTopicSem(topId);
-            studentTopicSem.setIdStudent(studentId);
-            studentTopicSemRepo.delete(studentTopicSem);
-            return topic;
+        StudentTopicSem studentTopic = getStudentTopicSem(idTopic, idStudent);
+        studentTopicSemRepo.delete(studentTopic);
+        Topic topic = getTopicById(idTopic);
+        topic.setStudentCount(topic.getStudentCount() - 1);
+        topicRepo.save(topic);
+        return topic;
 
 
     }
@@ -475,6 +484,24 @@ public class TopicServiceImpl implements TopicService {
             throw new NullPointerException("No Student Applies To This Topic");
         }
         return studentTopicSem;
+    }
+
+    @Override
+    public Topic approveTopic(Disapprove topicDisapprove) {
+        Topic topic = getTopicById(topicDisapprove.getIdTopic());
+        if (topic.getIdProf() != userSession.getProf().getIdProfessor()) {
+            throw new NullPointerException("You don't have permission to approve or disapprove this task");
+        }
+        topic.setDisapprove(topic.getDisapprove() == null ? 1 : null);
+        if (topic.getDisapprove() != null) {
+            disapproveRepo.save(topicDisapprove);
+        }
+        return topicRepo.save(topic);
+    }
+
+    @Override
+    public Disapprove getDisapproveMessage(int idTopic) {
+        return disapproveRepo.findById(idTopic).orElseThrow(() -> new NullPointerException("Topic Message Not Found"));
     }
 
 }

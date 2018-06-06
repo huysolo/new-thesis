@@ -9,4 +9,5 @@ export class Topic {
   semesterNo: Number;
   publishDate: Number;
   studentCount: Number;
+  disapprove: Number;
 }

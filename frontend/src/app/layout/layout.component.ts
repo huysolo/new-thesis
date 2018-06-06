@@ -20,7 +20,7 @@ export class LayoutComponent implements OnInit {
     public layoutSv: LayoutService,
     private router: Router,
     private topicSv: TopicService,
-    private semSv: SemesterService,
+    public semSv: SemesterService,
     private profSv: ProfService
   ) {
       profSv.init();

@@ -3,6 +3,8 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Topic } from '../../../models/Topic';
 import { Observable } from 'rxjs/Observable';
 import { TopicService } from '../../topic.service';
+import { SemesterService } from '../../../core/semester.service';
+import { Disapprove } from '../../../models/Disapprove';
 
 @Component({
   selector: 'app-topic-table',
@@ -19,6 +21,7 @@ export class TopicTableComponent implements OnInit {
   @Input() showEdit = false;
   @Input() showPublish = false;
   @Input() displayFull = true;
+  
 
   @Output() emitTopic = new EventEmitter<Topic>();
   @Output() publish = new EventEmitter<Topic>();
@@ -26,7 +29,7 @@ export class TopicTableComponent implements OnInit {
   displayedColumns = ['idTop', 'stNumLimit', 'title', 'action'];
   displayedColumnsFull = ['idTop', 'stNumLimit', 'sem', 'publishDate', 'title', 'action'];
 
-  constructor(public topicSv: TopicService) { }
+  constructor(public topicSv: TopicService, public semSv: SemesterService) { }
 
   ngOnInit() {
 
@@ -49,6 +52,29 @@ export class TopicTableComponent implements OnInit {
       this.dataSource.data = this.dataSource.data.filter(topic => topic.idTop != idTop);
       this.publish.emit(data);
     });
+  }
+
+  approve(idTopic) {
+    const disapprove = new Disapprove(idTopic, '');
+    this.topicSv.disapproveTopic(disapprove).subscribe(data => {
+      const topLst = this.dataSource.data;
+      topLst.forEach((element, index) => {
+        if (element.idTop == data.idTop) {
+          topLst[index] = data;
+        }
+      });
+      this.dataSource.data = topLst;
+    });
+  }
+
+  disapprove(topic) {
+    const topLst = this.dataSource.data;
+    topLst.forEach((element, index) => {
+      if (element.idTop == topic.idTop) {
+        topLst[index] = topic;
+      }
+    });
+    this.dataSource.data = topLst;
   }
 
 

@@ -71,13 +71,17 @@ export class SemesterService {
     this.checkTime(this.currentSemester.startDate, this.currentSemester.midtermReviewDate);
   }
 
-  isMiddleReview(semNo){
+  isMiddleReview(semNo) {
     return this.currentSemester != null &&
     semNo == this.currentSemester.semesterNo && 
     this.checkTime(this.currentSemester.midtermReviewDate, this.currentSemester.endDate);
   }
 
-  isFinalReview(semNo){ 
+  isCurrentFinalReview() {
+    return this.checkTime(this.currentSemester.reviewDate, this.currentSemester.closeDate);
+  }
+
+  isFinalReview(semNo) { 
     return this.currentSemester != null &&
     semNo == this.currentSemester.semesterNo && 
     this.checkTime(this.currentSemester.reviewDate, this.currentSemester.closeDate);

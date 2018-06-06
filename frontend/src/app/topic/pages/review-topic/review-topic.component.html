@@ -2,7 +2,7 @@
   <div class="col-sm-12" [ngClass]="standardListReview? 'col-md-5':'col-md-12'">
     <div class="mat-elevation-z1">
       <div class="white-box">
-        <div class="box-title">
+        <div class="box-title text-primary">
           <i class="material-icons">
             create
           </i> Review
@@ -20,12 +20,14 @@
   
           <ng-container matColumnDef="title">
             <mat-header-cell *matHeaderCellDef> Tilte </mat-header-cell>
-            <mat-cell *matCellDef="let topic"> {{topic.title}} </mat-cell>
+            <mat-cell *matCellDef="let topic"> <div class="title">
+              {{topic.title}}
+            </div>  </mat-cell>
           </ng-container>
   
           <ng-container matColumnDef="stNumLimit">
             <mat-header-cell *matHeaderCellDef> Student Number </mat-header-cell>
-            <mat-cell *matCellDef="let topic"> {{topic.stNumLimit}} </mat-cell>
+            <mat-cell *matCellDef="let topic"> {{topic.studentCount}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="publishDate">
             <mat-header-cell *matHeaderCellDef> Publish Date </mat-header-cell>
@@ -43,7 +45,7 @@
           <mat-row *matRowDef="let row; columns: standardListReview ? displayedColumns : displayedColumnsFull;"></mat-row>
         </mat-table>
   
-        <mat-paginator #paginatorRe [pageSize]="3" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+        <mat-paginator #paginatorRe [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
         </mat-paginator>
       </div>
     </div>
@@ -58,12 +60,12 @@
         </div>
         <form action="" method="post" class="form" #submitReviewForm="ngForm">
           <table class="table">
-            <thead class="thead-dark">
+            <thead class="bg-primary">
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Coefficient</th>
-                <th scope="col">Score</th>
+                <th scope="col" class="text-white">#</th>
+                <th scope="col" class="text-white">Name</th>
+                <th scope="col" class="text-white">Coefficient</th>
+                <th scope="col" class="text-white">Score</th>
               </tr>
             </thead>
             <tbody>
@@ -88,7 +90,7 @@
           </table>
           <div class="text-center">
     
-            <button *ngIf="reviewTp != null" type="button" name="" id="" class="btn btn-primary" (click)="submitReview()"
+            <button *ngIf="reviewTp != null && semSv.isCurrentFinalReview()" type="button" name="" id="" class="btn btn-primary" (click)="submitReview()"
               [disabled]="!submitReviewForm.form.valid">Submit</button>
             <button type="button" name="cancelRv" id="cancelRv" class="btn btn-secondary " (click)="standardListReview = null">Cancel</button>
           </div>
@@ -153,7 +155,7 @@
           <mat-row *matRowDef="let row; columns: topicRvStandardDetail ? displayedColumns : displayedColumnsFull;"></mat-row>
         </mat-table>
   
-        <mat-paginator #paginator [pageSize]="3" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+        <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
         </mat-paginator>
       </div>
     </div>

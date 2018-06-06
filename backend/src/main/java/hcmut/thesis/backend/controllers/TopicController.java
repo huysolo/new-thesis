@@ -108,16 +108,10 @@ public class TopicController {
     @ResponseBody
     ResponseEntity<?> applyToTopic(@RequestBody Integer topicId){
         try {
-            if(!userSession.isStudent()){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO APPLY");
-            }
-            Topic topic =topicService.applyToTopic(topicId, userSession.getStudent().getIdStudent());
-            if (topic == null){
-                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("INVALID REQUEST");
-            }
+            Topic topic =topicService.applyToTopic(topicId);
             return ResponseEntity.ok(topic);
-        } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("INVALID REQUEST");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
 
     }
@@ -133,7 +127,7 @@ public class TopicController {
     
     @PostMapping(value = "reject")
     @ResponseBody
-    ResponseEntity<Object> rejectToTopic(@RequestBody Integer topicId){
+    ResponseEntity<?> rejectToTopic(@RequestBody Integer topicId){
         if(!userSession.isStudent()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("YOU DO NOT HAVE PERMISSION TO REJECT");
         }
@@ -145,15 +139,17 @@ public class TopicController {
     }
 
     @GetMapping(value = "listReview")
-    List<Topic> getListReviewTopic(
+    ResponseEntity<?> getListReviewTopic(
             @RequestParam(value = "semno", required = false) Integer semNo,
             @RequestParam(value = "submitted" , required = false) Integer isSubmitted,
             @RequestParam(value = "guide") Boolean guide
     ) {
-        if (!userSession.isProf()) {
-            return null;
+        try {
+            return ResponseEntity.ok(topicService.getListTopicReview(semNo, userSession.getProf().getIdProfessor(), isSubmitted, guide));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return topicService.getListTopicReview(semNo, userSession.getProf().getIdProfessor(), isSubmitted, guide);
+
     }
 
     @DeleteMapping
@@ -321,6 +317,26 @@ public class TopicController {
             return ResponseEntity.ok(topicService.setTeamLead(idTopic));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("disapprove")
+    ResponseEntity<?> setDisapprove(@RequestBody Disapprove disapprove) {
+        try {
+            return ResponseEntity.ok(topicService.approveTopic(disapprove));
+
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("disapprove")
+    ResponseEntity<?> getDisapprove(@RequestParam("id") int idTopic) {
+        try {
+            return ResponseEntity.ok(topicService.getDisapproveMessage(idTopic));
+        } catch (Exception e) {
+            return  ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

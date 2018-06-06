@@ -7,7 +7,7 @@
   <p>
     {{topicDetail.topic.sumary}}
   </p>
-  <label>AUTHOR</label>
+  <label>SUPERVISOR</label>
   <p>
     <a [routerLink]="['/user/view', (topicDetail.topic.idProf | prof: 'id')]">
       {{topicDetail.topic.idProf | prof}}
@@ -29,7 +29,7 @@
   </p>
 
   <mat-list *ngIf="students != null && students.length > 0 ">
-    <label>STUDENT GROUP</label>
+    <label>MEMBERS</label>
     <mat-list-item class="block-content" *ngFor="let student of students" [routerLink]="['/user/view', student.userId]" [ngClass]="{'text-success': student.teamlead == 1}"
       [ngClass]="{'text-primary': student.userId == authSv.getUserId()}">
       <mat-icon mat-list-icon>account_circle</mat-icon>

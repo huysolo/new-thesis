@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -36,6 +37,9 @@ public interface TopicRepo extends JpaRepository<Topic, Integer>, JpaSpecificati
     
     @Query("SELECT t FROM Topic t WHERE t.idTop = :idTopic ")
     Topic getTopicFromTopicID(@Param("idTopic") Integer idTopic);
+
+    @Query("SELECT t.semesterNo FROM Topic t WHERE t.idTop = :idTopic ")
+    Optional<Integer> getTopicSemesterNoByIdTopic(@Param("idTopic") int idTopic);
 
     @Query("SELECT COUNT (t) FROM Topic t WHERE t.idProf = :idProf")
     Integer countTopicByIdProf(@Param("idProf") Integer idProf);

@@ -33,13 +33,7 @@ export class TopicContentComponent implements OnInit {
   }
   reject() {
     this.topicSv.reject(this.topicSv.appliedTopic.idTop).subscribe(data => {
-      if (data === 'CREATED') {
-        this.topicSv.topicLst = this.topicSv.topicLst.map(topicLst => {
-          topicLst.push(this.topicSv.appliedTopic);
-          this.topicSv.appliedTopic = null;
-          return topicLst;
-        });
-      }
+      this.removeTopic.emit(data);
     });
   }
 

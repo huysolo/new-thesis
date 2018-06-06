@@ -1,7 +1,7 @@
 <div class="mat-elevation-z1">
   <div class="white-box">
     <div class="box-title">
-       Topic Infomation
+      Topic Infomation
     </div>
     <div>
       <label>Title</label>
@@ -18,25 +18,10 @@
           <p>{{topic.topic.semesterNo ? topic.topic.semesterNo : 'Unpublished'}}</p>
         </div>
         <div class="col-4">
-          <label>Proffessor</label>
+          <label>Supervisor</label>
           <p>{{topic.topic.idProf | prof}}</p>
         </div>
       </div>
-      <mat-list *ngIf="students != null && students.length > 0">
-        <label>Student Group </label> 
-        <div *ngIf="curStudent != null && !curStudent.teamlead">
-          <button type="button" class="btn btn-outline-primary btn-sm" (click)="setTeamlead()">Set Teamleader</button>
-        </div>
-        <div class="row">
-          <div class="col-3 block-content" *ngFor="let student of students" [routerLink]="['/user/view/', student.userId]">
-            <mat-list-item [ngClass]="{'text-success': student.teamlead == 1}" [ngClass]="{'text-primary': student.userId == authSv.getUserId()}">
-              <mat-icon mat-list-icon>account_circle</mat-icon>
-              <h6 mat-line>{{student.stdName}}</h6>
-              <p mat-line> {{student.studentId}} </p>
-            </mat-list-item>
-          </div>
-        </div>
-      </mat-list>
       <ng-container *ngIf=" topic.topicRequirement.length > 0">
         <label>Topic Requirements</label>
         <p>
@@ -55,6 +40,26 @@
           </mat-list>
         </p>
       </ng-container>
+      <mat-list *ngIf="students != null && students.length > 0">
+        <label>Member(s) </label>
+        <!-- <div *ngIf="curStudent != null && !curStudent.teamlead">
+                                              <button type="button" class="btn btn-outline-primary btn-sm" (click)="setTeamlead()">Set Teamleader</button>
+                                            </div> -->
+        <div class="row">
+          <div class="col-3 block-content" *ngFor="let student of students">
+
+            <div class="text-center top-right" *ngIf="student.userId == authSv.getUserId() && !student.teamlead" (click)="setTeamlead()">
+              <button type="button" class="btn btn-sm" 
+                ><i class="fas fa-user-plus text-primary"></i></button>
+            </div>
+            <mat-list-item [routerLink]="['/user/view/', student.userId]" [ngClass]="{'text-success': student.teamlead == 1}" [ngClass]="{'text-primary': student.userId == authSv.getUserId()}">
+              <mat-icon mat-list-icon>account_circle</mat-icon>
+              <h6 mat-line>{{student.stdName}}</h6>
+              <p mat-line> {{student.studentId}} </p>
+            </mat-list-item>
+          </div>
+        </div>
+      </mat-list>
     </div>
   </div>
 </div>

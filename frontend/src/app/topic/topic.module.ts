@@ -26,6 +26,8 @@ import { CreateFormModalComponent } from './components/create-form-modal/create-
 import { TopicFormButtonComponent } from './components/topic-form-button/topic-form-button.component';
 import { TopicFormButtonDirective } from './directives/topic-form-button.directive';
 import { TopicDetailDirective } from './components/topic-detail.directive';
+import { DisapproveComponent } from './components/disapprove/disapprove.component';
+import { DisapproveDirective } from './components/disapprove.directive';
 @NgModule({
   imports: [
     CommonModule,
@@ -58,10 +60,13 @@ import { TopicDetailDirective } from './components/topic-detail.directive';
     TopicFormButtonComponent,
     TopicFormButtonDirective,
     TopicDetailDirective,
+    DisapproveComponent,
+    DisapproveDirective,
   ],
   entryComponents: [
     TopidDetailComponent,
-    CreateFormModalComponent
+    CreateFormModalComponent,
+    DisapproveComponent
   ]
 })
 export class TopicModule { }

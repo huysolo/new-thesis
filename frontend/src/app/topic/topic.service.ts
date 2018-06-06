@@ -7,6 +7,7 @@ import { TopicDetail } from '../models/TopicDetail';
 import { AuthService } from '../core/auth.service';
 import { StudentDoTask } from '../task/components/student-do-task';
 import { Review } from '../models/Review';
+import { Disapprove } from '../models/Disapprove';
 
 @Injectable()
 export class TopicService {
@@ -37,6 +38,7 @@ export class TopicService {
   private listProfTopicUrl = this.topicUrl + 'listProfTopic';
   private reviewsUrl = this.topicUrl + 'reviews';
   private teamleadUrl = this.topicUrl + 'teamlead';
+  private disapproveUrl = this.topicUrl + 'disapprove';
 
   private stdTopic = this.topicUrl + 'stdgetcurrtopic';
   private profCurrTopic = this.topicUrl + 'profgetcurrappliedtopic';
@@ -193,6 +195,17 @@ export class TopicService {
 
   profGetCurrAppliedTopic() {
     return this.http.get<Topic[]>(this.profCurrTopic);
+  }
+
+  disapproveTopic(disapprove) {
+    return this.http.post<Topic>(this.disapproveUrl, disapprove);
+  }
+
+  getDisapproveMessage(idTopic) {
+    const param  = new HttpParams().set('id', idTopic);
+    return this.http.get<Disapprove>(this.disapproveUrl, {params: param}).map(data => {
+      return data.reason;
+    });
   }
 
 }

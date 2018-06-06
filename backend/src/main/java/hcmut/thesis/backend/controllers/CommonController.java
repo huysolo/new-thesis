@@ -21,7 +21,6 @@ public class CommonController {
     
      @Autowired
     StudentTopicSemRepo stdTopicSemRepo;
-    StudentTopicSemRepo studentTopicSemRepo;
 
     @RequestMapping(value = "listSemester", method = RequestMethod.GET)
     List<Semester> getListSemster(){

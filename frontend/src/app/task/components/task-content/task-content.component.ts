@@ -14,6 +14,7 @@ import { SemesterService } from '../../../core/semester.service';
 import { Observable } from 'rxjs/Observable';
 import { TaskListService } from '../../task-list.service';
 import { LayoutService } from '../../../layout/layout.service';
+import { Disapprove } from '../../../models/Disapprove';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class TaskContentComponent implements OnInit {
   searchText: String = '';
   public page: number;
   pagecount: Array<number>;
+  disapprove = null;
 
   disconnection: any;
   isTeamlead = false;
@@ -44,11 +46,18 @@ export class TaskContentComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.topicSv.getTopicById(params['id']).subscribe(data => {
-        this.layoutSv.labelName = 'Task of topic: ' + params['id'];
+        this.layoutSv.labelName = 'Tasks of topic: ' + params['id'];
         this.taskListSv.topic = data;
         this.taskListSv.getPage(0);
+        if (data.disapprove == null) {
+          this.disapprove = null;
+        } else {
+          this.topicSv.getDisapproveMessage(data.idTop).subscribe(msg => {
+            this.disapprove = msg;
+            
+          });
+        }
       });
-      
       this.listTask = null;
       this.page = 0;
       if (this.authService.isStudent()) {

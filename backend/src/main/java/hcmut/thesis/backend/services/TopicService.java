@@ -12,7 +12,7 @@ public interface TopicService {
     List<Topic> getListOpenTopic();
     TopicDetail getTopicDetailById(Integer topId);
     Topic setTopicDetail(TopicDetail topicDetail, Boolean publish);
-    Topic applyToTopic(Integer topId, Integer studentId);
+    Topic applyToTopic(Integer topId);
     Topic getAppliedTopic(Integer semesterNo, Integer studentId);
     Integer numberOfApply(Integer topicId);
     List<Topic> getDraftTopics(Integer profId);
@@ -46,4 +46,6 @@ public interface TopicService {
     List<Topic> profGetCurrAppliedListTopic(Integer profID);
     List<StudentTopicSem> setTeamLead(int idTopic);
     List<StudentTopicSem> getStudentTopicByIdTopic(int idTopic);
+    Topic approveTopic(Disapprove topicDisapprove);
+    Disapprove getDisapproveMessage(int idTopic);
 }

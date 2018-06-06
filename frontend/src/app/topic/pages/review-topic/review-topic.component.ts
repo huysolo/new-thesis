@@ -9,9 +9,10 @@ import { ReviewTopic } from '../../../models/ReviewTopic';
 import { TopicSemStandard } from '../../../models/TopicSemStandard';
 import { Standard } from '../../../models/Standard';
 import { StandardScore } from '../../../models/StandardScore';
-import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort, MatSnackBar } from '@angular/material';
 import { DataSource } from '@angular/cdk/table';
 import { LayoutService } from '../../../layout/layout.service';
+import { SemesterService } from '../../../core/semester.service';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
   @ViewChild('sort') sort: MatSort;
   @ViewChild('paginatorRe') paginatorRe: MatPaginator;
   @ViewChild('sortRe') sortRe: MatSort;
-  constructor(private route: ActivatedRoute, private layoutSv: LayoutService,
+  constructor(private route: ActivatedRoute, private layoutSv: LayoutService, public semSv: SemesterService, public snackBar: MatSnackBar,
     public topicSv: TopicService, public comSv: CommonService, public standardSv: StandardService) { }
 
 
@@ -45,7 +46,7 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
   }
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.layoutSv.labelName = params['typ'] === 'guide' ? 'Supervise' : 'Critique';
+      this.layoutSv.labelName = 'Review';
       this.topicRvStandardDetail = null;
       this.typ = params['typ'];
       this.topicSv.getListTopicReview(null, 0, this.typ === 'guide').subscribe(lst => {
@@ -87,15 +88,19 @@ export class ReviewTopicComponent implements OnInit, AfterViewInit {
   }
 
   submitReview() {
-    this.standardSv.postReview(this.reviewTp).subscribe(data => {
-      this.topicSv.getListTopicReview(null, 0, this.typ === 'guide').subscribe(lst => {
-        this.dataSourceRe = new MatTableDataSource(lst);
-        this.dataSourceRe.paginator = this.paginatorRe;
-        this.standardListReview = null;
+    if (this.semSv.isCurrentFinalReview()) {
+      this.standardSv.postReview(this.reviewTp).subscribe(data => {
+        this.topicSv.getListTopicReview(null, 0, this.typ === 'guide').subscribe(lst => {
+          this.dataSourceRe = new MatTableDataSource(lst);
+          this.dataSourceRe.paginator = this.paginatorRe;
+          this.standardListReview = null;
 
-        this.onChangeSemester(this.selectedSem);
+          this.onChangeSemester(this.selectedSem);
+        });
       });
-    });
+    } else {
+      this.snackBar.open('You cannot review the topic right now');
+    }
   }
 
   finalScore() {
