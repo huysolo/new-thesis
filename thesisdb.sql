@@ -43,6 +43,13 @@ create table council_user
   primary key (id_council, id_user)
 );
 
+create table disapprove
+(
+  id_topic int          not null
+    primary key,
+  reason   varchar(200) null
+);
+
 create table faculty
 (
   id_faculty int auto_increment
@@ -70,14 +77,13 @@ create table file
 
 create table general_standard
 (
-  id_general_standard int auto_increment
+  id_general_standard int          not null
     primary key,
-  stName              varchar(50)  not null,
-  coefficient         int unsigned not null,
-  semester_no         int          not null,
+  coefficient         int          null,
+  semester_no         int          null,
   st_name             varchar(255) null
 )
-  charset = utf8mb4;
+  engine = MyISAM;
 
 create table hibernate_sequence
 (
@@ -101,14 +107,16 @@ create index join_per_meeting_meeting_id_meeting_fk
 
 create table meeting
 (
-  id_meeting    int auto_increment
+  id_meeting     int auto_increment
     primary key,
-  status        int default '1' null,
-  content       varchar(150)    not null,
-  student_count int default '0' null,
-  id_topic_sem  int             null,
-  reason        varchar(45)     null,
-  title         varchar(45)     null
+  status         int default '1' null,
+  content        varchar(150)    not null,
+  student_count  int default '0' null,
+  id_topic_sem   int             null,
+  reason         varchar(45)     null,
+  title          varchar(45)     null,
+  report_content varchar(255)    null,
+  report_plan    varchar(255)    null
 )
   charset = utf8mb4;
 
@@ -274,7 +282,7 @@ create table topic
   publish_date  timestamp                           null,
   student_count int default '0'                     null,
   prof_score    int                                 null,
-  review_date   datetime                            null,
+  disapprove    int                                 null,
   constraint topic_id_top_uindex
   unique (id_top)
 )

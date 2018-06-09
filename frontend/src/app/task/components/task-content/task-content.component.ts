@@ -54,7 +54,6 @@ export class TaskContentComponent implements OnInit {
         } else {
           this.topicSv.getDisapproveMessage(data.idTop).subscribe(msg => {
             this.disapprove = msg;
-            
           });
         }
       });
@@ -79,15 +78,12 @@ export class TaskContentComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result != null){
-        if (result.idTask != null) {
-          result.taskID = result.idTask;
-          this.taskListSv.taskList = this.taskListSv.taskList.map(data => {
-            return data;
-          });
-        }
+      if (result.idTask != null) {
+        result.taskID = result.idTask;
+        this.taskListSv.taskList = this.taskListSv.taskList.map(data => {
+          return data;
+        });
       }
-     
     });
   }
 

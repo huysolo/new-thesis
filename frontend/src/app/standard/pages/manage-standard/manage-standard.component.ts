@@ -24,7 +24,7 @@ export class ManageStandardComponent implements OnInit, AfterViewInit {
   constructor(public standardSv: StandardService, private layoutSv: LayoutService,
     public topicSv: TopicService, public authoSv: AuthService,
     public semesterSv: SemesterService) {
-      layoutSv.labelName = 'Criterion';
+      layoutSv.labelName = 'Standard';
     }
   standardList: Observable<Standard[]>;
   standardListReview: Standard[];
@@ -50,7 +50,7 @@ export class ManageStandardComponent implements OnInit, AfterViewInit {
       this.standardGeneral = new MatTableDataSource(data);
       this.standardGeneral.paginator = this.paginatorGeneral;
 
-    })
+    });
 
   }
 
