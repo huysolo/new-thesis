@@ -144,7 +144,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Topic getCurrTopicFromStdID(int idStudent) {
         try {
-            System.out.println(idStudent);
             Integer currSem = commonService.getCurrentSem();
             return topicService.getAppliedTopic(currSem, idStudent);
         } catch (Exception e) {

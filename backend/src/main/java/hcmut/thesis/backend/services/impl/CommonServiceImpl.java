@@ -112,7 +112,6 @@ public class CommonServiceImpl implements CommonService {
         if (semesters.size() == 0){
             throw new NullPointerException();
         }
-        System.out.println(semesters.get(0));
         return semesters.get(0);
     }
 
