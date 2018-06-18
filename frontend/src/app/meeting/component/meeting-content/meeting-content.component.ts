@@ -7,6 +7,7 @@ import { MeetingService } from '../../meeting.service';
 import { AuthService } from '../../../core/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { SemesterService } from '../../../core/semester.service';
+import { LayoutService } from '../../../layout/layout.service';
 
 @Component({
   selector: 'app-meeting-content',
@@ -21,35 +22,39 @@ export class MeetingContentComponent implements OnInit {
   topicID: number;
   semesterState: number;
 
-  constructor(public semService: SemesterService, private route: ActivatedRoute, private meetingService: MeetingService, public authService: AuthService, private taskService: TaskService) { }
+  constructor(public semService: SemesterService, private layoutSv: LayoutService,
+    private route: ActivatedRoute,
+    private meetingService: MeetingService,
+    public authService: AuthService, private taskService: TaskService) { }
 
   ngOnInit() {
+    this.layoutSv.labelName = 'Meeting';
     this.semService.init().subscribe(
       res => {
         if (res) {
           this.semesterState = this.semService.getState(this.semService.getCurrrentSem().semesterNo);
-          if (this.semesterState != 0) {
-            this.route.params.subscribe(params => {
-              this.type = params['typ'];
-              if (this.type === 'recent') {
+          this.route.params.subscribe(params => {
+            this.type = params['typ'];
+            if (this.type === 'recent') {
 
 
-                if (this.authService.isStudent()) {
-                  this.stdGetRecentMeeting();
-                }
-                if (this.authService.isProfessor()) {
-                  this.profGetRecentMeeting();
-                  this.getTopicFromSemID(-1);
-                }
-              } else {
-                if (this.authService.isStudent()) {
-                  this.stdGetHistoryMeeting();
-                } else {
-                  this.profGetHistoryMeeting();
-                }
+              if (this.authService.isStudent()) {
+                this.stdGetRecentMeeting();
               }
-            });
-          }
+              if (this.authService.isProfessor()) {
+                this.profGetRecentMeeting();
+                this.getTopicFromSemID(-1);
+              }
+            } else {
+              if (this.authService.isStudent()) {
+                this.stdGetHistoryMeeting();
+              } else {
+                this.profGetHistoryMeeting();
+              }
+            }
+          });
+          // if (this.semesterState != 0) {
+          // }
         }
       }
     );

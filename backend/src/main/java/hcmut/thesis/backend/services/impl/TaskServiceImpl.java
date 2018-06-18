@@ -142,10 +142,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Topic getCurrTopicFromStdID(int stdid) {
+    public Topic getCurrTopicFromStdID(int idStudent) {
         try {
+            System.out.println(idStudent);
             Integer currSem = commonService.getCurrentSem();
-            return topicService.getAppliedTopic(currSem, stdid);
+            return topicService.getAppliedTopic(currSem, idStudent);
         } catch (Exception e) {
             return null;
         }
@@ -271,7 +272,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Integer countTaskByStudent(int stdID) {
-        int topicID = this.getCurrTopicFromStdID(stdID).getIdTop();
+        int topicID = getCurrTopicFromStdID(stdID).getIdTop();
         try {
             return taskRepo.countTaskFromIDTopic(topicID);
         } catch (Exception e) {

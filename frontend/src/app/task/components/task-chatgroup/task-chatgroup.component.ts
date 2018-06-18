@@ -56,11 +56,10 @@ export class TaskChatgroupComponent implements OnInit, OnDestroy {
     );
   }
 
- isMyMessage(username){
-    if(this.authService.getUsername() == username){
+ isMyMessage(username) {
+    if (this.authService.getUsername() == username) {
       return 'right';
-    }
-    else {
+    } else {
       return null;
     }
   }

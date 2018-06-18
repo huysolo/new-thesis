@@ -29,4 +29,5 @@ public interface SemesterRepo extends JpaRepository<Semester, Integer> {
     
     @Query("SELECT s FROM Semester s WHERE s.semesterNo = :semID AND s.applyOpenDate < current_timestamp AND  s.applyCloseDate > current_timestamp")
     Semester isCurrApplySem(@Param("semID") Integer semID);
+
 }

@@ -17,7 +17,6 @@ const routes: Routes = [
             { path: 'topic', loadChildren: 'app/topic/topic.module#TopicModule' , data: {breadcrumbs: 'Topic'}  },
             { path: 'standard', loadChildren: 'app/standard/standard.module#StandardModule' , data: {breadcrumbs: 'Standard' } },
             { path: 'meeting', loadChildren: 'app/meeting/meeting.module#MeetingModule' , data: {breadcrumbs: 'Meeting' } },
-
         ]
     }
 ];

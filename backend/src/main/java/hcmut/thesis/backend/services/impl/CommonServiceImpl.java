@@ -112,6 +112,7 @@ public class CommonServiceImpl implements CommonService {
         if (semesters.size() == 0){
             throw new NullPointerException();
         }
+        System.out.println(semesters.get(0));
         return semesters.get(0);
     }
 
@@ -163,11 +164,7 @@ public class CommonServiceImpl implements CommonService {
     public Boolean isCurrApply(Integer semID){
         try {
             Semester check = semRepo.isCurrApplySem(semID);
-            if(check != null){
-                return true;
-            } else {
-                return false;
-            }
+            return check != null;
             
         } catch(Exception e){
             return false;
