@@ -1,0 +1,87 @@
+<div *ngFor="let sem of semSv.getListSemster()">
+  <h4>
+    Semester No: {{sem.semesterNo}}
+    <input name="" id="" class="btn btn-primary" type="button" value="Edit" (click)="edit(sem)">
+  </h4>
+  <div *ngIf="semesterEdit.semesterNo != sem.semesterNo">
+    <div>
+      <label for="">Begin Semester: </label> {{sem.beginDate | date}}
+    </div>
+    <div>
+      <label for="">Open Topic Registration: </label> {{sem.applyOpenDate | date}}
+    </div>
+    <div>
+      <label for="">Close Topic Registration: </label> {{sem.applyCloseDate | date}}
+    </div>
+    <div>
+      <label for="">Start Topic: </label> {{sem.startDate | date}}
+    </div>
+    <div>
+      <label for="">End Topic: </label> {{sem.endDate | date}}
+    </div>
+    <div>
+      <label for="">Review Topic: </label> {{sem.reviewDate | date}}
+    </div>
+    <div>
+      <label for="">Close Semester: </label> {{sem.closeDate | date}}
+    </div>
+  </div>
+  <br>
+  <form *ngIf="semesterEdit.semesterNo == sem.semesterNo" action="" method="post" #createTaskForm="ngForm">
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="beginDate" placeholder="Edit begin date" [(ngModel)]="semesterEdit.beginDate" name="beginDate">
+        <mat-datepicker-toggle matSuffix [for]="beginDate"></mat-datepicker-toggle>
+        <mat-datepicker #beginDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="applyOpenDate" placeholder="Edit apply open date" [(ngModel)]="semesterEdit.applyOpenDate"
+          name="applyOpenDate">
+        <mat-datepicker-toggle matSuffix [for]="applyOpenDate"></mat-datepicker-toggle>
+        <mat-datepicker #applyOpenDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="applyCloseDate" placeholder="Edit apply close date" [(ngModel)]="semesterEdit.applyCloseDate"
+          name="applyCloseDate">
+        <mat-datepicker-toggle matSuffix [for]="applyCloseDate"></mat-datepicker-toggle>
+        <mat-datepicker #applyCloseDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="startDate" placeholder="Edit start topic date" [(ngModel)]="semesterEdit.startDate" name="startDate">
+        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+        <mat-datepicker #startDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="endDate" placeholder="Edit end topic date" [(ngModel)]="semesterEdit.endDate" name="endDate">
+        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+        <mat-datepicker #endDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="reviewDate" placeholder="Edit review topic date" [(ngModel)]="semesterEdit.reviewDate" name="reviewDate">
+        <mat-datepicker-toggle matSuffix [for]="reviewDate"></mat-datepicker-toggle>
+        <mat-datepicker #reviewDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="closeDate" placeholder="Edit close semester date" [(ngModel)]="semesterEdit.closeDate" name="closeDate">
+        <mat-datepicker-toggle matSuffix [for]="closeDate"></mat-datepicker-toggle>
+        <mat-datepicker #closeDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <input name="" id="" class="btn btn-success active" type="button" value="Submit Change" (click)="submitEdit()">
+    <input name="" id="" class="btn btn-secondary active" type="button" value="Close" (click)="resetSem()">
+  </form>
+
+</div>

@@ -11,21 +11,25 @@ import { McBreadcrumbsModule } from 'ngx-breadcrumbs';
 import { LayoutService } from './layout.service';
 import {MeetingModule} from '../meeting/meeting.module';
 import {TaskModule} from '../task/task.module';
+import { SemesterComponent } from '../semester/semester.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     LayoutRoutingModule,
     MaterialModule,
+    FormsModule,
     CommonModule,
     McBreadcrumbsModule.forRoot(),
     MeetingModule,
-    TaskModule
+    TaskModule,
   ],
   declarations: [
     HeaderComponent,
     LayoutComponent,
     SidebarComponent,
-    MainPageComponent
+    MainPageComponent,
+    SemesterComponent
   ],
   providers:
   [LayoutService]

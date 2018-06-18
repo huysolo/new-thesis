@@ -171,6 +171,11 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
+    public Semester editSemester(Semester semester) {
+        return semesterRepo.save(semester);
+    }
+
+    @Override
     public Integer getReviewSemester() {
         return semesterRepo.getSemesterByAtReviewTime().orElseThrow(() -> new NullPointerException("Cannot get semester review time")).getSemesterNo();
     }

@@ -7,6 +7,7 @@ import hcmut.thesis.backend.modelview.UserSession;
 import hcmut.thesis.backend.repositories.StudentTopicSemRepo;
 import hcmut.thesis.backend.services.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,6 +53,15 @@ public class CommonController {
             return null;
         }
         return commonService.getAllByIdFaculty(userSession.getCurrentUserFaculty());
+    }
+
+    @PostMapping(value = "listSemester")
+    ResponseEntity<?> editSemester(@RequestBody Semester semester){
+        try {
+            return ResponseEntity.ok(commonService.editSemester(semester));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "spec", method = RequestMethod.GET)

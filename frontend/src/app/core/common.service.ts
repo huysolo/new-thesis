@@ -22,6 +22,10 @@ export class CommonService {
     return this.http.get<Semester[]>(this.urlListSemester);
   }
 
+  editSemester(sem): Observable<Semester> {
+    return this.http.post<Semester>(this.urlListSemester, sem);
+  }
+
   getAllSemNo(): Observable<Number[]> {
     return this.http.get<Number[]>(this.urlAllSem);
   }

@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from '../layout.component';
 import { MainPageComponent } from '../../main-page/main-page.component';
 import { AuthGuardUserService } from '../../core/auth-guard-user.service';
+import { SemesterComponent } from '../../semester/semester.component';
 
 const routes: Routes = [
     {
@@ -12,6 +13,7 @@ const routes: Routes = [
         children: [
             { path: '', redirectTo: 'mainpage'},
             { path: 'mainpage', component: MainPageComponent , data: {breadcrumbs: 'Home' }},
+            { path: 'semester', component: SemesterComponent},
             { path: 'user', loadChildren: 'app/user/user.module#UserModule' , data: {breadcrumbs: 'User'} },
             { path: 'task', loadChildren: 'app/task/task.module#TaskModule' , data: {breadcrumbs: 'Task' } },
             { path: 'topic', loadChildren: 'app/topic/topic.module#TopicModule' , data: {breadcrumbs: 'Topic'}  },

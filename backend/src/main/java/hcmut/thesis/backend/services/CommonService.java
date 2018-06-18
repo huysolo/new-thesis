@@ -24,4 +24,5 @@ public interface CommonService {
     Integer getSemFromTopicID(Integer topicID);
     Boolean isCurrDoTask(Integer semID);
     Boolean isCurrApply(Integer semID);
+    Semester editSemester(Semester semester);
 }
