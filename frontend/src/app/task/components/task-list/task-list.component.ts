@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {TaskService} from '../../task.service';
 import { Task } from '../../../models/Task';
-import { StudentDoTask } from '../student-do-task';
 import { AuthService } from '../../../core/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { TopicService } from '../../../topic/topic.service';
-import { TaskCreateComponent } from '../task-create/task-create.component';
 import { TaskListService } from '../../task-list.service';
 import { LayoutService } from '../../../layout/layout.service';
 
@@ -22,7 +19,7 @@ export class TaskListComponent implements OnInit {
   listSem: Array<any>;
 
   constructor(public taskService: TaskService, public authService: AuthService, private route: ActivatedRoute,
-    public dialog: MatDialog, private topicSv: TopicService,
+    public dialog: MatDialog,
     public taskListSv: TaskListService, private layoutSv: LayoutService
   ) {
     layoutSv.labelName = 'Task';

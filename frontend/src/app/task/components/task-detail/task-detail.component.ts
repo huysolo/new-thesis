@@ -6,6 +6,7 @@ import { UploadFileService } from '../../upload-file.service';
 import { Task } from '../../../models/Task';
 import { MatDialog } from '@angular/material';
 import {TaskEditComponent} from '../task-edit/task-edit.component';
+import { SemesterService } from '../../../core/semester.service';
 
 @Component({
   selector: 'app-task-detail',
@@ -18,11 +19,14 @@ export class TaskDetailComponent implements OnInit {
   @Input() task: Task;
   @Input() isTeamlead = false;
 
-  constructor(public dialog: MatDialog, public authService: AuthService, public taskService: TaskService, public uploadSv: UploadFileService) { 
+  constructor(public dialog: MatDialog,
+    public authService: AuthService, public taskService: TaskService, public uploadSv: UploadFileService,
+    public semSv: SemesterService
+  ) {
   }
 
   ngOnInit() {
-    
+
   }
 
   showTask(task) {

@@ -28,7 +28,7 @@ public class TopicDAO implements ITopicDAO {
     @Override
     public List<Topic> getListReviewTopicByProfId(Integer profId, Integer submitted, Boolean isGuide) {
         String guideSql = "id_prof "+ (isGuide ? "==" : "!=") + "?";
-        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ? and submitted = ?)" + " AND " + guideSql;
+        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ? and submitted = ?) AND topic.student_count > 0 " + " AND " + guideSql;
         List<Map<String, Object>> rs = jdbcTemplate.queryForList(sql, profId, submitted, profId);
         List<Topic> lstTopic = new LinkedList<>();
         rs.forEach(row -> {
@@ -40,7 +40,7 @@ public class TopicDAO implements ITopicDAO {
 
     @Override
     public List<Topic> getListReviewTopicByProfId(Integer profId, Boolean isGuide) {
-        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ?) AND id_prof " + (isGuide ? " == " : " != ") + "?";
+        String sql = "SELECT * FROM topic WHERE topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ?) AND topic.student_count > 0 AND id_prof " + (isGuide ? " == " : " != ") + "?";
         List<Map<String, Object>> rs = jdbcTemplate.queryForList(sql, profId);
         List<Topic> lstTopic = new LinkedList<>();
         rs.forEach(row -> {
@@ -53,7 +53,7 @@ public class TopicDAO implements ITopicDAO {
     @Override
     public List<Topic> getListReviewTopicByProfIdAndSemesterNo(Integer profId, Integer semNo, Boolean isGuide, Integer submitted) {
 
-        String sql = "SELECT * FROM topic WHERE topic.disapprove is null and topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ? AND r.submitted = ?) " +
+        String sql = "SELECT * FROM topic WHERE topic.disapprove is null and topic.id_top IN (SELECT r.id_topic FROM review r WHERE r.id_prof = ? AND r.submitted = ?) AND topic.student_count > 0 " +
                 "AND semester_no = ?  AND id_prof " + (isGuide ? " = " : " != ") + "?";
         System.out.println(sql);
         List<Map<String, Object>> rs = jdbcTemplate.queryForList(sql, profId, submitted, semNo, profId);

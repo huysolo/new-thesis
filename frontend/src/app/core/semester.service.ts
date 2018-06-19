@@ -71,6 +71,12 @@ export class SemesterService {
     this.checkTime(this.currentSemester.startDate, this.currentSemester.midtermReviewDate);
   }
 
+  isInDoTask(semNo) {
+    return this.currentSemester != null &&
+    semNo == this.currentSemester.semesterNo &&
+    this.checkTime(this.currentSemester.startDate, this.currentSemester.endDate);
+  }
+
   isMiddleReview(semNo) {
     return this.currentSemester != null &&
     semNo == this.currentSemester.semesterNo && 
