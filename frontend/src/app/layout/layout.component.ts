@@ -19,7 +19,6 @@ export class LayoutComponent implements OnInit {
     public authService: AuthService,
     public layoutSv: LayoutService,
     private router: Router,
-    private topicSv: TopicService,
     public semSv: SemesterService,
     private profSv: ProfService
   ) {
@@ -27,7 +26,6 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit() {
-
   }
 
   logout() {

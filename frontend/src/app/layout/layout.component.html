@@ -39,13 +39,17 @@
           <span class="nav-link-text">Task</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="authService.isProfessor()">
         <a [routerLink]="['/standard/list']" class="nav-link">
           <i class="fas fa-list-ol"></i>
           <span class="nav-link-text">Standard</span>
         </a>
       </li>
-
+      <li class="nav-item" *ngIf="authService.isStudent()">
+        <a [routerLink]="['/task/chatgroup']" class="nav-link">
+          <span class="nav-link-text">Chat Group</span>
+        </a>
+      </li>
       <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
           <i class="fab fa-stack-overflow"></i>
@@ -151,6 +155,7 @@
           <a class="dropdown-item small" href="#">View all alerts</a>
         </div>
       </li> -->
+
       <li class="nav-item">
         <a class="nav-link" data-toggle="modal" data-target="#exampleModal" (click)="logout()">
           <i class="fas fa-sign-out-alt"></i>Logout</a>
