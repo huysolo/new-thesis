@@ -20,6 +20,9 @@
       <label for="">End Topic: </label> {{sem.endDate | date}}
     </div>
     <div>
+      <label for="">Mid-term Review Topic: </label> {{sem.midtermReviewDate | date}}
+    </div>
+    <div>
       <label for="">Review Topic: </label> {{sem.reviewDate | date}}
     </div>
     <div>
@@ -63,6 +66,14 @@
         <input matInput [matDatepicker]="endDate" placeholder="Edit end topic date" [(ngModel)]="semesterEdit.endDate" name="endDate">
         <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
         <mat-datepicker #endDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="midtermReviewDate" placeholder="Edit midterm review topic date" [(ngModel)]="semesterEdit.midtermReviewDate"
+          name="midtermReviewDate">
+        <mat-datepicker-toggle matSuffix [for]="midtermReviewDate"></mat-datepicker-toggle>
+        <mat-datepicker #midtermReviewDate></mat-datepicker>
       </mat-form-field>
     </div>
     <div>

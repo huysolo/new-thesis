@@ -27,6 +27,8 @@ export class SemesterComponent implements OnInit {
     this.semesterEdit.reviewDate = new Date(sem.reviewDate);
     this.semesterEdit.endDate = new Date(sem.endDate);
     this.semesterEdit.closeDate = new Date(sem.closeDate);
+    this.semesterEdit.midtermReviewDate = new Date(sem.midtermReviewDate);
+
   }
 
   submitEdit() {
